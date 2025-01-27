@@ -247,6 +247,7 @@ const JobRegistry = async () => {
         </div>
         <div className='w-full rounded-xl bg-white flex flex-col justify-end p-5 gap-3 shadow-lg h-[500px]'>
           <h1 className='text-xl font-semibold'>Recently Added</h1>
+          <h1>Sample</h1>
         </div>
       </div>
     </div>
