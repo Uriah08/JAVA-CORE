@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import StoreProvider from "@/provider/redux";
 import { Poppins } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,10 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontSans.className} antialiased`}
+        className={`${fontSans.className} antialiased bg-[#eee8e8] overflow-x-hidden`}
       >
         <StoreProvider>
         {children}
+        <Toaster />
         </StoreProvider>
       </body>
     </html>

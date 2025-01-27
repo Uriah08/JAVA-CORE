@@ -90,7 +90,7 @@ const ProtectedLayout = ({ children }: Props) => {
         </div>
       </div>
       </div>
-      <div className='h-full w-full'>
+      <div className={`h-full w-full ${open ? 'md:pl-[269px]':''}`}>
       {children}
       </div>
     </div>
