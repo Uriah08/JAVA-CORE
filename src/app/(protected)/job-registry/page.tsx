@@ -9,7 +9,7 @@ import React from 'react'
 async function getData(): Promise<Registry[]> {
   return [
     {
-      id: "1qweqwe",
+      id: "1",
       status: "Being Analysed",
       client: "ABC Corp",
       area: "Site A",
