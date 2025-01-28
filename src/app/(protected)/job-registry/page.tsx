@@ -9,7 +9,7 @@ import React from 'react'
 async function getData(): Promise<Registry[]> {
   return [
     {
-      id: "1",
+      id: "1qweqwe",
       status: "Being Analysed",
       client: "ABC Corp",
       area: "Site A",
@@ -18,7 +18,7 @@ async function getData(): Promise<Registry[]> {
       poNo: "PO456",
       woNo: "WO789",
       reportNo: "RPT001",
-      jobDescription: "Inspection of pipeline integrity",
+      jobDescription: "Inspection of pipeline integrity lorem ipsum dolor sit amet consectetur adipiscing elit",
       method: "Ultrasonic Testing",
       inspector: "John Doe",
       analyst: "Jane Smith",
@@ -220,6 +220,12 @@ const JobRegistry = async () => {
   return (
     <div className='w-full p-5 flex md:flex-row flex-col pr-8 gap-5'>
       <div className='w-full md:w-2/3 h-full gap-5 flex flex-col'>
+      <div className='w-full md:hidden rounded-xl bg-white flex justify-end p-3 shadow-lg'>
+          <div className='flex items-center gap-3'>
+            <h1 className='text-sm font-semibold'>Username</h1>
+            <Image src={'/logoo.png'} width={50} height={50} alt='profile' className='rounded-full'/>
+          </div>
+        </div>
         <div className='w-full h-full p-5 bg-white rounded-xl flex flex-col shadow-lg'>
         <h1 className='text-2xl font-bold'>Job Registry</h1>
           <DataTable columns={columns} data={data}/>
@@ -231,7 +237,7 @@ const JobRegistry = async () => {
         </div>
       </div>
       <div className='w-full md:w-1/3 md:sticky md:top-5 h-full flex flex-col gap-5'>
-        <div className='w-full rounded-xl bg-white flex justify-end p-3 shadow-lg'>
+        <div className='w-full rounded-xl bg-white hidden md:flex justify-end p-3 shadow-lg'>
           <div className='flex items-center gap-3'>
             <h1 className='text-sm font-semibold'>Username</h1>
             <Image src={'/logoo.png'} width={50} height={50} alt='profile' className='rounded-full'/>

@@ -52,7 +52,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
   )
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
+    const [rowSelection, setRowSelection] = React.useState<Record<string, boolean>>({})
 
     const filteredData = React.useMemo(() => {
       if (!fromDate && !toDate) return data;
@@ -99,19 +99,32 @@ export function DataTable<TData, TValue>({
     },
   })
 
+  const getSelectedIds = () => {
+    const selectedIds = Object.keys(rowSelection)
+      .filter((key) => rowSelection[key])
+      .map((key) => filteredData[parseInt(key)]?.id)
+      .filter(Boolean);
+  
+    console.log("Selected IDs:", selectedIds);
+    return selectedIds;
+  };
+
+  getSelectedIds();
+  
+
   return (
     <div className="mt-5">
       <div className="flex xl:flex-row flex-col gap-3 justify-between">
-        <h1 className="text-xl font-semibold">Date Range:</h1>
-        <div className="flex gap-5">
-        <div className="flex gap-2 items-center">
+        <h1 className="text-xl font-semibold whitespace-nowrap">Date Range:</h1>
+        <div className="flex sm:flex-row flex-col gap-5 w-full">
+        <div className="flex flex-1 gap-2 items-center">
           <h1 className="text-sm text-zinc-600">From:</h1>
           <Popover>
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
               className={cn(
-                "w-full md:w-[240px] justify-start text-left font-normal",
+                "w-full justify-start text-left font-normal",
                 !fromDate && "text-muted-foreground"
               )}
             >
@@ -129,14 +142,14 @@ export function DataTable<TData, TValue>({
           </PopoverContent>
         </Popover>
         </div>
-        <div className="flex gap-2 items-center">
-          <h1 className="text-sm text-zinc-600">To:</h1>
+        <div className="flex flex-1 gap-2 items-center">
+          <h1 className="text-sm text-zinc-600 sm:mr-0 mr-[20px]">To:</h1>
           <Popover>
           <PopoverTrigger asChild>
             <Button
               variant={"outline"}
               className={cn(
-                "w-full md:w-[240px] justify-start text-left font-normal",
+                "w-full justify-start text-left font-normal",
                 !toDate && "text-muted-foreground"
               )}
             >
@@ -165,12 +178,12 @@ export function DataTable<TData, TValue>({
           }
           className="w-full"
         />
-        <button disabled className="bg-main rounded-md p-2 text-white">
+        <button disabled className="bg-main rounded-md p-2 text-white hover:bg-follow">
           <Trash size={20}/>
         </button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="bg-main rounded-md p-2 cursor-pointer text-white">
+            <div className="bg-main rounded-md p-2 cursor-pointer text-white hover:bg-follow">
               <Filter size={20}/>
             </div>
           </DropdownMenuTrigger>
@@ -278,6 +291,11 @@ export function DataTable<TData, TValue>({
           Next
         </Button>
         </div>
+        
+        </div>
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
     </div>
   )
