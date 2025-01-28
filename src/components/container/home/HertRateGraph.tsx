@@ -6,12 +6,10 @@ interface HeartRateGraphProps {
 
 const HeartRateGraph: React.FC<HeartRateGraphProps> = ({ data }) => {
   const maxHeartRate = Math.max(...data);
-
-  // Create the path for the line graph
   const pathData = data
     .map((heartRate, index) => {
-      const x = (index / (data.length - 1)) * 100; // Spread across the width
-      const y = 100 - (heartRate / maxHeartRate) * 100; // Scale based on max heart rate
+      const x = (index / (data.length - 1)) * 100;
+      const y = 100 - (heartRate / maxHeartRate) * 100;
       return `${x},${y}`;
     })
     .join(" ");
@@ -21,14 +19,9 @@ const HeartRateGraph: React.FC<HeartRateGraphProps> = ({ data }) => {
       <svg
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 100 100"
+        viewBox="0 -20 100 80"
       >
-        <polyline
-          fill="none"
-          stroke="green"
-          strokeWidth="2"
-          points={pathData}
-        />
+        <polyline fill="none" stroke="red" strokeWidth="2" points={pathData} />
       </svg>
     </div>
   );
