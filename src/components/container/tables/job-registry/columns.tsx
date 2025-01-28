@@ -40,7 +40,7 @@ export const columns: ColumnDef<Registry>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-      className="mx-2 bg-white"
+      className="mx-2 bg-white border-main data-[state=checked]:bg-main data-[state=checked]:text-white"
         checked={
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -51,7 +51,7 @@ export const columns: ColumnDef<Registry>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
-        className="mx-2"
+        className="mx-2 border-main data-[state=checked]:bg-main data-[state=checked]:text-white"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
@@ -86,6 +86,7 @@ export const columns: ColumnDef<Registry>[] = [
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-follow hover:text-white"
         >
           Client
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -145,7 +146,7 @@ export const columns: ColumnDef<Registry>[] = [
           const jobDescription = row.getValue("jobDescription") as string;
           return (
             <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-              {jobDescription}
+              {jobDescription.length > 40 ? `${jobDescription.substring(0, 37)}...` : jobDescription}
             </h1>
           )
         }
