@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Java Condition Monitoring",
-  description: "Ensure optimal performance and longevity of your equipment with our expert machine health specialist services, providing proactive maintenance and diagnostics.",
+  description: "A website where we ensure optimal performance and longevity of your equipment with our expert machine health specialist services, providing proactive maintenance and diagnostics.",
 };
 
 const fontSans = Poppins({
