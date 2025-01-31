@@ -13,9 +13,11 @@ type NestedData = {
 const NestedList = ({
   data,
   level = 0,
+  onDragStart,
 }: {
   data: NestedData;
   level?: number;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>, data: NestedData) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,6 +28,8 @@ const NestedList = ({
       <div
         className="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded"
         onClick={toggleOpen}
+        draggable
+        onDragStart={(e) => onDragStart(e, data)}
       >
         <span className="mr-2">{isOpen ? "-" : "+"}</span>
         <span>{data.name}</span>
@@ -34,7 +38,12 @@ const NestedList = ({
         <div className="ml-4">
           {data.equipmentGroups &&
             data.equipmentGroups.map((group) => (
-              <NestedList key={group.id} data={group} level={level + 1} />
+              <NestedList
+                key={group.id}
+                data={group}
+                level={level + 1}
+                onDragStart={onDragStart}
+              />
             ))}
           {data.equipmentNames &&
             data.equipmentNames.map((equipment) => (
@@ -42,11 +51,19 @@ const NestedList = ({
                 key={equipment.id}
                 data={equipment}
                 level={level + 1}
+                onDragStart={onDragStart}
               />
             ))}
           {data.components &&
             data.components.map((component, index) => (
-              <div key={index} className="ml-4">
+              <div
+                key={index}
+                className="ml-4"
+                draggable
+                onDragStart={(e) =>
+                  onDragStart(e, { id: index, name: component })
+                }
+              >
                 {component}
               </div>
             ))}
