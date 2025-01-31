@@ -8,7 +8,20 @@ export const api = createApi({
         baseUrl: process.env.NEXT_PUBLIC_URL
     }),
     tagTypes: [],
-    endpoints: (build) => ({})
+    endpoints: (build) => ({
+        loginUser: build.mutation({
+            query: (userData) => ({
+                url: "/api/login",
+                method: "POST",
+                body: userData,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+        }),
+    })
 })
 
-export const { } = api;
+export const { 
+    useLoginUserMutation 
+} = api;

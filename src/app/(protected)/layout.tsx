@@ -6,6 +6,12 @@ import React from 'react'
 import { BriefcaseBusiness, Luggage, Route, ChartArea, User, CircleHelp, LogOut, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 
+import { signOut } from 'next-auth/react';
+
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import Loading from '@/components/ui/loading';
+
 interface Props {
     children: React.ReactNode;
 }
@@ -34,15 +40,33 @@ const sidebar = [
     {
         title: 'Profile',
         icon: User,
-        link: '/profile/admin'
+        link: '/profile'
     },
 ]
 
 const ProtectedLayout = ({ children }: Props) => {
 
+  const { data: session, status} = useSession()
+  const router = useRouter();
+
   const [active, setActive] = React.useState('/job-registry');
 
   const [open, setOpen] = React.useState(true);
+  const [loading, setLoading] = React.useState(true)
+  
+  React.useEffect(() => {
+    if (status === "loading") {
+      setLoading(true);
+    } else if (status === "authenticated") {
+      if (session?.user?.role !== "admin") {
+        router.push("/");
+      } else {
+        setLoading(false);
+      }
+    } else if (status === "unauthenticated") {
+      router.push("/");
+    }
+  }, [status, session, router]);
 
   return (
     <div className='h-full w-screen flex bg-[#eee8e8]'>
@@ -52,13 +76,13 @@ const ProtectedLayout = ({ children }: Props) => {
         </div>
         <div className='w-full flex flex-col'>
 
-        <div className='flex gap-2 items-center mt-7 mb-10 justify-center'>
+        <Link href={'/'} className='flex gap-2 items-center mt-7 mb-10 justify-center'>
           <Image src={'/logoo.png'} width={200} height={200} alt='logo' className='size-12'/>
           <div className='flex flex-col text-white space-y-0 text-sm font-medium'>
             <h1>Java</h1>
             <h1>Condition Monitoring</h1>
           </div>
-        </div>
+        </Link>
         <div className='flex flex-col w-full'>
           <h1 className='text-[#FFADAD] font-medium text-sm'>Java Core</h1>
           <div className='flex flex-col w-full mt-2 gap-1'>
@@ -76,7 +100,7 @@ const ProtectedLayout = ({ children }: Props) => {
         </div>
       </div>
       <div className='flex flex-col gap-3 w-full'>
-        <button className='flex gap-2 pl-8 relative py-3 rounded-lg duration-200 transition-all hover:bg-white hover:bg-opacity-20'>
+        <button onClick={() => signOut()} className='flex gap-2 pl-8 relative py-3 rounded-lg duration-200 transition-all hover:bg-white hover:bg-opacity-20'>
           <LogOut size={20} className='text-white'/>
           <h1 className='font-medium text-sm text-white'>Sign Out</h1>
         </button>
@@ -91,7 +115,9 @@ const ProtectedLayout = ({ children }: Props) => {
       </div>
       </div>
       <div className={`h-full w-full ${open ? 'lg:pl-[269px]':''}`}>
-      {children}
+      {loading ? (<div className='w-full h-screen'>
+        <Loading/>
+      </div>) : children}
       </div>
     </div>
   )
