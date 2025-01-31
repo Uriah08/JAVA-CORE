@@ -20,6 +20,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { jobSchema } from "@/schema";
 import NestedList from "./NestedList";
+import DroppedList from "./DroppedList";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
@@ -66,63 +67,63 @@ const CreateRoute = () => {
       name: "Area 1",
       equipmentGroups: [
         {
-          id: 1,
+          id: 2,
           name: "Equipment Group 1",
           equipmentNames: [
             {
-              id: 1,
+              id: 3,
               name: "Equipment Name 1",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 2,
+              id: 4,
               name: "Equipment Name 2",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 3,
+              id: 5,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
           ],
         },
         {
-          id: 2,
+          id: 6,
           name: "Equipment Group 2",
           equipmentNames: [
             {
-              id: 1,
+              id: 7,
               name: "Equipment Name 1",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 2,
+              id: 8,
               name: "Equipment Name 2",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 3,
+              id: 9,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
           ],
         },
         {
-          id: 3,
+          id: 10,
           name: "Equipment Group 3",
           equipmentNames: [
             {
-              id: 1,
+              id: 11,
               name: "Equipment Name 1",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 2,
+              id: 12,
               name: "Equipment Name 2",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 3,
+              id: 13,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
@@ -131,25 +132,25 @@ const CreateRoute = () => {
       ],
     },
     {
-      id: 2,
+      id: 14,
       name: "Area 2",
       equipmentGroups: [
         {
-          id: 1,
+          id: 15,
           name: "Equipment Group 1",
           equipmentNames: [
             {
-              id: 1,
+              id: 16,
               name: "Equipment Name 1",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 2,
+              id: 17,
               name: "Equipment Name 2",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 3,
+              id: 18,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
@@ -158,25 +159,25 @@ const CreateRoute = () => {
       ],
     },
     {
-      id: 3,
+      id: 19,
       name: "Area 3",
       equipmentGroups: [
         {
-          id: 1,
+          id: 20,
           name: "Equipment Group 1",
           equipmentNames: [
             {
-              id: 1,
+              id: 21,
               name: "Equipment Name 1",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 2,
+              id: 22,
               name: "Equipment Name 2",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 3,
+              id: 23,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
@@ -203,25 +204,8 @@ const CreateRoute = () => {
     e.preventDefault();
   };
 
-  // Recursive function to render dropped items with hierarchy
-  const renderDroppedItems = (items: NestedData[], level = 0) => {
-    return items.map((item, index) => (
-      <div key={index} className={`pl-${level * 4} mb-2`}>
-        <div className="flex items-center">
-          <span>{item.name}</span>
-        </div>
-        {item.equipmentGroups &&
-          renderDroppedItems(item.equipmentGroups, level + 1)}
-        {item.equipmentNames &&
-          renderDroppedItems(item.equipmentNames, level + 1)}
-        {item.components &&
-          item.components.map((component, idx) => (
-            <div key={idx} className={`pl-${(level + 1) * 4} mb-1`}>
-              {component}
-            </div>
-          ))}
-      </div>
-    ));
+  const handleRemoveItem = (itemId: number) => {
+    setDroppedItems((prev) => prev.filter((item) => item.id !== itemId));
   };
 
   return (
@@ -273,18 +257,16 @@ const CreateRoute = () => {
           </div>
 
           <hr className="h-auto border-l border-gray-300 mx-4" />
-          <div
-            className="w-2/3"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
+          <div className="w-2/3">
             <div className="flex md:flex-row flex-col gap-3 w-full">
               <FormField
                 control={form.control}
                 name="woNo"
                 render={({ field }) => (
                   <FormItem className="w-full md:w-1/2">
-                    <FormLabel>Create Route</FormLabel>
+                    <FormLabel className="text-lg font-semibold">
+                      Create Route
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Enter route name..." {...field} />
                     </FormControl>
@@ -293,10 +275,12 @@ const CreateRoute = () => {
                 )}
               />
             </div>
-            <h2 className="text-lg font-semibold mt-5 mb-3">Dropped Items</h2>
-            <div className="border border-gray-300 rounded-lg p-4">
-              {renderDroppedItems(droppedItems)}
-            </div>
+            <DroppedList
+              droppedItems={droppedItems}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onRemoveItem={handleRemoveItem}
+            />
           </div>
         </div>
       </form>
