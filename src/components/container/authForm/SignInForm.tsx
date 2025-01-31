@@ -14,16 +14,60 @@ import {
 } from "@/components/ui/form";
 import { User, LockKeyhole } from "lucide-react";
 
+import { loginSchema } from "@/schema";
+import { z } from "zod";
+
+import { useLoginUserMutation } from "@/store/api";
+
+import { useToast } from "@/hooks/use-toast";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+
+import { useRouter } from "next/navigation";
+
+interface ErrorData {
+  message: string;
+}
 const SignInForm = () => {
-  const form = useForm({
+
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+
+  const { toast } = useToast();
+
+  const router = useRouter()
+
+  const form = useForm<z.infer<typeof loginSchema>>({
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: { email: string; password: string }) => {
-    console.log("Form submitted", data);
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    try {
+      const response = await loginUser(values)
+      
+      if(response.error){
+        const error = response.error as FetchBaseQueryError;
+
+      if (error.data && (error.data as ErrorData).message) {
+        throw new Error((error.data as ErrorData).message);
+      } else {
+        toast({
+          title: 'Login Successfully',
+          description: 'Redirecting to your home page...',
+        })
+        router.push("/")
+      }
+      }
+
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error:any) {
+      toast({
+        title: 'Login Failed',
+        description: error.message,
+      })
+    }
   };
 
   return (
@@ -80,10 +124,11 @@ const SignInForm = () => {
 
             {/* Submit Button */}
             <Button
+              disabled={isLoading}
               type="submit"
               className="w-full bg-red-700 hover:bg-red-800 text-white py-2 rounded-md"
             >
-              Login
+              {isLoading ? 'Loading...' : 'Login'}
             </Button>
           </form>
         </Form>
