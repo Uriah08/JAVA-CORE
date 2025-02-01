@@ -83,17 +83,10 @@ const ProtectedLayout = ({ children }: Props) => {
   }, [status, session, router]);
 
   return (
-    <div className="h-full w-screen flex bg-[#eee8e8]">
-      <div
-        className={`h-screen fixed p-7 bg-main flex flex-col z-20 justify-between min-w-[269px] ${
-          open ? "" : "-left-[269px]"
-        }`}
-      >
-        <div
-          onClick={() => setOpen(!open)}
-          className="cursor-pointer absolute bg-main w-5 h-10 -right-[20px] top-1/2 -translate-y-1/2 rounded-e-lg flex items-center justify-center"
-        >
-          <ChevronLeft className={`text-white ${!open && "rotate-180"}`} />
+    <div className='h-full w-screen flex bg-[#eee8e8]'>
+      <div className={`h-screen fixed p-7 bg-main flex flex-col z-20 justify-between min-w-[269px] ${open ? '' : '-left-[269px]'}`}>
+        <div onClick={() => setOpen(!open)} className='cursor-pointer absolute bg-main w-5 h-10 -right-[20px] top-1/2 -translate-y-1/2 rounded-e-lg flex items-center justify-center'>
+        <ChevronLeft className={`text-white ${!open && 'rotate-180'}`}/>
         </div>
         <div className="w-full flex flex-col">
           <Link
@@ -183,17 +176,14 @@ const ProtectedLayout = ({ children }: Props) => {
           </div>
         </div>
       </div>
-      <div className={`h-full w-full ${open ? "lg:pl-[269px]" : ""}`}>
-        {loading ? (
-          <div className="w-full h-screen">
-            <Loading />
-          </div>
-        ) : (
-          children
-        )}
+      </div>
+      <div className={`h-full w-full ${open ? 'lg:pl-[269px]':''}`}>
+      {loading ? (<div className='w-full h-screen'>
+        <Loading/>
+      </div>) : children}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default ProtectedLayout;

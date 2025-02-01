@@ -10,9 +10,19 @@ import ArrowButtonUP from "@/components/container/home/ArrowButtonUp";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/loading";
 
+import { useRouter } from "next/navigation";
+
 const HomePage = () => {
   const { data: session, status } = useSession();
-
+  const router = useRouter()
+  React.useEffect(() => {
+    if(session?.user.role === "admin") {
+      if (localStorage.getItem("redirected") === "false") {
+        localStorage.setItem("redirected", "true");
+        router.push('/job-registry')
+      }
+    }
+  }, [router, session?.user.role])
   return (
     <>
     {status === 'loading' ? (

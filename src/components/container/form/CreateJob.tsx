@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
+import { CalendarIcon, Plus } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
@@ -36,9 +36,36 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 
 import { jobSchema } from '@/schema'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import ClientDialog from '../dialog/ClientDialog'
+import { useLazyGetClientsQuery } from '@/store/api'
+import { useToast } from '@/hooks/use-toast'
+import { Client } from '@prisma/client'
 
 const CreateJobForm = () => {
 
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [clients, setClients] = React.useState<Client[]>([])
+  const { toast } = useToast()
+
+  const [getClients, { isLoading: clientLoading}] = useLazyGetClientsQuery();
+  const openClient = async () => {
+    try {
+      const response = await getClients().unwrap();
+      if(!response.success) {
+        throw new Error(response.message)
+      }
+      setClients(response.client || [])
+      console.log(clients);
+      
+    } catch (error: unknown) {
+      const err = error as { data?: { message?: string } };
+      toast({
+          title: "Error",
+          description: err.data?.message || "An unexpected error occurred.",
+      });
+    }
+  }
     const form = useForm<z.infer<typeof jobSchema>>({
         resolver: zodResolver(jobSchema),
         defaultValues: {
@@ -79,14 +106,22 @@ const CreateJobForm = () => {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a client" />
+                                <SelectValue onClick={openClient} placeholder="Select a client" />
                             </SelectTrigger>
                         </FormControl>
                         <FormMessage />
                         <SelectContent>
-                            <SelectItem value="client1">Client 1</SelectItem>
-                            <SelectItem value="client2">Client 2</SelectItem>
-                            <SelectItem value="client3">Client 3</SelectItem>
+                          {clients.map((client) => (
+                            <SelectItem key={client.id} value={client.client}>
+                              {client.client}
+                            </SelectItem>
+                          ))}
+                            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                              <DialogTrigger asChild>
+                              <Button onClick={openClient} variant='outline' className='w-full'>Add new Client <Plus/></Button>
+                              </DialogTrigger>
+                              <ClientDialog onClose={() => setIsOpen(false)}/>
+                            </Dialog>
                         </SelectContent>
                     </Select>
                 </FormItem>
