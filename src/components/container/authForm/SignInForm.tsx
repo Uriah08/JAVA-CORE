@@ -48,15 +48,12 @@ const SignInForm = () => {
       if (error.data && (error.data as ErrorData).message) {
         throw new Error((error.data as ErrorData).message);
       } else {
-        localStorage.setItem("reloaded", "false");
+        localStorage.setItem("redirected", "false");
         toast({
           title: 'Login Successfully',
           description: 'Redirecting to home page...',
         })
-        if (localStorage.getItem("reloaded") === "false") {
-          localStorage.setItem("reloaded", "true");
-          window.location.reload();
-        }
+        window.location.reload();
       }
       }
 
