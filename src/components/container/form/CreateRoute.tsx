@@ -18,11 +18,12 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { jobSchema } from "@/schema";
+import { routeSchema } from "@/schema";
 import NestedList from "./NestedList";
 import DroppedList from "./DroppedList";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 type Area = {
   id: number;
@@ -47,16 +48,18 @@ type NestedData = {
 };
 
 const CreateRoute = () => {
-  const form = useForm<z.infer<typeof jobSchema>>({
-    resolver: zodResolver(jobSchema),
+  const form = useForm<z.infer<typeof routeSchema>>({
+    resolver: zodResolver(routeSchema),
     defaultValues: {
       client: "",
+      route: "",
+      droppedItems: [],
     },
   });
 
   const [droppedItems, setDroppedItems] = useState<NestedData[]>([]);
 
-  function onSubmit(values: z.infer<typeof jobSchema>) {
+  function onSubmit(values: z.infer<typeof routeSchema>) {
     console.log(values);
     form.reset();
   }
@@ -82,48 +85,6 @@ const CreateRoute = () => {
             },
             {
               id: 5,
-              name: "Equipment Name 3",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-          ],
-        },
-        {
-          id: 6,
-          name: "Equipment Group 2",
-          equipmentNames: [
-            {
-              id: 7,
-              name: "Equipment Name 1",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 8,
-              name: "Equipment Name 2",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 9,
-              name: "Equipment Name 3",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-          ],
-        },
-        {
-          id: 10,
-          name: "Equipment Group 3",
-          equipmentNames: [
-            {
-              id: 11,
-              name: "Equipment Name 1",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 12,
-              name: "Equipment Name 2",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 13,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
@@ -158,33 +119,6 @@ const CreateRoute = () => {
         },
       ],
     },
-    {
-      id: 19,
-      name: "Area 3",
-      equipmentGroups: [
-        {
-          id: 20,
-          name: "Equipment Group 1",
-          equipmentNames: [
-            {
-              id: 21,
-              name: "Equipment Name 1",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 22,
-              name: "Equipment Name 2",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 23,
-              name: "Equipment Name 3",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-          ],
-        },
-      ],
-    },
   ];
 
   const handleDragStart = (
@@ -194,18 +128,152 @@ const CreateRoute = () => {
     e.dataTransfer.setData("text/plain", JSON.stringify(data));
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (
+    e: React.DragEvent<HTMLDivElement>,
+    parentId?: number,
+    type?: "equipmentGroup" | "equipmentName" | "component"
+  ) => {
     e.preventDefault();
     const data = JSON.parse(e.dataTransfer.getData("text/plain"));
-    setDroppedItems((prev) => [...prev, data]);
+
+    const itemExists = (items: NestedData[], item: NestedData) => {
+      return items.some((existingItem) => existingItem.id === item.id);
+    };
+
+    if (parentId) {
+      setDroppedItems((prev) =>
+        prev.map((item) => {
+          if (item.id === parentId) {
+            if (type === "equipmentGroup") {
+              if (!itemExists(item.equipmentGroups || [], data)) {
+                return {
+                  ...item,
+                  equipmentGroups: [
+                    ...(item.equipmentGroups || []),
+                    { id: Date.now(), name: data.name },
+                  ],
+                };
+              }
+            } else if (type === "equipmentName") {
+              if (!itemExists(item.equipmentNames || [], data)) {
+                return {
+                  ...item,
+                  equipmentNames: [
+                    ...(item.equipmentNames || []),
+                    { id: Date.now(), name: data.name },
+                  ],
+                };
+              }
+            } else if (type === "component") {
+              if (!item.components?.includes(data.name)) {
+                return {
+                  ...item,
+                  components: [...(item.components || []), data.name],
+                };
+              }
+            }
+          } else if (item.equipmentGroups || item.equipmentNames) {
+            return {
+              ...item,
+              equipmentGroups: item.equipmentGroups
+                ? item.equipmentGroups.map((group) =>
+                    group.id === parentId
+                      ? {
+                          ...group,
+                          equipmentNames:
+                            type === "equipmentName" &&
+                            !itemExists(group.equipmentNames || [], data)
+                              ? [
+                                  ...(group.equipmentNames || []),
+                                  { id: Date.now(), name: data.name },
+                                ]
+                              : group.equipmentNames,
+                          components:
+                            type === "component" &&
+                            !group.components?.includes(data.name)
+                              ? [...(group.components || []), data.name]
+                              : group.components,
+                        }
+                      : group
+                  )
+                : undefined,
+              equipmentNames: item.equipmentNames
+                ? item.equipmentNames.map((name) =>
+                    name.id === parentId
+                      ? {
+                          ...name,
+                          components:
+                            type === "component" &&
+                            !name.components?.includes(data.name)
+                              ? [...(name.components || []), data.name]
+                              : name.components,
+                        }
+                      : name
+                  )
+                : undefined,
+            };
+          }
+          return item;
+        })
+      );
+    } else {
+      if (!itemExists(droppedItems, data)) {
+        setDroppedItems((prev) => [...prev, data]);
+      }
+    }
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
-  const handleRemoveItem = (itemId: number) => {
-    setDroppedItems((prev) => prev.filter((item) => item.id !== itemId));
+  const handleRemoveItem = (
+    itemId: number,
+    parentId?: number,
+    type?: "component" | "equipmentGroup" | "equipmentName"
+  ) => {
+    setDroppedItems((prev) => {
+      const removeItem = (items: NestedData[]): NestedData[] => {
+        return items
+          .map((item) => {
+            if (type === "component" && item.id === parentId) {
+              return {
+                ...item,
+                components: item.components?.filter((_, idx) => idx !== itemId),
+              };
+            } else if (type === "equipmentGroup" && item.id === parentId) {
+              return {
+                ...item,
+                equipmentGroups: item.equipmentGroups?.filter(
+                  (group) => group.id !== itemId
+                ),
+              };
+            } else if (type === "equipmentName" && item.id === parentId) {
+              return {
+                ...item,
+                equipmentNames: item.equipmentNames?.filter(
+                  (name) => name.id !== itemId
+                ),
+              };
+            } else if (item.id === itemId && !type) {
+              return null;
+            } else {
+              return {
+                ...item,
+                equipmentGroups: item.equipmentGroups
+                  ? removeItem(item.equipmentGroups)
+                  : undefined,
+                equipmentNames: item.equipmentNames
+                  ? removeItem(item.equipmentNames)
+                  : undefined,
+              };
+            }
+          })
+          .filter(Boolean) as NestedData[];
+      };
+
+      return removeItem(prev);
+    });
   };
 
   return (
@@ -261,7 +329,7 @@ const CreateRoute = () => {
             <div className="flex md:flex-row flex-col gap-3 w-full">
               <FormField
                 control={form.control}
-                name="woNo"
+                name="route"
                 render={({ field }) => (
                   <FormItem className="w-full md:w-1/2">
                     <FormLabel className="text-lg font-semibold">
@@ -283,6 +351,12 @@ const CreateRoute = () => {
             />
           </div>
         </div>
+        <Button
+          type="submit"
+          className="w-20 absolute top-48 right-16 bg-red-700 hover:bg-red-800 text-white py-2 rounded-md"
+        >
+          Create
+        </Button>
       </form>
     </Form>
   );
