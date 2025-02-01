@@ -22,8 +22,6 @@ import { useLoginUserMutation } from "@/store/api";
 import { useToast } from "@/hooks/use-toast";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 
-import { useRouter } from "next/navigation";
-
 interface ErrorData {
   message: string;
 }
@@ -32,8 +30,6 @@ const SignInForm = () => {
   const [loginUser, { isLoading }] = useLoginUserMutation();
 
   const { toast } = useToast();
-
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     defaultValues: {
@@ -52,11 +48,15 @@ const SignInForm = () => {
       if (error.data && (error.data as ErrorData).message) {
         throw new Error((error.data as ErrorData).message);
       } else {
+        localStorage.setItem("reloaded", "false");
         toast({
           title: 'Login Successfully',
-          description: 'Redirecting to your home page...',
+          description: 'Redirecting to home page...',
         })
-        router.push("/")
+        if (localStorage.getItem("reloaded") === "false") {
+          localStorage.setItem("reloaded", "true");
+          window.location.reload();
+        }
       }
       }
 
