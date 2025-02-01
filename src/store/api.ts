@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Client } from '@prisma/client';
 
 type ClientsResponse = {
-    client: Client[];
+    clients: Client[];
     message: string
     success: boolean
   };
@@ -50,5 +50,5 @@ export const api = createApi({
 export const { 
     useLoginUserMutation,
     useCreateClientMutation,
-    useLazyGetClientsQuery
+    useGetClientsQuery
 } = api;

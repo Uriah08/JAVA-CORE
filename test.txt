@@ -1,0 +1,164 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  client    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model Job {
+//   id              String   @id @default(uuid())
+//   status          String
+//   client          String
+//   area            String
+//   dateSurveyed    DateTime
+//   jobNumber       String   @unique
+//   poNumber        String?
+//   woNumber        String?
+//   reportNumber    String?
+//   jobDescription  String
+//   method          String
+//   inspector       String
+//   inspectionRoute String
+//   equipmentUse    String
+//   dateRegistered  DateTime @default(now())
+
+//   userId String
+//   user   User   @relation(fields: [userId], references: [id])
+
+//   @@map("jobs")
+// }
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?   @unique
+  email         String?   @unique
+  password      String?
+  role          String    @default("user")
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  Route           Route[]
+
+  @@map("users")
+}
+
+model Route {
+  id         String   @id @default(uuid())
+  userId     String
+  clientName String
+  routeName  String
+  createdAt  DateTime @default(now())
+
+  machines RouteMachineList[]
+  user     User               @relation(fields: [userId], references: [id])
+
+  @@map("routes")
+}
+
+model RouteMachineList {
+  id               String  @id @default(uuid())
+  routeId          String
+  areaId           String? @unique
+  equipmentGroupId String? @unique
+  equipmentNameId  String? @unique
+  componentId      String? @unique
+
+  route          Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  area           Area?           @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  equipmentGroup EquipmentGroup? @relation(fields: [equipmentGroupId], references: [id], onDelete: Cascade)
+  equipmentName  EquipmentName?  @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+  component      Component?      @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+  @@map("route_machine_list")
+}
+
+model Area {
+  id   String @id @default(uuid())
+  name String
+
+  equipmentGroups  EquipmentGroup[]
+  RouteMachineList RouteMachineList[]
+
+  @@map("area")
+}
+
+model EquipmentGroup {
+  id     String  @id @default(uuid())
+  name   String
+  areaId String?
+
+  area             Area?              @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  equipmentNames   EquipmentName[]
+  RouteMachineList RouteMachineList[]
+
+  @@map("equipmentgroup")
+}
+
+model EquipmentName {
+  id      String  @id @default(uuid())
+  name    String
+  groupId String?
+
+  group            EquipmentGroup?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  components       Component[]
+  RouteMachineList RouteMachineList[]
+
+  @@map("equipmentname")
+}
+
+model Component {
+  id              String  @id @default(uuid())
+  name            String
+  equipmentNameId String?
+
+  equipmentName    EquipmentName?     @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+  RouteMachineList RouteMachineList[]
+
+  @@map("component")
+}
