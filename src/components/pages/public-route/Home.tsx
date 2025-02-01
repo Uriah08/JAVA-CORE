@@ -12,6 +12,7 @@ import Loading from "@/components/ui/loading";
 
 const HomePage = () => {
   const { data: session, status } = useSession();
+
   return (
     <>
     {status === 'loading' ? (
