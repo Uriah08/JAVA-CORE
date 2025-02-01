@@ -18,10 +18,12 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { jobSchema } from "@/schema";
+import { routeSchema } from "@/schema";
 import NestedList from "./NestedList";
+import DroppedList from "./DroppedList";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 type Area = {
   id: number;
@@ -46,16 +48,18 @@ type NestedData = {
 };
 
 const CreateRoute = () => {
-  const form = useForm<z.infer<typeof jobSchema>>({
-    resolver: zodResolver(jobSchema),
+  const form = useForm<z.infer<typeof routeSchema>>({
+    resolver: zodResolver(routeSchema),
     defaultValues: {
       client: "",
+      route: "",
+      droppedItems: [],
     },
   });
 
   const [droppedItems, setDroppedItems] = useState<NestedData[]>([]);
 
-  function onSubmit(values: z.infer<typeof jobSchema>) {
+  function onSubmit(values: z.infer<typeof routeSchema>) {
     console.log(values);
     form.reset();
   }
@@ -66,63 +70,21 @@ const CreateRoute = () => {
       name: "Area 1",
       equipmentGroups: [
         {
-          id: 1,
+          id: 2,
           name: "Equipment Group 1",
           equipmentNames: [
             {
-              id: 1,
+              id: 3,
               name: "Equipment Name 1",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 2,
+              id: 4,
               name: "Equipment Name 2",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 3,
-              name: "Equipment Name 3",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-          ],
-        },
-        {
-          id: 2,
-          name: "Equipment Group 2",
-          equipmentNames: [
-            {
-              id: 1,
-              name: "Equipment Name 1",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 2,
-              name: "Equipment Name 2",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 3,
-              name: "Equipment Name 3",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-          ],
-        },
-        {
-          id: 3,
-          name: "Equipment Group 3",
-          equipmentNames: [
-            {
-              id: 1,
-              name: "Equipment Name 1",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 2,
-              name: "Equipment Name 2",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 3,
+              id: 5,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
@@ -131,52 +93,25 @@ const CreateRoute = () => {
       ],
     },
     {
-      id: 2,
+      id: 14,
       name: "Area 2",
       equipmentGroups: [
         {
-          id: 1,
+          id: 15,
           name: "Equipment Group 1",
           equipmentNames: [
             {
-              id: 1,
+              id: 16,
               name: "Equipment Name 1",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 2,
+              id: 17,
               name: "Equipment Name 2",
               components: ["Component 1", "Component 2", "Component 3"],
             },
             {
-              id: 3,
-              name: "Equipment Name 3",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 3,
-      name: "Area 3",
-      equipmentGroups: [
-        {
-          id: 1,
-          name: "Equipment Group 1",
-          equipmentNames: [
-            {
-              id: 1,
-              name: "Equipment Name 1",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 2,
-              name: "Equipment Name 2",
-              components: ["Component 1", "Component 2", "Component 3"],
-            },
-            {
-              id: 3,
+              id: 18,
               name: "Equipment Name 3",
               components: ["Component 1", "Component 2", "Component 3"],
             },
@@ -193,35 +128,152 @@ const CreateRoute = () => {
     e.dataTransfer.setData("text/plain", JSON.stringify(data));
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (
+    e: React.DragEvent<HTMLDivElement>,
+    parentId?: number,
+    type?: "equipmentGroup" | "equipmentName" | "component"
+  ) => {
     e.preventDefault();
     const data = JSON.parse(e.dataTransfer.getData("text/plain"));
-    setDroppedItems((prev) => [...prev, data]);
+
+    const itemExists = (items: NestedData[], item: NestedData) => {
+      return items.some((existingItem) => existingItem.id === item.id);
+    };
+
+    if (parentId) {
+      setDroppedItems((prev) =>
+        prev.map((item) => {
+          if (item.id === parentId) {
+            if (type === "equipmentGroup") {
+              if (!itemExists(item.equipmentGroups || [], data)) {
+                return {
+                  ...item,
+                  equipmentGroups: [
+                    ...(item.equipmentGroups || []),
+                    { id: Date.now(), name: data.name },
+                  ],
+                };
+              }
+            } else if (type === "equipmentName") {
+              if (!itemExists(item.equipmentNames || [], data)) {
+                return {
+                  ...item,
+                  equipmentNames: [
+                    ...(item.equipmentNames || []),
+                    { id: Date.now(), name: data.name },
+                  ],
+                };
+              }
+            } else if (type === "component") {
+              if (!item.components?.includes(data.name)) {
+                return {
+                  ...item,
+                  components: [...(item.components || []), data.name],
+                };
+              }
+            }
+          } else if (item.equipmentGroups || item.equipmentNames) {
+            return {
+              ...item,
+              equipmentGroups: item.equipmentGroups
+                ? item.equipmentGroups.map((group) =>
+                    group.id === parentId
+                      ? {
+                          ...group,
+                          equipmentNames:
+                            type === "equipmentName" &&
+                            !itemExists(group.equipmentNames || [], data)
+                              ? [
+                                  ...(group.equipmentNames || []),
+                                  { id: Date.now(), name: data.name },
+                                ]
+                              : group.equipmentNames,
+                          components:
+                            type === "component" &&
+                            !group.components?.includes(data.name)
+                              ? [...(group.components || []), data.name]
+                              : group.components,
+                        }
+                      : group
+                  )
+                : undefined,
+              equipmentNames: item.equipmentNames
+                ? item.equipmentNames.map((name) =>
+                    name.id === parentId
+                      ? {
+                          ...name,
+                          components:
+                            type === "component" &&
+                            !name.components?.includes(data.name)
+                              ? [...(name.components || []), data.name]
+                              : name.components,
+                        }
+                      : name
+                  )
+                : undefined,
+            };
+          }
+          return item;
+        })
+      );
+    } else {
+      if (!itemExists(droppedItems, data)) {
+        setDroppedItems((prev) => [...prev, data]);
+      }
+    }
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
-  // Recursive function to render dropped items with hierarchy
-  const renderDroppedItems = (items: NestedData[], level = 0) => {
-    return items.map((item, index) => (
-      <div key={index} className={`pl-${level * 4} mb-2`}>
-        <div className="flex items-center">
-          <span>{item.name}</span>
-        </div>
-        {item.equipmentGroups &&
-          renderDroppedItems(item.equipmentGroups, level + 1)}
-        {item.equipmentNames &&
-          renderDroppedItems(item.equipmentNames, level + 1)}
-        {item.components &&
-          item.components.map((component, idx) => (
-            <div key={idx} className={`pl-${(level + 1) * 4} mb-1`}>
-              {component}
-            </div>
-          ))}
-      </div>
-    ));
+  const handleRemoveItem = (
+    itemId: number,
+    parentId?: number,
+    type?: "component" | "equipmentGroup" | "equipmentName"
+  ) => {
+    setDroppedItems((prev) => {
+      const removeItem = (items: NestedData[]): NestedData[] => {
+        return items
+          .map((item) => {
+            if (type === "component" && item.id === parentId) {
+              return {
+                ...item,
+                components: item.components?.filter((_, idx) => idx !== itemId),
+              };
+            } else if (type === "equipmentGroup" && item.id === parentId) {
+              return {
+                ...item,
+                equipmentGroups: item.equipmentGroups?.filter(
+                  (group) => group.id !== itemId
+                ),
+              };
+            } else if (type === "equipmentName" && item.id === parentId) {
+              return {
+                ...item,
+                equipmentNames: item.equipmentNames?.filter(
+                  (name) => name.id !== itemId
+                ),
+              };
+            } else if (item.id === itemId && !type) {
+              return null;
+            } else {
+              return {
+                ...item,
+                equipmentGroups: item.equipmentGroups
+                  ? removeItem(item.equipmentGroups)
+                  : undefined,
+                equipmentNames: item.equipmentNames
+                  ? removeItem(item.equipmentNames)
+                  : undefined,
+              };
+            }
+          })
+          .filter(Boolean) as NestedData[];
+      };
+
+      return removeItem(prev);
+    });
   };
 
   return (
@@ -273,18 +325,16 @@ const CreateRoute = () => {
           </div>
 
           <hr className="h-auto border-l border-gray-300 mx-4" />
-          <div
-            className="w-2/3"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
+          <div className="w-2/3">
             <div className="flex md:flex-row flex-col gap-3 w-full">
               <FormField
                 control={form.control}
-                name="woNo"
+                name="route"
                 render={({ field }) => (
                   <FormItem className="w-full md:w-1/2">
-                    <FormLabel>Create Route</FormLabel>
+                    <FormLabel className="text-lg font-semibold">
+                      Create Route
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Enter route name..." {...field} />
                     </FormControl>
@@ -293,12 +343,20 @@ const CreateRoute = () => {
                 )}
               />
             </div>
-            <h2 className="text-lg font-semibold mt-5 mb-3">Dropped Items</h2>
-            <div className="border border-gray-300 rounded-lg p-4">
-              {renderDroppedItems(droppedItems)}
-            </div>
+            <DroppedList
+              droppedItems={droppedItems}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onRemoveItem={handleRemoveItem}
+            />
           </div>
         </div>
+        <Button
+          type="submit"
+          className="w-20 absolute top-48 right-16 bg-red-700 hover:bg-red-800 text-white py-2 rounded-md"
+        >
+          Create
+        </Button>
       </form>
     </Form>
   );
