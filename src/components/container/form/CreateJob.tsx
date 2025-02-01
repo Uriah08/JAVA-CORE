@@ -38,34 +38,16 @@ import { Calendar } from '@/components/ui/calendar'
 import { jobSchema } from '@/schema'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import ClientDialog from '../dialog/ClientDialog'
-import { useLazyGetClientsQuery } from '@/store/api'
-import { useToast } from '@/hooks/use-toast'
-import { Client } from '@prisma/client'
+import { useGetClientsQuery } from '@/store/api'
+import Loading from '@/components/ui/loading'
 
 const CreateJobForm = () => {
 
   const [isOpen, setIsOpen] = React.useState(false);
-  const [clients, setClients] = React.useState<Client[]>([])
-  const { toast } = useToast()
 
-  const [getClients, { isLoading: clientLoading}] = useLazyGetClientsQuery();
-  const openClient = async () => {
-    try {
-      const response = await getClients().unwrap();
-      if(!response.success) {
-        throw new Error(response.message)
-      }
-      setClients(response.client || [])
-      console.log(clients);
-      
-    } catch (error: unknown) {
-      const err = error as { data?: { message?: string } };
-      toast({
-          title: "Error",
-          description: err.data?.message || "An unexpected error occurred.",
-      });
-    }
-  }
+  const { data, isLoading: clientLoading} = useGetClientsQuery();
+  const clients = data?.clients || []
+
     const form = useForm<z.infer<typeof jobSchema>>({
         resolver: zodResolver(jobSchema),
         defaultValues: {
@@ -87,8 +69,6 @@ const CreateJobForm = () => {
       })
     
     function onSubmit(values: z.infer<typeof jobSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
      console.log(values)
      form.reset()
     }
@@ -106,19 +86,19 @@ const CreateJobForm = () => {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                             <SelectTrigger>
-                                <SelectValue onClick={openClient} placeholder="Select a client" />
+                                <SelectValue placeholder="Select a client" />
                             </SelectTrigger>
                         </FormControl>
                         <FormMessage />
                         <SelectContent>
-                          {clients.map((client) => (
+                          {clientLoading ? <div><Loading/></div> : clients.map((client) => (
                             <SelectItem key={client.id} value={client.client}>
                               {client.client}
                             </SelectItem>
                           ))}
                             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                               <DialogTrigger asChild>
-                              <Button onClick={openClient} variant='outline' className='w-full'>Add new Client <Plus/></Button>
+                              <Button variant='outline' className='w-full'>Add new Client <Plus/></Button>
                               </DialogTrigger>
                               <ClientDialog onClose={() => setIsOpen(false)}/>
                             </Dialog>
