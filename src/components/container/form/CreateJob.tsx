@@ -91,11 +91,13 @@ const CreateJobForm = () => {
                         </FormControl>
                         <FormMessage />
                         <SelectContent>
+                          <div className='flex flex-col max-h-[200px] overflow-auto'>
                           {clientLoading ? <div><Loading/></div> : clients.map((client) => (
                             <SelectItem key={client.id} value={client.client}>
                               {client.client}
                             </SelectItem>
                           ))}
+                          </div>
                             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                               <DialogTrigger asChild>
                               <Button variant='outline' className='w-full'>Add new Client <Plus/></Button>
