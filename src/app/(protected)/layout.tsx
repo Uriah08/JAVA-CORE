@@ -99,7 +99,7 @@ const ProtectedLayout = ({ children }: Props) => {
           <div className="w-full flex flex-col">
             <Link
               href={"/"}
-              className="flex gap-2 items-center mt-7 mb-10 justify-center"
+              className="flex gap-2 items-center mt-2 mb-10 justify-center"
             >
               <Image
                 src={"/logoo.png"}
