@@ -72,7 +72,7 @@ model Session {
  
   @@map("sessions")
 }
- 
+
 model User {
   id            String    @id @default(cuid())
   name          String?   @unique
@@ -86,3 +86,78 @@ model User {
  
   @@map("users")
 }
+
+// model Route {
+//   id         String   @id @default(uuid())
+//   userId     String
+//   clientName String
+//   routeName  String
+//   createdAt  DateTime @default(now())
+
+//   machines RouteMachineList[]
+//   user     User               @relation(fields: [userId], references: [id])
+
+//   @@map("routes")
+// }
+
+// model RouteMachineList {
+//   id               String  @id @default(uuid())
+//   routeId          String
+//   areaId           String? @unique
+//   equipmentGroupId String? @unique
+//   equipmentNameId  String? @unique
+//   componentId      String? @unique
+
+//   route          Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
+//   area           Area?           @relation(fields: [areaId], references: [id], onDelete: Cascade)
+//   equipmentGroup EquipmentGroup? @relation(fields: [equipmentGroupId], references: [id], onDelete: Cascade)
+//   equipmentName  EquipmentName?  @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+//   component      Component?      @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+//   @@map("route_machine_list")
+// }
+
+// model Area {
+//   id   String @id @default(uuid())
+//   name String
+
+//   equipmentGroups  EquipmentGroup[]
+//   RouteMachineList RouteMachineList[]
+
+//   @@map("area")
+// }
+
+// model EquipmentGroup {
+//   id     String  @id @default(uuid())
+//   name   String
+//   areaId String?
+
+//   area             Area?              @relation(fields: [areaId], references: [id], onDelete: Cascade)
+//   equipmentNames   EquipmentName[]
+//   RouteMachineList RouteMachineList[]
+
+//   @@map("equipmentgroup")
+// }
+
+// model EquipmentName {
+//   id      String  @id @default(uuid())
+//   name    String
+//   groupId String?
+
+//   group            EquipmentGroup?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+//   components       Component[]
+//   RouteMachineList RouteMachineList[]
+
+//   @@map("equipmentname")
+// }
+
+// model Component {
+//   id              String  @id @default(uuid())
+//   name            String
+//   equipmentNameId String?
+
+//   equipmentName    EquipmentName?     @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+//   RouteMachineList RouteMachineList[]
+
+//   @@map("component")
+// }
