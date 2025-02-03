@@ -14,51 +14,48 @@ datasource db {
 }
 
 model Client {
-  id        String   @id @default(uuid())
-  client    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  client         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
-// model Job {
-//   id              String   @id @default(uuid())
-//   status          String
-//   client          String
-//   area            String
-//   dateSurveyed    DateTime
-//   jobNumber       String   @unique
-//   poNumber        String?
-//   woNumber        String?
-//   reportNumber    String?
-//   jobDescription  String
-//   method          String
-//   inspector       String
-//   inspectionRoute String
-//   equipmentUse    String
-//   dateRegistered  DateTime @default(now())
-
-//   userId String
-//   user   User   @relation(fields: [userId], references: [id])
-
-//   @@map("jobs")
-// }
+model Job {
+  id              String   @id @default(uuid())
+  no              Int      @default(autoincrement()) @unique
+  status          String   @default("Waiting for Analysis")
+  client          String
+  area            String
+  dateSurveyed    DateTime
+  jobNumber       String   @unique
+  poNumber        String?
+  woNumber        String?
+  reportNumber    String?
+  jobDescription  String
+  method          String
+  inspector       String
+  inspectionRoute String
+  equipmentUse    String
+  dateRegistered  DateTime @default(now())
+  yearWeekNumber  String
+}
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String  @map("user_id")
-  type              String
-  provider          String
-  providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
+  id                 String  @id @default(cuid())
+  userId             String  @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+ 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+ 
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
@@ -69,7 +66,7 @@ model Session {
   userId       String   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+ 
   @@map("sessions")
 }
 
@@ -78,13 +75,12 @@ model User {
   name          String?   @unique
   email         String?   @unique
   password      String?
-  role          String    @default("user")
+  role          String   @default("user")
   emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
   sessions      Session[]
-  // Route           Route[]
-
+ 
   @@map("users")
 }
 

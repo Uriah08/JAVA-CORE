@@ -29,6 +29,7 @@ const ClientDialog = ({ onClose}: ClientDialogProps) => {
             if(!response.success) {
                 throw new Error(response.message)
             }
+            setClientName("")
             toast({
               title: "Success",
               description: response.message,
