@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import MachineList from "../../form/MachineList";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 type Component = string;
 
@@ -85,26 +88,49 @@ const List = () => {
     useState<EquipmentGroup | null>(null);
   const [currentEquipmentName, setCurrentEquipmentName] =
     useState<EquipmentName | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
 
-  // Handle clicking on an area
+  const handleAddItem = (name: string) => {
+    if (modalTitle === "Add Area") {
+      const newArea: Area = {
+        id: areas.length + 1,
+        name: name,
+        equipmentGroups: [],
+      };
+      areas.push(newArea);
+    } else if (modalTitle === "Add Equipment Group" && currentArea) {
+      const newEquipmentGroup: EquipmentGroup = {
+        id: currentArea.equipmentGroups.length + 1,
+        name: name,
+        equipmentNames: [],
+      };
+      currentArea.equipmentGroups.push(newEquipmentGroup);
+    } else if (modalTitle === "Add Equipment Name" && currentEquipmentGroup) {
+      const newEquipmentName: EquipmentName = {
+        id: currentEquipmentGroup.equipmentNames.length + 1,
+        name: name,
+        components: [],
+      };
+      currentEquipmentGroup.equipmentNames.push(newEquipmentName);
+    }
+  };
+
   const handleAreaClick = (area: Area) => {
     setCurrentArea(area);
     setCurrentEquipmentGroup(null);
     setCurrentEquipmentName(null);
   };
 
-  // Handle clicking on an equipment group
   const handleEquipmentGroupClick = (equipmentGroup: EquipmentGroup) => {
     setCurrentEquipmentGroup(equipmentGroup);
     setCurrentEquipmentName(null);
   };
 
-  // Handle clicking on an equipment name
   const handleEquipmentNameClick = (equipmentName: EquipmentName) => {
     setCurrentEquipmentName(equipmentName);
   };
 
-  // Handle clicking on the breadcrumb
   const handleBreadcrumbClick = (
     level: "area" | "equipmentGroup" | "equipmentName"
   ) => {
@@ -120,7 +146,6 @@ const List = () => {
     }
   };
 
-  // breadcrumb
   const breadcrumb = [];
   if (currentArea) {
     breadcrumb.push(
@@ -158,7 +183,7 @@ const List = () => {
 
   return (
     <div className="p-5">
-      <div className="mb-4 text-sm   font-semibold">
+      <div className="mb-4 text-sm font-semibold">
         {breadcrumb.length > 0 ? breadcrumb : "Select an area"}
       </div>
 
@@ -174,6 +199,19 @@ const List = () => {
                 {area.name}
               </li>
             ))}
+            <li>
+              <div className=" flex justify-center">
+                <Button
+                  onClick={() => {
+                    setModalTitle("Add Area");
+                    setIsModalOpen(true);
+                  }}
+                  className="bg-main justify-center hover:bg-red-400"
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </li>
           </ul>
         )}
 
@@ -188,6 +226,19 @@ const List = () => {
                 {equipmentGroup.name}
               </li>
             ))}
+            <li>
+              <div className=" flex justify-center">
+                <Button
+                  onClick={() => {
+                    setModalTitle("Add Equipment Group");
+                    setIsModalOpen(true);
+                  }}
+                  className="bg-main justify-center hover:bg-red-400"
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </li>
           </ul>
         )}
 
@@ -202,6 +253,19 @@ const List = () => {
                 {equipmentName.name}
               </li>
             ))}
+            <li>
+              <div className=" flex justify-center">
+                <Button
+                  onClick={() => {
+                    setModalTitle("Add Equipment");
+                    setIsModalOpen(true);
+                  }}
+                  className="bg-main justify-center hover:bg-red-400"
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </li>
           </ul>
         )}
 
@@ -212,9 +276,29 @@ const List = () => {
                 {component}
               </li>
             ))}
+            <li>
+              <div className=" flex justify-center">
+                <Button
+                  onClick={() => {
+                    setModalTitle("Add component");
+                    setIsModalOpen(true);
+                  }}
+                  className="bg-main justify-center hover:bg-red-400"
+                >
+                  <Plus />
+                </Button>
+              </div>
+            </li>
           </ul>
         )}
       </div>
+
+      <MachineList
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddItem}
+        title={modalTitle}
+      />
     </div>
   );
 };

@@ -353,7 +353,7 @@ const CreateRoute = () => {
         </div>
         <Button
           type="submit"
-          className="w-20 absolute top-48 right-16 bg-red-700 hover:bg-red-800 text-white py-2 rounded-md"
+          className="w-20 absolute top-48 right-16 bg-red-700 hover:bg-red-300 text-white py-2 rounded-md"
         >
           Create
         </Button>

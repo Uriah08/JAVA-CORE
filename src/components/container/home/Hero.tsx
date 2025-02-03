@@ -2,19 +2,25 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CircleArrowDown } from "lucide-react";
+import { CircleArrowDown, Cog } from "lucide-react";
 import HeartRateGraph from "./HertRateGraph";
 
-import { Session } from 'next-auth'
+import { Session } from "next-auth";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import { signOut } from "next-auth/react";
 
-const Hero = ({session, status}: {session?:Session | null, status?: "authenticated" | "loading" | "unauthenticated"}) => {
+const Hero = ({
+  session,
+  status,
+}: {
+  session?: Session | null;
+  status?: "authenticated" | "loading" | "unauthenticated";
+}) => {
   const heartRateData = [
     58, 58, 38, 80, 58, 58, 38, 80, 38, 58, 50, 80, 38, 38, 80, 58, 58, 38, 80,
     38, 58, 58,
@@ -68,33 +74,44 @@ const Hero = ({session, status}: {session?:Session | null, status?: "authenticat
             </Link>
           </div>
           <div>
-            {status === 'authenticated' ? (
+            {status === "authenticated" ? (
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button 
-                  variant="default" 
-                  className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900">{session?.user.name}
+                  <Button
+                    variant="default"
+                    className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
+                  >
+                    {session?.user.name}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent align="end" className="py-1 bg-white border-none shadow-none flex flex-col gap-1">
-                  {session?.user.role === 'admin' && 
-                    <Link href={'/job-registry'}>
-                    <Button className="w-full hover:bg-follow bg-main">
-                      Admin
-                    </Button>
-                    </Link>}
-                  <Button onClick={() => signOut()} className="w-full hover:bg-follow bg-main">Sign Out</Button>
+                <PopoverContent
+                  align="end"
+                  className="py-1 bg-white border-none shadow-none flex flex-col gap-1"
+                >
+                  {session?.user.role === "admin" && (
+                    <Link href={"/job-registry"}>
+                      <Button className="w-full hover:bg-follow bg-main">
+                        Admin
+                      </Button>
+                    </Link>
+                  )}
+                  <Button
+                    onClick={() => signOut()}
+                    className="w-full hover:bg-follow bg-main"
+                  >
+                    Sign Out
+                  </Button>
                 </PopoverContent>
               </Popover>
             ) : (
               <Link href={"/auth/sign-in"}>
-              <Button
-                variant="default"
-                className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
-              >
-                Login
-              </Button>
-            </Link>
+                <Button
+                  variant="default"
+                  className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
+                >
+                  Login
+                </Button>
+              </Link>
             )}
           </div>
         </nav>
@@ -119,29 +136,10 @@ const Hero = ({session, status}: {session?:Session | null, status?: "authenticat
           <Link href="#about" className="z-10 mt-10">
             <CircleArrowDown className="w-10 h-10 text-white animate-bounce" />
           </Link>
-          <div className="absolute bottom-4 right-4 flex items-center justify-center space-x-[-20px]">
-            {/* Gear 1 */}
-            <Image
-              src="/gear1.png"
-              alt="Gear 1"
-              width={450}
-              height={450}
-              className="animate-spin absolute -bottom-36 -right-32 z-10"
-            />
-            <Image
-              src="/gear1.png"
-              alt="Gear 3"
-              width={250}
-              height={250}
-              className="animate-spin-reverse relative top-0 left-32"
-            />
-            <Image
-              src="/gear1.png"
-              alt="Gear 2"
-              width={200}
-              height={200}
-              className="animate-spin-reverse relative bottom-11 left-14"
-            />
+          <div className="absolute right-14 flex items-center justify-center space-x-[-20px]">
+            <Cog className="w-48 h-48 animate-spin absolute top-48 -right-16 z-10" />
+            <Cog className="w-20 h-20 animate-spin-reverse relative top-36 left-9" />
+            <Cog className="w-36 h-36 animate-spin-reverse relative top-20 left-24" />
           </div>
         </div>
       </div>
@@ -153,4 +151,4 @@ const Hero = ({session, status}: {session?:Session | null, status?: "authenticat
   );
 };
 
-export default Hero
+export default Hero;

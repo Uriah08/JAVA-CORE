@@ -9,9 +9,9 @@ const ArrowButtonUP = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 500) {
-        setIsVisible(true); // Show the button when scrolled down more than 500 pixels
+        setIsVisible(true);
       } else {
-        setIsVisible(false); // Hide the button when scrolled up less than 500 pixels
+        setIsVisible(false);
       }
     };
 

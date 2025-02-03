@@ -7,7 +7,6 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white py-8 px-12">
       <div className="container mx-auto grid grid-cols-3 gap-8 items-start">
-        {/* Left: Logo */}
         <div className="flex items-center">
           <Image
             src="/logoo.png"
@@ -18,7 +17,6 @@ const Footer = () => {
           />
         </div>
 
-        {/* Center: Company */}
         <div>
           <h3 className="text-lg font-semibold mb-4">Company</h3>
           <ul className="space-y-2">
@@ -57,7 +55,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Copyright */}
       <div className="mt-8 border-gray-600 pt-4 text-center text-sm">
         © 2025 All rights reserved.
       </div>
