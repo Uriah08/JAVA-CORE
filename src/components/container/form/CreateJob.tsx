@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
 import { format } from "date-fns"
-import { CalendarIcon, Plus } from "lucide-react"
+import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import { Button } from "@/components/ui/button"
@@ -36,14 +36,16 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 
 import { jobSchema } from '@/schema'
-import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import ClientDialog from '../dialog/ClientDialog'
 import { useGetClientsQuery } from '@/store/api'
 import Loading from '@/components/ui/loading'
 
-const CreateJobForm = () => {
+import { useCreateJobMutation } from '@/store/api'
+import { useToast } from '@/hooks/use-toast'
 
-  const [isOpen, setIsOpen] = React.useState(false);
+const CreateJobForm = () => {
+  const { toast } = useToast()
+
+  const [createJob, { isLoading: createJobLoading }] = useCreateJobMutation()
 
   const { data, isLoading: clientLoading} = useGetClientsQuery();
   const clients = data?.clients || []
@@ -68,9 +70,35 @@ const CreateJobForm = () => {
         },
       })
     
-    function onSubmit(values: z.infer<typeof jobSchema>) {
-     console.log(values)
-     form.reset()
+    async function onSubmit(values: z.infer<typeof jobSchema>) {
+     try {
+
+      const formattedValues = {
+        ...values,
+        dateSurveyed: new Date(values.dateSurveyed),
+        dateRegistered: new Date(values.dateRegistered),
+      };
+
+      console.log(formattedValues);
+      
+
+      const response = await createJob(formattedValues).unwrap()
+      
+      if(!response.success) {
+        throw new Error(response.message)
+      }
+      toast({
+        title: "Success",
+        description: response.message,
+      });
+      form.reset()
+     } catch (error) {
+      const err = error as { data?: { message?: string } };
+      toast({
+        title: "Error",
+        description: err.data?.message || "An unexpected error occurred.",
+      });
+     }
     }
 
   return (
@@ -86,22 +114,18 @@ const CreateJobForm = () => {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a client" />
+                                <SelectValue placeholder={clientLoading ? 'Loading...' : 'Select a client'} />
                             </SelectTrigger>
                         </FormControl>
                         <FormMessage />
                         <SelectContent>
+                          <div className='flex flex-col max-h-[200px] overflow-auto'>
                           {clientLoading ? <div><Loading/></div> : clients.map((client) => (
-                            <SelectItem key={client.id} value={client.client}>
-                              {client.client}
+                            <SelectItem key={client.id} value={client.name || 'Unknown'}>
+                              {client.name}
                             </SelectItem>
                           ))}
-                            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                              <DialogTrigger asChild>
-                              <Button variant='outline' className='w-full'>Add new Client <Plus/></Button>
-                              </DialogTrigger>
-                              <ClientDialog onClose={() => setIsOpen(false)}/>
-                            </Dialog>
+                          </div>
                         </SelectContent>
                     </Select>
                 </FormItem>
@@ -381,7 +405,7 @@ const CreateJobForm = () => {
           )}
         />
         </div>
-        <Button className='w-fit bg-main mt-5'>Submit</Button>
+        <Button disabled={createJobLoading} className='w-fit bg-main mt-5 hover:bg-follow'>{createJobLoading ? 'Creating...' : 'Submit'}</Button>
         </form>
     </Form>
   )

@@ -47,15 +47,26 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { Skeleton } from "@/components/ui/skeleton"
+
+import { useDeleteJobsMutation } from "@/store/api"
+
+import { useToast } from "@/hooks/use-toast"
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  loading: boolean
 }
 
 export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
+  loading
 }: DataTableProps<TData, TValue>) {
+
+  const { toast } = useToast()
+  const [deleteJobs, { isLoading: deleteLoading }] = useDeleteJobsMutation();
 
   const [fromDate, setFromDate] = React.useState<Date>()
   const [toDate, setToDate] = React.useState<Date>()
@@ -99,17 +110,30 @@ export function DataTable<TData extends { id: string }, TValue>({
     },
   })
 
-  const getSelectedIds = () => {
-    const selectedIds = Object.keys(rowSelection)
+  const deleteJob = async () => {
+    try {
+      const selectedIds = Object.keys(rowSelection)
       .filter((key) => rowSelection[key])
       .map((key) => filteredData[parseInt(key)]?.id)
       .filter(Boolean);
-  
-    console.log("Selected IDs:", selectedIds);
-    return selectedIds;
-  };
 
-  getSelectedIds();
+      const response = await deleteJobs({id: selectedIds}).unwrap()
+      if(!response.success) {
+        throw new Error(response.message)
+      }
+      toast({
+        title: "Success",
+        description: response.message,
+      });
+      
+    } catch (error) {
+      const err = error as { data?: { message?: string } };
+      toast({
+        title: "Error",
+        description: err.data?.message || "An unexpected error occurred.",
+      });
+    }
+  };
   
 
   return (
@@ -122,6 +146,7 @@ export function DataTable<TData extends { id: string }, TValue>({
           <Popover>
           <PopoverTrigger asChild>
             <Button
+              disabled={loading}
               variant={"outline"}
               className={cn(
                 "w-full justify-start text-left font-normal",
@@ -147,6 +172,7 @@ export function DataTable<TData extends { id: string }, TValue>({
           <Popover>
           <PopoverTrigger asChild>
             <Button
+            disabled={loading}
               variant={"outline"}
               className={cn(
                 "w-full justify-start text-left font-normal",
@@ -171,6 +197,7 @@ export function DataTable<TData extends { id: string }, TValue>({
       </div>
       <div className="flex items-center py-4 w-full justify-between gap-3">
         <Input
+          disabled={loading}
           placeholder="Filter clients..."
           value={(table.getColumn("client")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
@@ -178,7 +205,7 @@ export function DataTable<TData extends { id: string }, TValue>({
           }
           className="w-full"
         />
-        <button disabled className="bg-main rounded-md p-2 text-white hover:bg-follow">
+        <button onClick={deleteJob} disabled={deleteLoading} className={`bg-main rounded-md p-2 text-white ${deleteLoading ? 'bg-opacity-50': 'hover:bg-follow'}`}>
           <Trash size={20}/>
         </button>
         <DropdownMenu>
@@ -210,7 +237,9 @@ export function DataTable<TData extends { id: string }, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    <div className="rounded-md border">
+
+    {loading ? <Skeleton className="h-[500px] w-full rounded-lg"/> : (
+      <div className="rounded-md border">
       <Table>
         <TableHeader className="bg-main">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -254,6 +283,9 @@ export function DataTable<TData extends { id: string }, TValue>({
         </TableBody>
       </Table>
       </div>
+    )}
+
+
       <div className="flex xl:flex-row flex-col items-start xl:gap-0 gap-2 xl:items-center justify-between xl:space-x-2 py-4 w-full ">
         <div className="flex gap-2">
           <div className="flex gap-2">

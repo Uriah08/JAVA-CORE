@@ -17,25 +17,9 @@ import { ArrowUpDown } from "lucide-react"
 
 import { Checkbox } from "@/components/ui/checkbox"
 
-export type Registry = {
-  id: string
-  status: "Waiting for Analysis" | "Being Analysed" | "Being Reviewed" | "Report Submitted"
-  client: string
-  area: string
-  dateSurveyed: string
-  jobNo: string
-  poNo: string
-  woNo: string
-  reportNo: string
-  jobDescription: string
-  method: string
-  inspector: string
-  analyst: string
-  reviewer: string
-  dateFinished: string
-}
+import { Job } from "@prisma/client"
 
-export const columns: ColumnDef<Registry>[] = [
+export const columns: ColumnDef<Job>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -61,7 +45,7 @@ export const columns: ColumnDef<Registry>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "no",
     header: "No.",
   },
   {
@@ -124,19 +108,19 @@ export const columns: ColumnDef<Registry>[] = [
         }
     },
     {
-        accessorKey: "jobNo",
+        accessorKey: "jobNumber",
         header: () => <div className="whitespace-nowrap">Job Number</div>,
     },
     {
-        accessorKey: "poNo",
+        accessorKey: "poNumber",
         header: () => <div className="whitespace-nowrap">PO Number</div>,
     },
     {
-        accessorKey: "woNo",
+        accessorKey: "woNumber",
         header: () => <div className="whitespace-nowrap">WO Number</div>,
     },
     {
-        accessorKey: "reportNo",
+        accessorKey: "reportNumber",
         header: () => <div className="whitespace-nowrap">Report Number</div>,
     },
     {
@@ -175,47 +159,47 @@ export const columns: ColumnDef<Registry>[] = [
           )
         }
     },
-    {
-        accessorKey: "analyst",
-        header: "Analyst",
-        cell: ({ row }) => {
-          const analyst = row.getValue("analyst") as string;
-          return (
-            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-              {analyst}
-            </h1>
-          )
-        }
-    },
-    {
-        accessorKey: "reviewer",
-        header: "Reviewer",
-        cell: ({ row }) => {
-          const reviewer = row.getValue("reviewer") as string;
-          return (
-            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-              {reviewer}
-            </h1>
-          )
-        }
-    },
-    {
-        accessorKey: "dateFinished",
-        header: () => <div className="whitespace-nowrap">Date Finished</div>,
-        cell: ({ row }) => {
-          const dateFinished = row.getValue("dateFinished") as string;
-          const formattedDate = new Date(dateFinished).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          });
-          return (
-            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-              {formattedDate}
-            </h1>
-          )
-        }
-    },
+    // {
+    //     accessorKey: "inspector",
+    //     header: "Analyst",
+    //     cell: ({ row }) => {
+    //       const analyst = row.getValue("inspector") as string;
+    //       return (
+    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+    //           {analyst}
+    //         </h1>
+    //       )
+    //     }
+    // },
+    // {
+    //     accessorKey: "inspector",
+    //     header: "Reviewer",
+    //     cell: ({ row }) => {
+    //       const reviewer = row.getValue("inspector") as string;
+    //       return (
+    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+    //           {reviewer}
+    //         </h1>
+    //       )
+    //     }
+    // },
+    // {
+    //     accessorKey: "dateSurveyed",
+    //     header: () => <div className="whitespace-nowrap">Date Finished</div>,
+    //     cell: ({ row }) => {
+    //       const dateFinished = row.getValue("dateSurveyed") as string;
+    //       const formattedDate = new Date(dateFinished).toLocaleDateString("en-US", {
+    //         month: "short",
+    //         day: "numeric",
+    //         year: "numeric",
+    //       });
+    //       return (
+    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+    //           {formattedDate}
+    //         </h1>
+    //       )
+    //     }
+    // },
     {
         id: "actions",
         cell: ({ row }) => {
