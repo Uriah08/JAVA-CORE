@@ -3,6 +3,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User, Job } from '@prisma/client';
 
+export type ExtendedJob = Job & {
+    user: {
+        name: string
+    }
+  };
+
 type ClientsResponse = {
     clients: User[];
     message: string
@@ -10,7 +16,7 @@ type ClientsResponse = {
   };
 
 type JobsResponse = {
-    jobs: Job[];
+    jobs: ExtendedJob[];
     message: string
     success: boolean
 }

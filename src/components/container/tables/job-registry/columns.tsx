@@ -17,9 +17,9 @@ import { ArrowUpDown } from "lucide-react"
 
 import { Checkbox } from "@/components/ui/checkbox"
 
-import { Job } from "@prisma/client"
+import { ExtendedJob } from "@/store/api"
 
-export const columns: ColumnDef<Job>[] = [
+export const columns: ColumnDef<ExtendedJob>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -64,7 +64,7 @@ export const columns: ColumnDef<Job>[] = [
     }
   },
   {
-    accessorKey: "client",
+    accessorKey: "user",
     header: ({ column }) => {
       return (
         <Button
@@ -76,7 +76,8 @@ export const columns: ColumnDef<Job>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
-    }
+    },
+    cell: ({ row }) => row.original.user?.name || "No Name",
   },
     {
         accessorKey: "area",
@@ -159,47 +160,52 @@ export const columns: ColumnDef<Job>[] = [
           )
         }
     },
-    // {
-    //     accessorKey: "inspector",
-    //     header: "Analyst",
-    //     cell: ({ row }) => {
-    //       const analyst = row.getValue("inspector") as string;
-    //       return (
-    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-    //           {analyst}
-    //         </h1>
-    //       )
-    //     }
-    // },
-    // {
-    //     accessorKey: "inspector",
-    //     header: "Reviewer",
-    //     cell: ({ row }) => {
-    //       const reviewer = row.getValue("inspector") as string;
-    //       return (
-    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-    //           {reviewer}
-    //         </h1>
-    //       )
-    //     }
-    // },
-    // {
-    //     accessorKey: "dateSurveyed",
-    //     header: () => <div className="whitespace-nowrap">Date Finished</div>,
-    //     cell: ({ row }) => {
-    //       const dateFinished = row.getValue("dateSurveyed") as string;
-    //       const formattedDate = new Date(dateFinished).toLocaleDateString("en-US", {
-    //         month: "short",
-    //         day: "numeric",
-    //         year: "numeric",
-    //       });
-    //       return (
-    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-    //           {formattedDate}
-    //         </h1>
-    //       )
-    //     }
-    // },
+    {
+        accessorKey: "analyst",
+        header: "Analyst",
+        cell: ({ row }) => {
+          const analyst = row.getValue("analyst") as string;
+          return (
+            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {analyst || 'N/A'}
+            </h1>
+          )
+        }
+    },
+    {
+        accessorKey: "reviewer",
+        header: "Reviewer",
+        cell: ({ row }) => {
+          const reviewer = row.getValue("reviewer") as string;
+          return (
+            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {reviewer || 'N/A'}
+            </h1>
+          )
+        }
+    },
+    {
+        accessorKey: "dateFinished",
+        header: () => <div className="whitespace-nowrap">Date Finished</div>,
+        cell: ({ row }) => {
+          const dateFinished = row.getValue("dateFinished") as string;
+
+          if (!dateFinished) {
+            return <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">Not Finished</h1>;
+          }
+
+          const formattedDate = new Date(dateFinished).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+          return (
+            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {formattedDate}
+            </h1>
+          )
+        }
+    },
     {
         id: "actions",
         cell: ({ row }) => {

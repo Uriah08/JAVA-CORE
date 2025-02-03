@@ -52,6 +52,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useDeleteJobsMutation } from "@/store/api"
 
 import { useToast } from "@/hooks/use-toast"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { DialogClose } from "@radix-ui/react-dialog"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -68,6 +70,8 @@ export function DataTable<TData extends { id: string }, TValue>({
   const { toast } = useToast()
   const [deleteJobs, { isLoading: deleteLoading }] = useDeleteJobsMutation();
 
+  const [open, setOpen] = React.useState(false)
+
   const [fromDate, setFromDate] = React.useState<Date>()
   const [toDate, setToDate] = React.useState<Date>()
 
@@ -78,7 +82,7 @@ export function DataTable<TData extends { id: string }, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState<Record<string, boolean>>({})
-
+    
     const filteredData = React.useMemo(() => {
       if (!fromDate && !toDate) return data;
   
@@ -125,7 +129,7 @@ export function DataTable<TData extends { id: string }, TValue>({
         title: "Success",
         description: response.message,
       });
-      
+      setOpen(false)
     } catch (error) {
       const err = error as { data?: { message?: string } };
       toast({
@@ -199,15 +203,28 @@ export function DataTable<TData extends { id: string }, TValue>({
         <Input
           disabled={loading}
           placeholder="Filter clients..."
-          value={(table.getColumn("client")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("user")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("client")?.setFilterValue(event.target.value)
+            table.getColumn("user")?.setFilterValue(event.target.value)
           }
           className="w-full"
         />
-        <button onClick={deleteJob} disabled={deleteLoading} className={`bg-main rounded-md p-2 text-white ${deleteLoading ? 'bg-opacity-50': 'hover:bg-follow'}`}>
-          <Trash size={20}/>
-        </button>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger disabled={deleteLoading || Object.keys(rowSelection).length === 0}>
+            <div className={`bg-main rounded-md p-2 text-white ${deleteLoading || Object.keys(rowSelection).length === 0 ? 'bg-opacity-50': 'hover:bg-follow'}`}>
+              <Trash size={20}/>
+            </div>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Are you sure you want to delete {Object.keys(rowSelection).length} rows?</DialogTitle>
+            <div className="flex gap-3 justify-end">
+              <DialogClose asChild>
+                <Button onClick={() => setRowSelection({})} variant={"outline"}>Cancel</Button>
+              </DialogClose>
+              <Button className="bg-main hover:bg-follow" onClick={deleteJob} disabled={deleteLoading || Object.keys(rowSelection).length === 0}>Delete</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="bg-main rounded-md p-2 cursor-pointer text-white hover:bg-follow">

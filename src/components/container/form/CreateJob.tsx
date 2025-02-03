@@ -79,9 +79,6 @@ const CreateJobForm = () => {
         dateRegistered: new Date(values.dateRegistered),
       };
 
-      console.log(formattedValues);
-      
-
       const response = await createJob(formattedValues).unwrap()
       
       if(!response.success) {
@@ -121,7 +118,7 @@ const CreateJobForm = () => {
                         <SelectContent>
                           <div className='flex flex-col max-h-[200px] overflow-auto'>
                           {clientLoading ? <div><Loading/></div> : clients.map((client) => (
-                            <SelectItem key={client.id} value={client.name || 'Unknown'}>
+                            <SelectItem key={client.id} value={client.id}>
                               {client.name}
                             </SelectItem>
                           ))}

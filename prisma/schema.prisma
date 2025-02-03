@@ -13,18 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
-  id             String   @id @default(uuid())
-  client         String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
 model Job {
   id              String   @id @default(uuid())
   no              Int      @default(autoincrement()) @unique
   status          String   @default("Waiting for Analysis")
-  client          String
+  userId          String   @map("user_id")
   area            String
   dateSurveyed    DateTime
   jobNumber       String   @unique
@@ -34,10 +27,17 @@ model Job {
   jobDescription  String
   method          String
   inspector       String
+  analyst         String?
+  reviewer        String?
+  dateFinished    DateTime?
   inspectionRoute String
   equipmentUse    String
   dateRegistered  DateTime @default(now())
   yearWeekNumber  String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("jobs")
 }
 
 model Account {
@@ -80,6 +80,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+
+  jobs          Job[]
  
   @@map("users")
 }
