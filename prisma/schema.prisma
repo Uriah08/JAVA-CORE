@@ -20,28 +20,25 @@ model Client {
   updatedAt      DateTime @updatedAt
 }
 
-// model Job {
-//   id              String   @id @default(uuid())
-//   status          String
-//   client          String
-//   area            String
-//   dateSurveyed    DateTime
-//   jobNumber       String   @unique
-//   poNumber        String?
-//   woNumber        String?
-//   reportNumber    String?
-//   jobDescription  String
-//   method          String
-//   inspector       String
-//   inspectionRoute String
-//   equipmentUse    String
-//   dateRegistered  DateTime @default(now())
-
-//   userId String
-//   user   User   @relation(fields: [userId], references: [id])
-
-//   @@map("jobs")
-// }
+model Job {
+  id              String   @id @default(uuid())
+  no              Int      @default(autoincrement()) @unique
+  status          String   @default("Waiting for Analysis")
+  client          String
+  area            String
+  dateSurveyed    DateTime
+  jobNumber       String   @unique
+  poNumber        String?
+  woNumber        String?
+  reportNumber    String?
+  jobDescription  String
+  method          String
+  inspector       String
+  inspectionRoute String
+  equipmentUse    String
+  dateRegistered  DateTime @default(now())
+  yearWeekNumber  String
+}
 
 model Account {
   id                 String  @id @default(cuid())
