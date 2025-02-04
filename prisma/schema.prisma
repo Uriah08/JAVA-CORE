@@ -34,6 +34,8 @@ model Job {
   equipmentUse    String
   dateRegistered  DateTime @default(now())
   yearWeekNumber  String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
