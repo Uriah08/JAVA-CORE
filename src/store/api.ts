@@ -73,6 +73,17 @@ export const api = createApi({
                 }
             }),
             invalidatesTags: ["Job"]
+        }),
+        updateJob: build.mutation({
+            query: (data) => ({
+                url: "/api/job/update",
+                method: "POST",
+                body: data,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }),
+            invalidatesTags: ["Job"]
         })
     })
 })
@@ -82,5 +93,6 @@ export const {
     useGetClientsQuery,
     useCreateJobMutation,
     useGetJobsQuery,
-    useDeleteJobsMutation
+    useDeleteJobsMutation,
+    useUpdateJobMutation
 } = api;

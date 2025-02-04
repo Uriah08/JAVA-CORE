@@ -18,6 +18,11 @@ import { ArrowUpDown } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 
 import { ExtendedJob } from "@/store/api"
+import { Dialog } from "@/components/ui/dialog"
+import Analyst from "../../dialogs/Analyst"
+import React from "react"
+import Reviewer from "../../dialogs/Reviewer"
+import Status from "../../dialogs/Status"
 
 export const columns: ColumnDef<ExtendedJob>[] = [
   {
@@ -209,29 +214,52 @@ export const columns: ColumnDef<ExtendedJob>[] = [
     {
         id: "actions",
         cell: ({ row }) => {
-          const registry = row.original
-     
+          const job = row.original
+
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          const [dialogState, setDialogState] = React.useState<{ [key: string]: boolean }>({
+            analyst: false,
+            reviewer: false,
+            status: false,
+          });
+          
+          const openDialog = (key: string) => setDialogState((prev) => ({ ...prev, [key]: true }));
+          const closeDialog = (key: string) => setDialogState((prev) => ({ ...prev, [key]: false }));
+          
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() => navigator.clipboard.writeText(registry.id)}
-                >
-                  Copy regsitry ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>View Routes</DropdownMenuItem>
-                <DropdownMenuItem>View Other</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(job.id)}>
+                    Copy registry ID
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => openDialog("analyst")}>Assign Analyst</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => openDialog("reviewer")}>Assign Reviewer</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => openDialog("status")}>Update Status</DropdownMenuItem>
+                  <DropdownMenuItem>View Other</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+          
+              {/* Dialog Components */}
+              <Dialog open={dialogState.analyst} onOpenChange={() => closeDialog("analyst")}>
+                <Analyst onClose={() => closeDialog("analyst")} id={job.id} defaultAnalyst={job.analyst || "None"} />
+              </Dialog>
+              <Dialog open={dialogState.reviewer} onOpenChange={() => closeDialog("reviewer")}>
+                <Reviewer onClose={() => closeDialog("reviewer")} id={job.id} defaultReviewer={job.reviewer || "None"} />
+              </Dialog>
+              <Dialog open={dialogState.status} onOpenChange={() => closeDialog("status")}>
+                <Status onClose={() => closeDialog("status")} id={job.id} defaultStatus={job.status || "Waiting for Analysis"} />
+              </Dialog>
+            </>
+          );
         },
       },
 ]
