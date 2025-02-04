@@ -16,7 +16,7 @@ const JobRegistry = () => {
 
   const chart1 = jobs
   .map(job => job.dateSurveyed)
-  .filter(date => date);
+  .filter(date => date)
 
   const chart2 = jobs.map(job => job.status).filter(status => status)
 
