@@ -36,7 +36,6 @@ const chartConfig = {
   }
 } satisfies ChartConfig
 
-
 export function WaveChart({ chartDatas } : { chartDatas: Date[]}) {
 
   const formattedData = chartDatas.reduce((acc, dateObj) => {

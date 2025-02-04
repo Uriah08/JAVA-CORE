@@ -82,7 +82,6 @@ export function DataTable<TData extends { id: string }, TValue>({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState<Record<string, boolean>>({})
-    
     const filteredData = React.useMemo(() => {
       if (!fromDate && !toDate) return data;
   

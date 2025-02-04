@@ -69,9 +69,6 @@ const CreateJobForm = () => {
           yearWeekNo: ""
         },
       })
-
-      console.log(form.getValues("dateSurveyed"));
-      
     
     async function onSubmit(values: z.infer<typeof jobSchema>) {
      try {
