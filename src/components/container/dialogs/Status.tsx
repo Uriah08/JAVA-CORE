@@ -13,10 +13,9 @@ interface Props {
     onClose: () => void
   }
 const Status = ({defaultStatus, id, onClose}: Props) => {
-  const { toast } = useToast();
+    const { toast } = useToast();
     const [updateJob, { isLoading }] = useUpdateJobMutation();
-    const [status, setStatus] = React.useState(defaultStatus);
-        
+    const [status, setStatus] = React.useState("");
     const handleUpdate = async () => {
       try {
         const response = await updateJob({status,id}).unwrap()
@@ -27,7 +26,7 @@ const Status = ({defaultStatus, id, onClose}: Props) => {
           title: "Success",
           description: response.message,
         });
-        setStatus(defaultStatus)
+        setStatus("")
         onClose();
       } catch (error) {
         const err = error as { data?: { message?: string } };
@@ -36,13 +35,14 @@ const Status = ({defaultStatus, id, onClose}: Props) => {
           description: err.data?.message || "An unexpected error occurred.",
         });
       }
+      setStatus("")
     }
   return (
     <DialogContent>
         <DialogTitle>Assign Reviewer</DialogTitle>
                   <Select onValueChange={setStatus} defaultValue={defaultStatus}>
                     <SelectTrigger>
-                      <SelectValue>{status || defaultStatus}</SelectValue>
+                      <SelectValue>{status || "Select Status"}</SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Waiting for Analysis"> <div className='flex gap-3 items-center'><div className='h-3 w-3 bg-main rounded-full'/> Waiting for Analysis</div></SelectItem>
@@ -51,7 +51,7 @@ const Status = ({defaultStatus, id, onClose}: Props) => {
                       <SelectItem value="Report Submitted"> <div className='flex gap-3 items-center'><div className='h-3 w-3 bg-green-500 rounded-full'/> Report Submitted</div></SelectItem>
                     </SelectContent>
                   </Select>
-                  {status === "Report Submitted" && (
+                  {defaultStatus === "Report Submitted" || status === "Report Submitted" && (
                     <div className='flex flex-col gap-3 w-full p-2 bg-[#eee8e8] rounded-lg'>
                       <div className='flex gap-3 justify-center'>
                         <AlertCircle className='text-yellow-700'/>
@@ -64,8 +64,8 @@ const Status = ({defaultStatus, id, onClose}: Props) => {
                     </div>
                   )}
                   <div className="w-full flex justify-end gap-3">
-                    <Button variant="outline">Cancel</Button>
-                    <Button onClick={handleUpdate} disabled={isLoading} className="bg-main hover:bg-follow">{isLoading ? 'Assigning...' : 'Assign'}</Button>
+                    <Button onClick={onClose} variant="outline">Cancel</Button>
+                    <Button onClick={handleUpdate} disabled={isLoading || defaultStatus === "Report Submitted"} className="bg-main hover:bg-follow">{isLoading ? 'Updating...' : 'Update'}</Button>
                   </div>
     </DialogContent>
   )

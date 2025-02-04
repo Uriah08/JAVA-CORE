@@ -51,7 +51,23 @@ export const columns: ColumnDef<ExtendedJob>[] = [
   },
   {
     accessorKey: "no",
-    header: "No.",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-follow hover:text-white"
+        >
+          No
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => { 
+      const no = row.getValue("no") as string;
+      return (
+      <div className="flex justify-center">{no}</div>
+      )},
   },
   {
     accessorKey: "status",
@@ -64,7 +80,7 @@ export const columns: ColumnDef<ExtendedJob>[] = [
       ? "bg-red-500"
       : status === "Being Analysed" ? "bg-orange-500" : status === "Being Reviewed" ? "bg-yellow-500":"bg-green-500";
       return (
-        <div className={`w-fit h-full p-2 rounded-full ${bgColor}`}></div>
+        <div className={`w-fit h-full p-2 rounded-full mx-auto ${bgColor}`}></div>
       )
     }
   },
@@ -78,12 +94,15 @@ export const columns: ColumnDef<ExtendedJob>[] = [
           className="hover:bg-follow hover:text-white"
         >
           Client
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       )
     },
-    cell: ({ row }) => row.original.user?.name || "No Name",
-  },
+    cell: ({ row }) => { 
+      return (
+      <div className="flex ml-4">{row.original.user.name}</div>
+      )},
+    },
     {
         accessorKey: "area",
         header: "Area",
@@ -256,7 +275,7 @@ export const columns: ColumnDef<ExtendedJob>[] = [
                 <Reviewer onClose={() => closeDialog("reviewer")} id={job.id} defaultReviewer={job.reviewer || "None"} />
               </Dialog>
               <Dialog open={dialogState.status} onOpenChange={() => closeDialog("status")}>
-                <Status onClose={() => closeDialog("status")} id={job.id} defaultStatus={job.status || "Waiting for Analysis"} />
+                <Status onClose={() => closeDialog("status")} id={job.id} defaultStatus={job.status} />
               </Dialog>
             </>
           );

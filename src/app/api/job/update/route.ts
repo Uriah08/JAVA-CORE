@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         
         const { status, analyst, reviewer, id } = body;
 
-        const dateFinished = status === "Report Submitted" ? new Date() : null;
+        const dateFinished = status === "Report Submitted" ? new Date() : undefined;
 
         await prisma.job.update({
             where: {

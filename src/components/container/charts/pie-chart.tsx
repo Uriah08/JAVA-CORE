@@ -18,41 +18,56 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
-]
 
 const chartConfig = {
   visitors: {
     label: "Visitors",
   },
-  chrome: {
+  analysis: {
     label: "Analysis",
     color: "#b70000",
   },
-  firefox: {
+  submitted: {
     label: "Submitted",
     color: "#22C55E",
   },
-  edge: {
+  analysed: {
     label: "Analysed",
     color: "#F97316",
   },
-  other: {
+  reviewed: {
     label: "Reviewed",
     color: "#EAB308",
   },
 } satisfies ChartConfig
 
-export function PieCharts() {
+export function PieCharts({chartDatas}: {chartDatas: string[]}) {
+  const statusColors: { [key: string]: string } = {
+    "Submitted": "var(--color-submitted)",
+    "Analysed": "var(--color-analysed)",
+    "Reviewed": "var(--color-reviewed)",
+    "Analysis": "var(--color-analysis)",
+  }
+
+  const statusCount = chartDatas.reduce((acc, status) => {
+    const cleanStatus = status.replace("Report ", "").replace("Being ", "").replace("Waiting for ","");
+    acc[cleanStatus] = (acc[cleanStatus] || 0) + 1;
+    return acc;
+  }, {} as { [key: string]: number });
+
+  // Create chartData in the required format
+  const chartData = Object.entries(statusCount).map(([status, count]) => ({
+    browser: status.toLowerCase().replace(/\s+/g, ''), 
+    visitors: count,
+    fill: statusColors[status] || "var(--color-default)", 
+  }));
+  
+
   return (
     <Card className="flex flex-col md:w-1/2 w-full shadow-lg">
       <CardHeader className="items-center pb-0">
         <CardTitle>Pie Chart - Donut Active</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription>All - Time</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer

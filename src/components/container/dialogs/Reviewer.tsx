@@ -49,7 +49,7 @@ const Reviewer = ({ defaultReviewer, id, onClose }: Props) => {
             </SelectContent>
           </Select>
           <div className="w-full flex justify-end gap-3">
-            <Button variant="outline">Cancel</Button>
+            <Button onClick={onClose} variant="outline">Cancel</Button>
             <Button onClick={handleUpdate} disabled={isLoading} className="bg-main hover:bg-follow">{isLoading ? 'Assigning...' : 'Assign'}</Button>
           </div>
         </DialogContent>
