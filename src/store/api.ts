@@ -3,6 +3,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { User, Job } from '@prisma/client';
 
+export type ExtendedJob = Job & {
+    user: {
+        name: string
+    }
+  };
+
 type ClientsResponse = {
     clients: User[];
     message: string
@@ -10,7 +16,7 @@ type ClientsResponse = {
   };
 
 type JobsResponse = {
-    jobs: Job[];
+    jobs: ExtendedJob[];
     message: string
     success: boolean
 }
@@ -67,6 +73,17 @@ export const api = createApi({
                 }
             }),
             invalidatesTags: ["Job"]
+        }),
+        updateJob: build.mutation({
+            query: (data) => ({
+                url: "/api/job/update",
+                method: "POST",
+                body: data,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }),
+            invalidatesTags: ["Job"]
         })
     })
 })
@@ -76,5 +93,6 @@ export const {
     useGetClientsQuery,
     useCreateJobMutation,
     useGetJobsQuery,
-    useDeleteJobsMutation
+    useDeleteJobsMutation,
+    useUpdateJobMutation
 } = api;

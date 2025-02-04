@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
         await prisma.job.create({
             data: {
-                client,
+                userId: client,
                 area,
                 dateSurveyed,
                 jobNumber: jobNo,
@@ -72,7 +72,15 @@ export async function GET() {
             throw new Error('Not Authenticated')
         }
         
-        const jobs = await prisma.job.findMany()
+        const jobs = await prisma.job.findMany({
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                    },
+                }
+            },
+        })
         return NextResponse.json({ message: 'Job created successfully', success: true, jobs}, { status: 201 });
     } catch (error) {
         console.error('Error in route handler:', error);

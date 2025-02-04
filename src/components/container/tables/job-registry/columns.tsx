@@ -17,9 +17,14 @@ import { ArrowUpDown } from "lucide-react"
 
 import { Checkbox } from "@/components/ui/checkbox"
 
-import { Job } from "@prisma/client"
+import { ExtendedJob } from "@/store/api"
+import { Dialog } from "@/components/ui/dialog"
+import Analyst from "../../dialogs/Analyst"
+import React from "react"
+import Reviewer from "../../dialogs/Reviewer"
+import Status from "../../dialogs/Status"
 
-export const columns: ColumnDef<Job>[] = [
+export const columns: ColumnDef<ExtendedJob>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -46,7 +51,23 @@ export const columns: ColumnDef<Job>[] = [
   },
   {
     accessorKey: "no",
-    header: "No.",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="hover:bg-follow hover:text-white"
+        >
+          No
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => { 
+      const no = row.getValue("no") as string;
+      return (
+      <div className="flex justify-center">{no}</div>
+      )},
   },
   {
     accessorKey: "status",
@@ -59,12 +80,12 @@ export const columns: ColumnDef<Job>[] = [
       ? "bg-red-500"
       : status === "Being Analysed" ? "bg-orange-500" : status === "Being Reviewed" ? "bg-yellow-500":"bg-green-500";
       return (
-        <div className={`w-fit h-full p-2 rounded-full ${bgColor}`}></div>
+        <div className={`w-fit h-full p-2 rounded-full mx-auto ${bgColor}`}></div>
       )
     }
   },
   {
-    accessorKey: "client",
+    accessorKey: "user",
     header: ({ column }) => {
       return (
         <Button
@@ -73,11 +94,15 @@ export const columns: ColumnDef<Job>[] = [
           className="hover:bg-follow hover:text-white"
         >
           Client
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="h-4 w-4" />
         </Button>
       )
-    }
-  },
+    },
+    cell: ({ row }) => { 
+      return (
+      <div className="flex ml-4">{row.original.user.name}</div>
+      )},
+    },
     {
         accessorKey: "area",
         header: "Area",
@@ -159,73 +184,101 @@ export const columns: ColumnDef<Job>[] = [
           )
         }
     },
-    // {
-    //     accessorKey: "inspector",
-    //     header: "Analyst",
-    //     cell: ({ row }) => {
-    //       const analyst = row.getValue("inspector") as string;
-    //       return (
-    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-    //           {analyst}
-    //         </h1>
-    //       )
-    //     }
-    // },
-    // {
-    //     accessorKey: "inspector",
-    //     header: "Reviewer",
-    //     cell: ({ row }) => {
-    //       const reviewer = row.getValue("inspector") as string;
-    //       return (
-    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-    //           {reviewer}
-    //         </h1>
-    //       )
-    //     }
-    // },
-    // {
-    //     accessorKey: "dateSurveyed",
-    //     header: () => <div className="whitespace-nowrap">Date Finished</div>,
-    //     cell: ({ row }) => {
-    //       const dateFinished = row.getValue("dateSurveyed") as string;
-    //       const formattedDate = new Date(dateFinished).toLocaleDateString("en-US", {
-    //         month: "short",
-    //         day: "numeric",
-    //         year: "numeric",
-    //       });
-    //       return (
-    //         <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
-    //           {formattedDate}
-    //         </h1>
-    //       )
-    //     }
-    // },
+    {
+        accessorKey: "analyst",
+        header: "Analyst",
+        cell: ({ row }) => {
+          const analyst = row.getValue("analyst") as string;
+          return (
+            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {analyst || 'N/A'}
+            </h1>
+          )
+        }
+    },
+    {
+        accessorKey: "reviewer",
+        header: "Reviewer",
+        cell: ({ row }) => {
+          const reviewer = row.getValue("reviewer") as string;
+          return (
+            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {reviewer || 'N/A'}
+            </h1>
+          )
+        }
+    },
+    {
+        accessorKey: "dateFinished",
+        header: () => <div className="whitespace-nowrap">Date Finished</div>,
+        cell: ({ row }) => {
+          const dateFinished = row.getValue("dateFinished") as string;
+
+          if (!dateFinished) {
+            return <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">Not Finished</h1>;
+          }
+
+          const formattedDate = new Date(dateFinished).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+          return (
+            <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+              {formattedDate}
+            </h1>
+          )
+        }
+    },
     {
         id: "actions",
         cell: ({ row }) => {
-          const registry = row.original
-     
+          const job = row.original
+
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          const [dialogState, setDialogState] = React.useState<{ [key: string]: boolean }>({
+            analyst: false,
+            reviewer: false,
+            status: false,
+          });
+          
+          const openDialog = (key: string) => setDialogState((prev) => ({ ...prev, [key]: true }));
+          const closeDialog = (key: string) => setDialogState((prev) => ({ ...prev, [key]: false }));
+          
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() => navigator.clipboard.writeText(registry.id)}
-                >
-                  Copy regsitry ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>View Routes</DropdownMenuItem>
-                <DropdownMenuItem>View Other</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(job.id)}>
+                    Copy registry ID
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => openDialog("analyst")}>Assign Analyst</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => openDialog("reviewer")}>Assign Reviewer</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => openDialog("status")}>Update Status</DropdownMenuItem>
+                  <DropdownMenuItem>View Other</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+          
+              {/* Dialog Components */}
+              <Dialog open={dialogState.analyst} onOpenChange={() => closeDialog("analyst")}>
+                <Analyst onClose={() => closeDialog("analyst")} id={job.id} defaultAnalyst={job.analyst || "None"} />
+              </Dialog>
+              <Dialog open={dialogState.reviewer} onOpenChange={() => closeDialog("reviewer")}>
+                <Reviewer onClose={() => closeDialog("reviewer")} id={job.id} defaultReviewer={job.reviewer || "None"} />
+              </Dialog>
+              <Dialog open={dialogState.status} onOpenChange={() => closeDialog("status")}>
+                <Status onClose={() => closeDialog("status")} id={job.id} defaultStatus={job.status} />
+              </Dialog>
+            </>
+          );
         },
       },
 ]

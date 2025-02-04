@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm, Controller } from "react-hook-form"; // Import Controller
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { routeSchema } from "@/schema";
@@ -53,9 +53,11 @@ const CreateRoute = () => {
     defaultValues: {
       client: "",
       route: "",
-      droppedItems: [] as NestedData[],
+      droppedItems: [],
     },
   });
+
+  const [droppedItems, setDroppedItems] = useState<NestedData[]>([]);
 
   function onSubmit(values: z.infer<typeof routeSchema>) {
     console.log(values);
@@ -119,6 +121,161 @@ const CreateRoute = () => {
     },
   ];
 
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    data: NestedData
+  ) => {
+    e.dataTransfer.setData("text/plain", JSON.stringify(data));
+  };
+
+  const handleDrop = (
+    e: React.DragEvent<HTMLDivElement>,
+    parentId?: number,
+    type?: "equipmentGroup" | "equipmentName" | "component"
+  ) => {
+    e.preventDefault();
+    const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+
+    const itemExists = (items: NestedData[], item: NestedData) => {
+      return items.some((existingItem) => existingItem.id === item.id);
+    };
+
+    if (parentId) {
+      setDroppedItems((prev) =>
+        prev.map((item) => {
+          if (item.id === parentId) {
+            if (type === "equipmentGroup") {
+              if (!itemExists(item.equipmentGroups || [], data)) {
+                return {
+                  ...item,
+                  equipmentGroups: [
+                    ...(item.equipmentGroups || []),
+                    { id: Date.now(), name: data.name },
+                  ],
+                };
+              }
+            } else if (type === "equipmentName") {
+              if (!itemExists(item.equipmentNames || [], data)) {
+                return {
+                  ...item,
+                  equipmentNames: [
+                    ...(item.equipmentNames || []),
+                    { id: Date.now(), name: data.name },
+                  ],
+                };
+              }
+            } else if (type === "component") {
+              if (!item.components?.includes(data.name)) {
+                return {
+                  ...item,
+                  components: [...(item.components || []), data.name],
+                };
+              }
+            }
+          } else if (item.equipmentGroups || item.equipmentNames) {
+            return {
+              ...item,
+              equipmentGroups: item.equipmentGroups
+                ? item.equipmentGroups.map((group) =>
+                    group.id === parentId
+                      ? {
+                          ...group,
+                          equipmentNames:
+                            type === "equipmentName" &&
+                            !itemExists(group.equipmentNames || [], data)
+                              ? [
+                                  ...(group.equipmentNames || []),
+                                  { id: Date.now(), name: data.name },
+                                ]
+                              : group.equipmentNames,
+                          components:
+                            type === "component" &&
+                            !group.components?.includes(data.name)
+                              ? [...(group.components || []), data.name]
+                              : group.components,
+                        }
+                      : group
+                  )
+                : undefined,
+              equipmentNames: item.equipmentNames
+                ? item.equipmentNames.map((name) =>
+                    name.id === parentId
+                      ? {
+                          ...name,
+                          components:
+                            type === "component" &&
+                            !name.components?.includes(data.name)
+                              ? [...(name.components || []), data.name]
+                              : name.components,
+                        }
+                      : name
+                  )
+                : undefined,
+            };
+          }
+          return item;
+        })
+      );
+    } else {
+      if (!itemExists(droppedItems, data)) {
+        setDroppedItems((prev) => [...prev, data]);
+      }
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleRemoveItem = (
+    itemId: number,
+    parentId?: number,
+    type?: "component" | "equipmentGroup" | "equipmentName"
+  ) => {
+    setDroppedItems((prev) => {
+      const removeItem = (items: NestedData[]): NestedData[] => {
+        return items
+          .map((item) => {
+            if (type === "component" && item.id === parentId) {
+              return {
+                ...item,
+                components: item.components?.filter((_, idx) => idx !== itemId),
+              };
+            } else if (type === "equipmentGroup" && item.id === parentId) {
+              return {
+                ...item,
+                equipmentGroups: item.equipmentGroups?.filter(
+                  (group) => group.id !== itemId
+                ),
+              };
+            } else if (type === "equipmentName" && item.id === parentId) {
+              return {
+                ...item,
+                equipmentNames: item.equipmentNames?.filter(
+                  (name) => name.id !== itemId
+                ),
+              };
+            } else if (item.id === itemId && !type) {
+              return null;
+            } else {
+              return {
+                ...item,
+                equipmentGroups: item.equipmentGroups
+                  ? removeItem(item.equipmentGroups)
+                  : undefined,
+                equipmentNames: item.equipmentNames
+                  ? removeItem(item.equipmentNames)
+                  : undefined,
+              };
+            }
+          })
+          .filter(Boolean) as NestedData[];
+      };
+
+      return removeItem(prev);
+    });
+  };
+
   return (
     <Form {...form}>
       <form
@@ -154,12 +311,16 @@ const CreateRoute = () => {
             )}
           />
         </div>
-        <hr className="my-0 border-t border-gray-300 w-full" />
+        <hr className="my-0 border-t border-gray-300 w-full" />{" "}
         <div className="flex gap-5 w-full">
           <div className="w-1/3">
             <h2 className="text-lg font-semibold mb-3">Machine List</h2>
             {areas.map((area) => (
-              <NestedList key={area.id} data={area} />
+              <NestedList
+                key={area.id}
+                data={area}
+                onDragStart={handleDragStart}
+              />
             ))}
           </div>
 
@@ -182,14 +343,11 @@ const CreateRoute = () => {
                 )}
               />
             </div>
-            <Controller
-              control={form.control}
-              name="droppedItems"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl></FormControl>
-                </FormItem>
-              )}
+            <DroppedList
+              droppedItems={droppedItems}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onRemoveItem={handleRemoveItem}
             />
           </div>
         </div>

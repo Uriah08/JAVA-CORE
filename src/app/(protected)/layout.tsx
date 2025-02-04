@@ -185,7 +185,7 @@ const ProtectedLayout = ({ children }: Props) => {
           </div>
         </div>
       </div>
-      <div className={`h-full w-full ${open ? "lg:pl-[269px]" : ""}`}>
+      <div className={`h-full w-full ${open ? loading ? '' : "lg:pl-[269px]" : ""}`}>
         {loading ? (
           <div className="w-full h-screen">
             <Loading />
