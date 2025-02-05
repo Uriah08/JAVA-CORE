@@ -111,7 +111,7 @@ const CreateJobForm = () => {
             render={({ field }) => (
                 <FormItem className='"w-full md:w-1/2'>
                     <FormLabel>Client</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
                         <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder={clientLoading ? 'Loading...' : 'Select a client'} />
@@ -137,7 +137,7 @@ const CreateJobForm = () => {
             render={({ field }) => (
                 <FormItem className='"w-full md:w-1/2'>
                     <FormLabel>Area</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
                         <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select a area" />
@@ -275,7 +275,7 @@ const CreateJobForm = () => {
             render={({ field }) => (
                 <FormItem className='"w-full md:w-1/2'>
                     <FormLabel>Method</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
                         <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select method" />
@@ -297,7 +297,7 @@ const CreateJobForm = () => {
             render={({ field }) => (
                 <FormItem className='"w-full md:w-1/2'>
                     <FormLabel>Inspector</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
                         <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select an inspector" />
@@ -334,7 +334,7 @@ const CreateJobForm = () => {
             render={({ field }) => (
                 <FormItem className='"w-full md:w-1/2'>
                     <FormLabel>Equipment Use</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
                         <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select an equipment" />

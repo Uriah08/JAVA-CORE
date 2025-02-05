@@ -102,7 +102,7 @@ const ProtectedLayout = ({ children }: Props) => {
               className="flex gap-2 items-center mt-2 mb-10 justify-center"
             >
               <Image
-                src={"/logoo.png"}
+                src={"/logo.png"}
                 width={200}
                 height={200}
                 alt="logo"
