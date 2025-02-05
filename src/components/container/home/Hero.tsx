@@ -1,18 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { CircleArrowDown, Cog } from "lucide-react";
-import HeartRateGraph from "./HertRateGraph";
 
 import { Session } from "next-auth";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { signOut } from "next-auth/react";
+import { Menu, X } from "lucide-react";
 
 const Hero = ({
   session,
@@ -21,134 +14,79 @@ const Hero = ({
   session?: Session | null;
   status?: "authenticated" | "loading" | "unauthenticated";
 }) => {
-  const heartRateData = [
-    58, 58, 38, 80, 58, 58, 38, 80, 38, 58, 50, 80, 38, 38, 80, 58, 58, 38, 80,
-    38, 58, 58,
-  ];
+
+  const [active, setActive] = React.useState(false)
+  console.log(active);
+  
 
   return (
     <div className="h-screen">
-      <div className="relative bg-main h-[90%] flex flex-col overflow-hidden [border-bottom-left-radius:100%_25%] [border-bottom-right-radius:100%_25%]">
-        <nav className="flex justify-between items-center p-10">
-          <div className="flex items-center">
-            <Image
-              src="/logoo.png"
-              alt="Logo"
-              width={62}
-              height={62}
-              className="mr-2 w-auto h-auto"
-            />
-          </div>
-          <div className="flex space-x-10">
-            <Link href="#home">
-              <Button
-                variant="default"
-                className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
-              >
-                Home
-              </Button>
-            </Link>
-            <Link href="#about">
-              <Button
-                variant="default"
-                className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
-              >
-                About
-              </Button>
-            </Link>
-            <Link href="#services">
-              <Button
-                variant="default"
-                className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
-              >
-                Our Services
-              </Button>
-            </Link>
-            <Link href="#contact">
-              <Button
-                variant="default"
-                className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
-              >
-                Contact
-              </Button>
-            </Link>
-          </div>
-          <div>
+      <div className="relative bg-zinc-800 h-[90%] flex flex-col overflow-hidden [border-bottom-left-radius:100%_25%] [border-bottom-right-radius:100%_25%]">
+        <div className={`fixed lg:hidden top-0 h-[500px] w-full bg-white z-20 duration-200 flex flex-col justify-center gap-5 items-center transition-all ${active ? '' : '-mt-[1000px]'}`}>
+          <X onClick={() => setActive(!active)} className="absolute right-5 top-10 text-main cursor-pointer" size={35}/>
+          <a href="#home" onClick={() => setActive(!active)} className="text-xl font-light text-main cursor-pointer duration-200 transition-all hover:text-follow">Home</a>
+            <a href="#about" onClick={() => setActive(!active)} className="text-xl font-light text-main cursor-pointer duration-200 transition-all hover:text-follow">About</a>
+            <a href="#services" onClick={() => setActive(!active)} className="text-xl font-light text-main cursor-pointer duration-200 transition-all hover:text-follow">Services</a>
+            <a href="#contact" onClick={() => setActive(!active)} className="text-xl font-light text-main cursor-pointer duration-200 transition-all hover:text-follow">Contact</a>
             {status === "authenticated" ? (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="default"
-                    className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
-                  >
-                    {session?.user.name}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent
-                  align="end"
-                  className="py-1 bg-white border-none shadow-none flex flex-col gap-1"
-                >
-                  {session?.user.role === "admin" && (
-                    <Link href={"/job-registry"}>
-                      <Button className="w-full hover:bg-follow bg-main">
-                        Admin
-                      </Button>
-                    </Link>
-                  )}
-                  <Button
-                    onClick={() => signOut()}
-                    className="w-full hover:bg-follow bg-main"
-                  >
-                    Sign Out
-                  </Button>
-                </PopoverContent>
-              </Popover>
+            session?.user.role === "admin" ? (
+              <Link href={'/job-registry'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Admin</Link>
             ) : (
-              <Link href={"/auth/sign-in"}>
-                <Button
-                  variant="default"
-                  className="bg-transparent shadow-none text-white text-xl font-semibold hover:bg-red-900"
-                >
-                  Login
-                </Button>
-              </Link>
+              <button onClick={() => signOut()} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign Out</button>
+            )
+            ) : (
+              <Link href={'/auth/sign-in'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign In</Link>
             )}
+        </div>
+        <Image src={'/hero.png'} width={1000} height={1000} alt="hero" className="absolute object-center object-cover h-screen w-full z-0"/>
+        <Image src={'/heartbeat.svg'} width={1} height={1} alt="beat" className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 z-10 opacity-30 w-full"/>
+        <Image src={'/gear.svg'} width={1} height={1} alt="gear" className="absolute -right-10 animate-spin w-[200px] bottom-0 opacity-65"/>
+        <nav className="w-full p-5 md:p-10 flex justify-between z-10 items-center">
+          <div className="w-[150px]">
+          <Image
+            src={"/logo.png"}
+            alt="logo"
+            width={62}
+            height={62}
+            className="mr-2 w-auto h-auto"
+          />
           </div>
+          <div className="hidden lg:flex gap-20">
+            <a href="#home" className="text-xl font-light text-white cursor-pointer duration-200 transition-all hover:text-red-300">Home</a>
+            <a href="#about" className="text-xl font-light text-white cursor-pointer duration-200 transition-all hover:text-red-300">About</a>
+            <a href="#services" className="text-xl font-light text-white cursor-pointer duration-200 transition-all hover:text-red-300">Services</a>
+            <a href="#contact" className="text-xl font-light text-white cursor-pointer duration-200 transition-all hover:text-red-300">Contact</a>
+          </div>
+          {status === "authenticated" ? (
+            session?.user.role === "admin" ? (
+              <Link href={'/job-registry'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Admin</Link>
+            ) : (
+              <button onClick={() => signOut()} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign Out</button>
+            )
+          ) : (
+            <Link href={'/auth/sign-in'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign In</Link>
+          )}
+          <Menu onClick={() => setActive(!active)} className={`${active ? 'text-main' : 'text-white'} cursor-pointer lg:hidden`} size={35}/>
         </nav>
-
-        <div className="flex flex-col items-center justify-center flex-grow text-white">
-          <h1 className="text-6xl font-semibold z-10 mt-10">
+        <div className="flex flex-col items-center justify-center flex-grow text-white relative">
+          <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold z-10 mt-10 text-center">
             Java Condition Monitoring
           </h1>
-          <h2 className="text-4xl font-semibold z-10 mt-2">
+          <h2 className="text-xl md:text-2xl lg:text-4xl font-semibold z-10 mt-2 text-center">
             Machinery Health Specialist
           </h2>
-          <p className="z-10 text-center max-w-2xl mt-8">
+          <p className="z-10 text-center max-w-2xl mt-8 font-light text-sm md:text-base px-3">
             Ensure optimal performance and longevity of your equipment with our
             expert machine health specialist services, providing proactive
             maintenance and diagnostics.
           </p>
-          <Link href="#contact">
-            <Button className="z-10 bg-red-800 hover:bg-red-900 text-white mt-10">
-              Contact Us
-            </Button>
+          <Link href="#contact" className="rounded-full px-10 py-4 bg-main text-white duration-200 transition-all hover:bg-follow text-xl font-semibold mt-10">
+          Contact Us
           </Link>
-          <Link href="#about" className="z-10 mt-10">
-            <CircleArrowDown className="w-10 h-10 text-white animate-bounce" />
-          </Link>
-          <div className="absolute right-14 flex items-center justify-center space-x-[-20px]">
-            <Cog className="w-48 h-48 animate-spin absolute top-48 -right-16 z-10" />
-            <Cog className="w-20 h-20 animate-spin-reverse relative top-36 left-9" />
-            <Cog className="w-36 h-36 animate-spin-reverse relative top-20 left-24" />
-          </div>
         </div>
-      </div>
-
-      <div className="absolute top-28 left-0 right-0">
-        <HeartRateGraph data={heartRateData} />
       </div>
     </div>
   );
 };
 
-export default Hero;
+export default Hero
