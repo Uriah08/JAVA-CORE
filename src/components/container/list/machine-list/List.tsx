@@ -79,6 +79,7 @@ const List = () => {
       <div className="space-y-2">
         {!currentArea && (
           <ul className="space-y-2">
+            <h1 className="mt-9 mb-5 text-lg text-gray-800">Select an area</h1>
             {data?.areas?.map((area) => (
               <li
                 key={area.id}
@@ -93,6 +94,7 @@ const List = () => {
 
         {currentArea && !currentEquipmentGroup && (
           <ul className="space-y-2">
+            <h1 className="mb-5 text-lg text-gray-800">Select an group</h1>
             {currentArea.equipmentGroups.map((equipmentGroup: any) => (
               <li
                 key={equipmentGroup.id}
@@ -107,6 +109,7 @@ const List = () => {
 
         {currentEquipmentGroup && !currentEquipmentName && (
           <ul className="space-y-2">
+            <h1 className="mb-5 text-lg text-gray-800">Select an name</h1>
             {currentEquipmentGroup.equipmentNames.map((equipmentName: any) => (
               <li
                 key={equipmentName.id}
