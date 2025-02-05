@@ -14,13 +14,13 @@ datasource db {
 }
 
 model Job {
-  id              String   @id @default(uuid())
-  no              Int      @default(autoincrement()) @unique
-  status          String   @default("Waiting for Analysis")
-  userId          String   @map("user_id")
+  id              String    @id @default(uuid())
+  no              Int       @unique @default(autoincrement())
+  status          String    @default("Waiting for Analysis")
+  userId          String    @map("user_id")
   area            String
   dateSurveyed    DateTime
-  jobNumber       String   @unique
+  jobNumber       String    @unique
   poNumber        String?
   woNumber        String?
   reportNumber    String?
@@ -32,10 +32,10 @@ model Job {
   dateFinished    DateTime?
   inspectionRoute String
   equipmentUse    String
-  dateRegistered  DateTime @default(now())
+  dateRegistered  DateTime  @default(now())
   yearWeekNumber  String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -43,21 +43,21 @@ model Job {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
-  type               String
-  provider           String
-  providerAccountId  String  @map("provider_account_id")
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String? @db.Text
-  session_state      String?
- 
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
@@ -77,88 +77,89 @@ model User {
   name          String?   @unique
   email         String?   @unique
   password      String?
-  role          String   @default("user")
+  role          String    @default("user")
   emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
   sessions      Session[]
 
-  jobs          Job[]
- 
+  jobs  Job[]
+  Route Route[]
+
   @@map("users")
 }
 
-// model Route {
-//   id         String   @id @default(uuid())
-//   userId     String
-//   clientName String
-//   routeName  String
-//   createdAt  DateTime @default(now())
+model Route {
+  id         String   @id @default(uuid())
+  userId     String
+  clientName String
+  routeName  String
+  createdAt  DateTime @default(now())
 
-//   machines RouteMachineList[]
-//   user     User               @relation(fields: [userId], references: [id])
+  machines RouteMachineList[]
+  user     User               @relation(fields: [userId], references: [id])
 
-//   @@map("routes")
-// }
+  @@map("routes")
+}
 
-// model RouteMachineList {
-//   id               String  @id @default(uuid())
-//   routeId          String
-//   areaId           String? @unique
-//   equipmentGroupId String? @unique
-//   equipmentNameId  String? @unique
-//   componentId      String? @unique
+model RouteMachineList {
+  id               String  @id @default(uuid())
+  routeId          String
+  areaId           String? @unique
+  equipmentGroupId String? @unique
+  equipmentNameId  String? @unique
+  componentId      String? @unique
 
-//   route          Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
-//   area           Area?           @relation(fields: [areaId], references: [id], onDelete: Cascade)
-//   equipmentGroup EquipmentGroup? @relation(fields: [equipmentGroupId], references: [id], onDelete: Cascade)
-//   equipmentName  EquipmentName?  @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
-//   component      Component?      @relation(fields: [componentId], references: [id], onDelete: Cascade)
+  route          Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  area           Area?           @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  equipmentGroup EquipmentGroup? @relation(fields: [equipmentGroupId], references: [id], onDelete: Cascade)
+  equipmentName  EquipmentName?  @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+  component      Component?      @relation(fields: [componentId], references: [id], onDelete: Cascade)
 
-//   @@map("route_machine_list")
-// }
+  @@map("route_machine_list")
+}
 
-// model Area {
-//   id   String @id @default(uuid())
-//   name String
+model Area {
+  id   String @id @default(uuid())
+  name String
 
-//   equipmentGroups  EquipmentGroup[]
-//   RouteMachineList RouteMachineList[]
+  equipmentGroups  EquipmentGroup[]
+  RouteMachineList RouteMachineList[]
 
-//   @@map("area")
-// }
+  @@map("area")
+}
 
-// model EquipmentGroup {
-//   id     String  @id @default(uuid())
-//   name   String
-//   areaId String?
+model EquipmentGroup {
+  id     String  @id @default(uuid())
+  name   String
+  areaId String?
 
-//   area             Area?              @relation(fields: [areaId], references: [id], onDelete: Cascade)
-//   equipmentNames   EquipmentName[]
-//   RouteMachineList RouteMachineList[]
+  area             Area?              @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  equipmentNames   EquipmentName[]
+  RouteMachineList RouteMachineList[]
 
-//   @@map("equipmentgroup")
-// }
+  @@map("equipmentgroup")
+}
 
-// model EquipmentName {
-//   id      String  @id @default(uuid())
-//   name    String
-//   groupId String?
+model EquipmentName {
+  id      String  @id @default(uuid())
+  name    String
+  groupId String?
 
-//   group            EquipmentGroup?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-//   components       Component[]
-//   RouteMachineList RouteMachineList[]
+  group            EquipmentGroup?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  components       Component[]
+  RouteMachineList RouteMachineList[]
 
-//   @@map("equipmentname")
-// }
+  @@map("equipmentname")
+}
 
-// model Component {
-//   id              String  @id @default(uuid())
-//   name            String
-//   equipmentNameId String?
+model Component {
+  id              String  @id @default(uuid())
+  name            String
+  equipmentNameId String?
 
-//   equipmentName    EquipmentName?     @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
-//   RouteMachineList RouteMachineList[]
+  equipmentName    EquipmentName?     @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+  RouteMachineList RouteMachineList[]
 
-//   @@map("component")
-// }
+  @@map("component")
+}

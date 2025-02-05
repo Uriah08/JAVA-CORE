@@ -1,196 +1,85 @@
 "use client";
 
 import React, { useState } from "react";
-import MachineList from "../../form/MachineList";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-
-type Component = string;
-
-type EquipmentName = {
-  id: number;
-  name: string;
-  components: Component[];
-};
-
-type EquipmentGroup = {
-  id: number;
-  name: string;
-  equipmentNames: EquipmentName[];
-};
-
-type Area = {
-  id: number;
-  name: string;
-  equipmentGroups: EquipmentGroup[];
-};
-
-const areas: Area[] = [
-  {
-    id: 1,
-    name: "Area 1",
-    equipmentGroups: [
-      {
-        id: 2,
-        name: "Equipment Group 1",
-        equipmentNames: [
-          {
-            id: 3,
-            name: "Equipment Name 1",
-            components: ["Component 1", "Component 2", "Component 3"],
-          },
-          {
-            id: 4,
-            name: "Equipment Name 2",
-            components: ["Component 1", "Component 2", "Component 3"],
-          },
-          {
-            id: 5,
-            name: "Equipment Name 3",
-            components: ["Component 1", "Component 2", "Component 3"],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 14,
-    name: "Area 2",
-    equipmentGroups: [
-      {
-        id: 15,
-        name: "Equipment Group 1",
-        equipmentNames: [
-          {
-            id: 16,
-            name: "Equipment Name 1",
-            components: ["Component 1", "Component 2", "Component 3"],
-          },
-          {
-            id: 17,
-            name: "Equipment Name 2",
-            components: ["Component 1", "Component 2", "Component 3"],
-          },
-          {
-            id: 18,
-            name: "Equipment Name 3",
-            components: ["Component 1", "Component 2", "Component 3"],
-          },
-        ],
-      },
-    ],
-  },
-];
+import { useGetMachineListQuery } from "@/store/api";
+import Loading from "@/components/ui/loading";
 
 const List = () => {
-  const [currentArea, setCurrentArea] = useState<Area | null>(null);
-  const [currentEquipmentGroup, setCurrentEquipmentGroup] =
-    useState<EquipmentGroup | null>(null);
-  const [currentEquipmentName, setCurrentEquipmentName] =
-    useState<EquipmentName | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
+  const { data, error, isLoading } = useGetMachineListQuery();
+  const [currentArea, setCurrentArea] = useState<any>(null);
+  const [currentEquipmentGroup, setCurrentEquipmentGroup] = useState<any>(null);
+  const [currentEquipmentName, setCurrentEquipmentName] = useState<any>(null);
+  const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
 
-  const handleAddItem = (name: string) => {
-    if (modalTitle === "Add Area") {
-      const newArea: Area = {
-        id: areas.length + 1,
-        name: name,
-        equipmentGroups: [],
-      };
-      areas.push(newArea);
-    } else if (modalTitle === "Add Equipment Group" && currentArea) {
-      const newEquipmentGroup: EquipmentGroup = {
-        id: currentArea.equipmentGroups.length + 1,
-        name: name,
-        equipmentNames: [],
-      };
-      currentArea.equipmentGroups.push(newEquipmentGroup);
-    } else if (modalTitle === "Add Equipment Name" && currentEquipmentGroup) {
-      const newEquipmentName: EquipmentName = {
-        id: currentEquipmentGroup.equipmentNames.length + 1,
-        name: name,
-        components: [],
-      };
-      currentEquipmentGroup.equipmentNames.push(newEquipmentName);
-    }
-  };
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loading />
+      </div>
+    );
+  if (error) return <div>Error loading machine list</div>;
+  if (!data) return <div>No data available</div>;
 
-  const handleAreaClick = (area: Area) => {
+  const handleAreaClick = (area: any) => {
     setCurrentArea(area);
     setCurrentEquipmentGroup(null);
     setCurrentEquipmentName(null);
+    setBreadcrumb([area.name]);
   };
 
-  const handleEquipmentGroupClick = (equipmentGroup: EquipmentGroup) => {
+  const handleEquipmentGroupClick = (equipmentGroup: any) => {
     setCurrentEquipmentGroup(equipmentGroup);
     setCurrentEquipmentName(null);
+    setBreadcrumb([breadcrumb[0], equipmentGroup.name]);
   };
 
-  const handleEquipmentNameClick = (equipmentName: EquipmentName) => {
+  const handleEquipmentNameClick = (equipmentName: any) => {
     setCurrentEquipmentName(equipmentName);
+    setBreadcrumb([breadcrumb[0], breadcrumb[1], equipmentName.name]);
   };
 
-  const handleBreadcrumbClick = (
-    level: "area" | "equipmentGroup" | "equipmentName"
-  ) => {
-    if (level === "area") {
+  const handleBreadcrumbClick = (level: number) => {
+    if (level === 0) {
       setCurrentArea(null);
       setCurrentEquipmentGroup(null);
       setCurrentEquipmentName(null);
-    } else if (level === "equipmentGroup") {
+      setBreadcrumb([]);
+    } else if (level === 1) {
       setCurrentEquipmentGroup(null);
       setCurrentEquipmentName(null);
-    } else if (level === "equipmentName") {
+      setBreadcrumb([breadcrumb[0]]);
+    } else if (level === 2) {
       setCurrentEquipmentName(null);
+      setBreadcrumb([breadcrumb[0], breadcrumb[1]]);
     }
   };
-
-  const breadcrumb = [];
-  if (currentArea) {
-    breadcrumb.push(
-      <span
-        key="area"
-        className="cursor-pointer text-gray-600 hover:underline text-sm"
-        onClick={() => handleBreadcrumbClick("area")}
-      >
-        {currentArea.name}
-      </span>
-    );
-  }
-  if (currentEquipmentGroup) {
-    breadcrumb.push(
-      <span
-        key="equipmentGroup"
-        className="cursor-pointer text-gray-600 hover:underline text-sm"
-        onClick={() => handleBreadcrumbClick("equipmentGroup")}
-      >
-        {` > ${currentEquipmentGroup.name}`}
-      </span>
-    );
-  }
-  if (currentEquipmentName) {
-    breadcrumb.push(
-      <span
-        key="equipmentName"
-        className="cursor-pointer text-gray-600 hover:underline text-sm"
-        onClick={() => handleBreadcrumbClick("equipmentName")}
-      >
-        {` > ${currentEquipmentName.name}`}
-      </span>
-    );
-  }
 
   return (
     <div className="p-5">
       <div className="mb-4 text-sm font-semibold">
-        {breadcrumb.length > 0 ? breadcrumb : "Select an area"}
+        {breadcrumb.length > 0 && (
+          <nav className="flex space-x-2">
+            {breadcrumb.map((item, index) => (
+              <React.Fragment key={index}>
+                <span
+                  className="cursor-pointer text-gray-600 hover:underline"
+                  onClick={() => handleBreadcrumbClick(index)}
+                >
+                  {item}
+                </span>
+                {index < breadcrumb.length - 1 && (
+                  <span className="text-sm text-gray-600"> &gt; </span>
+                )}
+              </React.Fragment>
+            ))}
+          </nav>
+        )}
       </div>
 
       <div className="space-y-2">
         {!currentArea && (
           <ul className="space-y-2">
-            {areas.map((area) => (
+            {data?.areas?.map((area) => (
               <li
                 key={area.id}
                 className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
@@ -199,25 +88,12 @@ const List = () => {
                 {area.name}
               </li>
             ))}
-            <li>
-              <div className=" flex justify-center">
-                <Button
-                  onClick={() => {
-                    setModalTitle("Add Area");
-                    setIsModalOpen(true);
-                  }}
-                  className="bg-main justify-center hover:bg-red-400"
-                >
-                  <Plus />
-                </Button>
-              </div>
-            </li>
           </ul>
         )}
 
         {currentArea && !currentEquipmentGroup && (
           <ul className="space-y-2">
-            {currentArea.equipmentGroups.map((equipmentGroup) => (
+            {currentArea.equipmentGroups.map((equipmentGroup: any) => (
               <li
                 key={equipmentGroup.id}
                 className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
@@ -226,25 +102,12 @@ const List = () => {
                 {equipmentGroup.name}
               </li>
             ))}
-            <li>
-              <div className=" flex justify-center">
-                <Button
-                  onClick={() => {
-                    setModalTitle("Add Equipment Group");
-                    setIsModalOpen(true);
-                  }}
-                  className="bg-main justify-center hover:bg-red-400"
-                >
-                  <Plus />
-                </Button>
-              </div>
-            </li>
           </ul>
         )}
 
         {currentEquipmentGroup && !currentEquipmentName && (
           <ul className="space-y-2">
-            {currentEquipmentGroup.equipmentNames.map((equipmentName) => (
+            {currentEquipmentGroup.equipmentNames.map((equipmentName: any) => (
               <li
                 key={equipmentName.id}
                 className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
@@ -253,52 +116,21 @@ const List = () => {
                 {equipmentName.name}
               </li>
             ))}
-            <li>
-              <div className=" flex justify-center">
-                <Button
-                  onClick={() => {
-                    setModalTitle("Add Equipment");
-                    setIsModalOpen(true);
-                  }}
-                  className="bg-main justify-center hover:bg-red-400"
-                >
-                  <Plus />
-                </Button>
-              </div>
-            </li>
           </ul>
         )}
 
         {currentEquipmentName && (
           <ul className="space-y-2">
-            {currentEquipmentName.components.map((component, index) => (
-              <li key={index} className="p-2 bg-gray-100 rounded-lg">
-                {component}
-              </li>
-            ))}
-            <li>
-              <div className=" flex justify-center">
-                <Button
-                  onClick={() => {
-                    setModalTitle("Add component");
-                    setIsModalOpen(true);
-                  }}
-                  className="bg-main justify-center hover:bg-red-400"
-                >
-                  <Plus />
-                </Button>
-              </div>
-            </li>
+            {currentEquipmentName.components.map(
+              (component: any, index: any) => (
+                <li key={index} className="p-2 bg-gray-100 rounded-lg">
+                  {component.name}
+                </li>
+              )
+            )}
           </ul>
         )}
       </div>
-
-      <MachineList
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddItem}
-        title={modalTitle}
-      />
     </div>
   );
 };
