@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useGetMachineListQuery } from "@/store/api";
 import Loading from "@/components/ui/loading";
+import MachineList from "../../form/MachineList";
 
 const List = () => {
   const { data, error, isLoading } = useGetMachineListQuery();
