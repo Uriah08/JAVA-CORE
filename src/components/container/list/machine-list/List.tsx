@@ -6,11 +6,17 @@ import {
   useLazyGetEquipmentGroupsQuery,
   useLazyGetEquipmentNamesQuery,
   useLazyGetComponentsQuery,
+  useSoftDeleteMachineListMutation,
+  useSoftDeleteEquipmentGroupsMutation,
+  useSoftDeleteEquipmentNamesMutation,
+  useSoftDeleteComponentsMutation,
 } from "@/store/api";
 import MachineList from "../../form/MachineList";
-import Loading from "@/components/ui/loading";
+import ConfirmationDialog from "@/components/container/dialog/deletingList/ConfirmationDialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Trash, X } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const List = () => {
   const {
@@ -35,17 +41,29 @@ const List = () => {
     },
   ] = useLazyGetComponentsQuery();
 
+  const [deleteMachine] = useSoftDeleteMachineListMutation();
+  const [deleteEquipmentGroup] = useSoftDeleteEquipmentGroupsMutation();
+  const [deleteEquipmentName] = useSoftDeleteEquipmentNamesMutation();
+  const [deleteComponent] = useSoftDeleteComponentsMutation();
+
   const [currentArea, setCurrentArea] = useState<any>(null);
   const [currentEquipmentGroup, setCurrentEquipmentGroup] = useState<any>(null);
   const [currentEquipmentName, setCurrentEquipmentName] = useState<any>(null);
   const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
-  if (loadingAreas || loadingGroups || loadingNames || loadingComponents) {
+  const loading =
+    loadingAreas || loadingGroups || loadingNames || loadingComponents;
+
+  if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Loading />
+      <div className="p-5 flex flex-col items-center justify-center min-h-screen">
+        <Skeleton className="h-[500px] w-full rounded-lg mb-4" />
+        <p className="text-gray-500">Loading data, please wait...</p>
       </div>
     );
   }
@@ -91,9 +109,128 @@ const List = () => {
     }
   };
 
+  const handleDeleteSelected = async () => {
+    if (selectedItems.length === 0) return;
+
+    try {
+      if (currentEquipmentName) {
+        await Promise.all(selectedItems.map((id) => deleteComponent(id)));
+      } else if (currentEquipmentGroup) {
+        await Promise.all(selectedItems.map((id) => deleteEquipmentName(id)));
+      } else if (currentArea) {
+        await Promise.all(selectedItems.map((id) => deleteEquipmentGroup(id)));
+      } else {
+        await Promise.all(selectedItems.map((id) => deleteMachine(id)));
+      }
+
+      setSelectedItems([]); // Clear selection
+      setIsConfirmDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to delete items:", error);
+    }
+  };
+
   const handleOpenDialog = (title: string) => {
     setDialogTitle(title);
     setIsDialogOpen(true);
+  };
+
+  const handleSelectItem = (id: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const renderList = (items: { id: string; name: string }[], level: number) => {
+    return (
+      <ul className="space-y-2">
+        <div className="flex justify-between items-center my-9">
+          <h1 className="text-lg items-center text-center text-gray-800">
+            {level === 0
+              ? "Select an area"
+              : level === 1
+              ? "Select a group"
+              : level === 2
+              ? "Select a name"
+              : "Components"}
+          </h1>
+          <div className="flex space-x-2">
+            <Button
+              onClick={() =>
+                handleOpenDialog(
+                  `Add New ${
+                    level === 0
+                      ? "Area"
+                      : level === 1
+                      ? "Group"
+                      : level === 2
+                      ? "Name"
+                      : "Component"
+                  }`
+                )
+              }
+              className="bg-main"
+            >
+              Add <Plus />
+            </Button>
+            <Button
+              onClick={() => setIsDeleting((prev) => !prev)}
+              className="bg-red-600"
+            >
+              {isDeleting ? (
+                <>
+                  Cancel <X className="ml-2" />
+                </>
+              ) : (
+                <>
+                  Delete <Trash className="ml-2" />
+                </>
+              )}
+            </Button>
+          </div>
+        </div>
+        {items.length === 0 ? (
+          <div className="flex flex-col items-center">
+            <p className="text-gray-500">No items available.</p>
+          </div>
+        ) : (
+          <>
+            {items.map((item) => (
+              <li
+                key={item.id}
+                className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 flex items-center justify-between"
+                onClick={() =>
+                  !isDeleting &&
+                  (level === 0
+                    ? handleAreaClick(item)
+                    : level === 1
+                    ? handleEquipmentGroupClick(item)
+                    : level === 2
+                    ? handleEquipmentNameClick(item)
+                    : null)
+                }
+              >
+                <span>{item.name}</span>
+                {isDeleting && (
+                  <Checkbox
+                    checked={selectedItems.includes(item.id)}
+                    onCheckedChange={() => handleSelectItem(item.id)}
+                  />
+                )}
+              </li>
+            ))}
+          </>
+        )}
+        {isDeleting && selectedItems.length > 0 && (
+          <Button
+            onClick={() => setIsConfirmDialogOpen(true)}
+            className="mt-4 bg-red-600"
+          >
+            Delete Selected
+          </Button>
+        )}
+      </ul>
+    );
   };
 
   return (
@@ -119,101 +256,14 @@ const List = () => {
       </div>
 
       <div className="space-y-2">
-        {!currentArea && (
-          <ul className="space-y-2">
-            <div className="flex justify-between items-center mt-9">
-              <h1 className="text-lg items-center text-center text-gray-800">
-                Select an area
-              </h1>
-              <Button
-                onClick={() => handleOpenDialog("Add New Area")}
-                className="bg-main"
-              >
-                Add <Plus />
-              </Button>
-            </div>
-            {areaData?.areas?.map((area) => (
-              <li
-                key={area.id}
-                className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
-                onClick={() => handleAreaClick(area)}
-              >
-                {area.name}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {currentArea && !currentEquipmentGroup && (
-          <ul className="space-y-2">
-            <div className="flex justify-between items-center">
-              <h1 className="text-lg items-center text-center text-gray-800">
-                Select a group
-              </h1>
-              <Button
-                onClick={() => handleOpenDialog("Add New Group")}
-                className="bg-main"
-              >
-                Add <Plus />
-              </Button>
-            </div>
-            {equipmentGroupData?.equipmentGroups?.map((equipmentGroup: any) => (
-              <li
-                key={equipmentGroup.id}
-                className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
-                onClick={() => handleEquipmentGroupClick(equipmentGroup)}
-              >
-                {equipmentGroup.name}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {currentEquipmentGroup && !currentEquipmentName && (
-          <ul className="space-y-2">
-            <div className="flex justify-between items-center">
-              <h1 className="text-lg items-center text-center text-gray-800">
-                Select a name
-              </h1>
-              <Button
-                onClick={() => handleOpenDialog("Add New Name")}
-                className="bg-main"
-              >
-                Add <Plus />
-              </Button>
-            </div>
-            {equipmentNameData?.equipmentNames?.map((equipmentName: any) => (
-              <li
-                key={equipmentName.id}
-                className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200"
-                onClick={() => handleEquipmentNameClick(equipmentName)}
-              >
-                {equipmentName.name}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {currentEquipmentName && (
-          <ul className="space-y-2">
-            <div className="flex justify-between items-center">
-              <h1 className="text-lg items-center text-center text-gray-800">
-                Components
-              </h1>
-              <Button
-                onClick={() => handleOpenDialog("Add New Component")}
-                className="bg-main"
-              >
-                Add <Plus />
-              </Button>
-            </div>
-            {componentData?.components?.map((component: any, index: any) => (
-              <li key={index} className="p-2 bg-gray-100 rounded-lg">
-                {component.name}
-              </li>
-            ))}
-          </ul>
-        )}
+        {!currentArea && renderList(areaData?.areas || [], 0)}
+        {currentArea &&
+          !currentEquipmentGroup &&
+          renderList(equipmentGroupData?.equipmentGroups || [], 1)}
+        {currentEquipmentGroup &&
+          !currentEquipmentName &&
+          renderList(equipmentNameData?.equipmentNames || [], 2)}
+        {currentEquipmentName && renderList(componentData?.components || [], 3)}
       </div>
       <MachineList
         isOpen={isDialogOpen}
@@ -222,6 +272,13 @@ const List = () => {
         areaId={currentArea?.id}
         groupId={currentEquipmentGroup?.id}
         equipmentNameId={currentEquipmentName?.id}
+      />
+      <ConfirmationDialog
+        isOpen={isConfirmDialogOpen}
+        onClose={() => setIsConfirmDialogOpen(false)}
+        onConfirm={handleDeleteSelected}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete ${selectedItems.length} item(s)?`}
       />
     </div>
   );

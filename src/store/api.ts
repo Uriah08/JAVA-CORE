@@ -148,6 +148,17 @@ export const api = createApi({
       }),
       invalidatesTags: ["Area"],
     }),
+    softDeleteMachineList: build.mutation({
+      query: (ids) => ({
+        url: "/api/machineList/delete",
+        method: "POST",
+        body: JSON.stringify({ ids }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Area"],
+    }),
     getEquipmentGroups: build.query<EquipmentGroupResponse, string>({
       query: (areaId) => `/api/machineList/equipmentGroupList?areaId=${areaId}`,
       providesTags: ["EquipmentGroup"],
@@ -157,6 +168,17 @@ export const api = createApi({
         url: "/api/machineList/equipmentGroupList",
         method: "POST",
         body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["EquipmentGroup"],
+    }),
+    softDeleteEquipmentGroups: build.mutation({
+      query: (ids) => ({
+        url: "/api/machineList/equipmentGroupList/delete",
+        method: "POST",
+        body: { ids },
         headers: {
           "Content-Type": "application/json",
         },
@@ -179,6 +201,17 @@ export const api = createApi({
       }),
       invalidatesTags: ["EquipmentName"],
     }),
+    softDeleteEquipmentNames: build.mutation({
+      query: (ids) => ({
+        url: "/api/machineList/equipmentGroupList/equipmentNameList/delete",
+        method: "POST",
+        body: { ids },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["EquipmentName"],
+    }),
     getComponents: build.query<ComponentResponse, string>({
       query: (equipmentNameId) =>
         `/api/machineList/equipmentGroupList/equipmentNameList/component?equipmentNameId=${equipmentNameId}`,
@@ -189,6 +222,17 @@ export const api = createApi({
         url: "/api/machineList/equipmentGroupList/equipmentNameList/component",
         method: "POST",
         body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Component"],
+    }),
+    softDeleteComponents: build.mutation({
+      query: (ids) => ({
+        url: "/api/machineList/equipmentGroupList/equipmentNameList/component/delete",
+        method: "POST",
+        body: { ids },
         headers: {
           "Content-Type": "application/json",
         },
@@ -209,10 +253,14 @@ export const {
   useUpdateJobMutation,
   useGetMachineListQuery,
   useCreateMachineListMutation,
+  useSoftDeleteMachineListMutation,
   useLazyGetEquipmentGroupsQuery,
   useCreateEquipmentGroupMutation,
+  useSoftDeleteEquipmentGroupsMutation,
   useLazyGetEquipmentNamesQuery,
   useCreateEquipmentNameMutation,
+  useSoftDeleteEquipmentNamesMutation,
   useLazyGetComponentsQuery,
   useCreateComponentMutation,
+  useSoftDeleteComponentsMutation,
 } = api;
