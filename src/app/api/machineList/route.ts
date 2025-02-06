@@ -9,19 +9,7 @@ export async function GET() {
       throw new Error("Not Authenticated");
     }
 
-    const areas = await prisma.area.findMany({
-      include: {
-        equipmentGroups: {
-          include: {
-            equipmentNames: {
-              include: {
-                components: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    const areas = await prisma.area.findMany({});
 
     return NextResponse.json({ areas });
   } catch (error) {

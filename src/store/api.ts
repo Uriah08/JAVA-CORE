@@ -28,29 +28,10 @@ type JobsResponse = {
   success: boolean;
 };
 
-type AreaResponse = {
-  areas: Area[];
-  message: string;
-  success: boolean;
-};
-
-type EquipmentGroupResponse = {
-  equipmentGroups: EquipmentGroup[];
-  message: string;
-  success: boolean;
-};
-
-type EquipmentNameResponse = {
-  equipmentNames: EquipmentName[];
-  message: string;
-  success: boolean;
-};
-
-type ComponentResponse = {
-  components: Component[];
-  message: string;
-  success: boolean;
-};
+type AreaResponse = { areas: Area[] };
+type EquipmentGroupResponse = { equipmentGroups: EquipmentGroup[] };
+type EquipmentNameResponse = { equipmentNames: EquipmentName[] };
+type ComponentResponse = { components: Component[] };
 
 export const api = createApi({
   reducerPath: "api",
@@ -124,34 +105,24 @@ export const api = createApi({
       invalidatesTags: ["Job"],
     }),
     getMachineList: build.query<AreaResponse, void>({
-      query: () => ({
-        url: "/api/machineList",
-        method: "GET",
-      }),
+      query: () => "/api/machineList",
       providesTags: ["Area"],
     }),
 
     getEquipmentGroups: build.query<EquipmentGroupResponse, string>({
-      query: (areaId) => ({
-        url: `/api/machineList/equipmentGroup/${areaId}`,
-        method: "GET",
-      }),
+      query: (areaId) => `/api/machineList/equipmentGroupList?areaId=${areaId}`,
       providesTags: ["EquipmentGroup"],
     }),
 
     getEquipmentNames: build.query<EquipmentNameResponse, string>({
-      query: (equipmentGroupId) => ({
-        url: `/api/machineList/equipmentName/${equipmentGroupId}`,
-        method: "GET",
-      }),
+      query: (groupId) =>
+        `/api/machineList/equipmentGroupList/equipmentNameList?groupId=${groupId}`,
       providesTags: ["EquipmentName"],
     }),
 
     getComponents: build.query<ComponentResponse, string>({
-      query: (equipmentNameId) => ({
-        url: `/api/machineList/component/${equipmentNameId}`,
-        method: "GET",
-      }),
+      query: (equipmentNameId) =>
+        `/api/machineList/equipmentGroupList/equipmentNameList/component?equipmentNameId=${equipmentNameId}`,
       providesTags: ["Component"],
     }),
   }),
@@ -164,8 +135,8 @@ export const {
   useGetJobsQuery,
   useDeleteJobsMutation,
   useUpdateJobMutation,
-  useGetMachineListQuery,
-  useGetEquipmentGroupsQuery,
-  useGetEquipmentNamesQuery,
-  useGetComponentsQuery,
+  useLazyGetMachineListQuery,
+  useLazyGetEquipmentGroupsQuery,
+  useLazyGetEquipmentNamesQuery,
+  useLazyGetComponentsQuery,
 } = api;
