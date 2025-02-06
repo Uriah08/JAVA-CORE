@@ -57,6 +57,27 @@ export const api = createApi({
         },
       }),
     }),
+    registerClient: build.mutation({
+      query: (data) => ({
+        url: "/api/register",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Client"]
+    }),
+    changePassword: build.mutation({
+      query: (data) => ({
+        url: "/api/changePassword",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
     getClients: build.query<ClientsResponse, void>({
       query: () => ({
         url: "/api/client",
@@ -130,6 +151,8 @@ export const api = createApi({
 
 export const {
   useLoginUserMutation,
+  useRegisterClientMutation,
+  useChangePasswordMutation,
   useGetClientsQuery,
   useCreateJobMutation,
   useGetJobsQuery,

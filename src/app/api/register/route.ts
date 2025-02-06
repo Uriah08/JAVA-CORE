@@ -16,7 +16,13 @@ export async function POST(req: Request){
             { status: 400 }
           );
         }
-        const {username, email, password} = validatedFields.data
+        const {username, email, password, confirmPassword} = validatedFields.data
+        if(password !== confirmPassword) {
+          return NextResponse.json(
+            { message: 'Passwords do not match', success: false },
+            { status: 400 }
+          );
+        }
 
         const [existingEmail, existingUsername] = await Promise.all([
           prisma.user.findUnique({
@@ -46,7 +52,8 @@ export async function POST(req: Request){
     
         return NextResponse.json({ message: 'User created successfully', success: true}, { status: 201 });
     } catch (error) {
+      const err = error as { message?: string }
         console.error('Error in route handler:', error);
-        return NextResponse.json({ message: 'Internal Server Error', success: false}, { status: 500 });
+        return NextResponse.json({ message: err.message, success: false}, { status: 500 });
     }
 }

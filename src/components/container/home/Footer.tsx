@@ -9,7 +9,7 @@ const Footer = () => {
       <div className="container mx-auto grid grid-cols-3 gap-8 items-start">
         <div className="flex items-center">
           <Image
-            src="/logoo.png"
+            src="/logo.png"
             alt="Logo"
             width={62}
             height={62}
