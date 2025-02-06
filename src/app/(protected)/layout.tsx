@@ -48,9 +48,9 @@ const sidebar = [
     link: "/analysis-report",
   },
   {
-    title: "Profile",
+    title: "Users",
     icon: User,
-    link: "/profile",
+    link: "/users",
   },
   {
     title: "Data Base",
@@ -118,7 +118,7 @@ const ProtectedLayout = ({ children }: Props) => {
               <div className="flex flex-col w-full mt-2 gap-1">
                 {sidebar.map((item) => (
                   <React.Fragment key={item.link}>
-                    {item.title === "Profile" && (
+                    {item.title === "Users" && (
                       <h1 className="text-[#FFADAD] font-medium text-sm mt-2">
                         Other
                       </h1>

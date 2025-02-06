@@ -62,10 +62,12 @@ export const registerSchema = z.object({
     .string()
     .min(8, {
       message: "Password must be at least 8 characters long",
-    })
-    .max(20, {
-      message: "Password must be at most 20 characters long",
     }),
+    confirmPassword: z
+    .string()
+    .min(8, {
+      message: "Password must be at least 8 characters long",
+    })
 });
 
 export const loginSchema = z.object({
@@ -79,6 +81,18 @@ export const loginSchema = z.object({
       message: "Password must be at most 20 characters long",
     }),
 });
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(8,{
+    message: "Password must be 8 characters long"
+  }),
+  newPassword: z.string().min(8,{
+    message: "Password must be at least 8 characters long"
+  }),
+  confirmPassword: z.string().min(8,{
+    message: "Password must be at least 8 characters long"
+  })
+})
 
 export const routeSchema = z.object({
   client: z.string().min(1, "Client is required"),
