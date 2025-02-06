@@ -3,14 +3,12 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  const ids = await req.json();
   try {
     const session = await auth();
     if (!session || session.user.id !== process.env.ADMIN) {
       throw new Error("Not Authenticated");
     }
-
-    const { ids } = body;
 
     await prisma.area.updateMany({
       where: {

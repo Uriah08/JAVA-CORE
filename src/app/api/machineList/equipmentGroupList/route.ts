@@ -21,7 +21,10 @@ export async function GET(req: Request) {
     }
 
     const equipmentGroups = await prisma.equipmentGroup.findMany({
-      where: { areaId },
+      where: {
+        areaId,
+        isDelete: false,
+      },
     });
 
     return NextResponse.json({ equipmentGroups });

@@ -152,7 +152,7 @@ export const api = createApi({
       query: (ids) => ({
         url: "/api/machineList/delete",
         method: "POST",
-        body: JSON.stringify({ ids }),
+        body: ids,
         headers: {
           "Content-Type": "application/json",
         },
@@ -178,7 +178,7 @@ export const api = createApi({
       query: (ids) => ({
         url: "/api/machineList/equipmentGroupList/delete",
         method: "POST",
-        body: { ids },
+        body: ids,
         headers: {
           "Content-Type": "application/json",
         },
@@ -205,7 +205,7 @@ export const api = createApi({
       query: (ids) => ({
         url: "/api/machineList/equipmentGroupList/equipmentNameList/delete",
         method: "POST",
-        body: { ids },
+        body: ids,
         headers: {
           "Content-Type": "application/json",
         },
@@ -232,7 +232,7 @@ export const api = createApi({
       query: (ids) => ({
         url: "/api/machineList/equipmentGroupList/equipmentNameList/component/delete",
         method: "POST",
-        body: { ids },
+        body: ids,
         headers: {
           "Content-Type": "application/json",
         },

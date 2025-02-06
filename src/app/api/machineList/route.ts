@@ -10,7 +10,11 @@ export async function GET() {
       throw new Error("Not Authenticated");
     }
 
-    const areas = await prisma.area.findMany({});
+    const areas = await prisma.area.findMany({
+      where: {
+        isDelete: false,
+      },
+    });
 
     return NextResponse.json({ areas });
   } catch (error) {

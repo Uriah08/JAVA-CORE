@@ -114,16 +114,17 @@ const List = () => {
 
     try {
       if (currentEquipmentName) {
-        await Promise.all(selectedItems.map((id) => deleteComponent(id)));
+        await deleteComponent(selectedItems).unwrap();
       } else if (currentEquipmentGroup) {
-        await Promise.all(selectedItems.map((id) => deleteEquipmentName(id)));
+        await deleteEquipmentName(selectedItems).unwrap();
       } else if (currentArea) {
-        await Promise.all(selectedItems.map((id) => deleteEquipmentGroup(id)));
+        await deleteEquipmentGroup(selectedItems).unwrap();
       } else {
-        await Promise.all(selectedItems.map((id) => deleteMachine(id)));
+        await deleteMachine(selectedItems).unwrap();
       }
 
-      setSelectedItems([]); // Clear selection
+      setSelectedItems([]);
+      setIsDeleting(false);
       setIsConfirmDialogOpen(false);
     } catch (error) {
       console.error("Failed to delete items:", error);
@@ -169,18 +170,24 @@ const List = () => {
                   }`
                 )
               }
-              className="bg-main"
+              className="bg-main hover:bg-red-300"
             >
               Add <Plus />
             </Button>
+            {isDeleting && selectedItems.length > 0 && (
+              <Button
+                onClick={() => setIsConfirmDialogOpen(true)}
+                className="bg-main hover:bg-red-300"
+              >
+                Delete Selected
+              </Button>
+            )}
             <Button
               onClick={() => setIsDeleting((prev) => !prev)}
-              className="bg-red-600"
+              className="bg-white text-main hover:bg-red-300  "
             >
               {isDeleting ? (
-                <>
-                  Cancel <X className="ml-2" />
-                </>
+                <>Cancel</>
               ) : (
                 <>
                   Delete <Trash className="ml-2" />
@@ -215,19 +222,12 @@ const List = () => {
                   <Checkbox
                     checked={selectedItems.includes(item.id)}
                     onCheckedChange={() => handleSelectItem(item.id)}
+                    className="mx-2 border-main data-[state=checked]:bg-main data-[state=checked]:text-white"
                   />
                 )}
               </li>
             ))}
           </>
-        )}
-        {isDeleting && selectedItems.length > 0 && (
-          <Button
-            onClick={() => setIsConfirmDialogOpen(true)}
-            className="mt-4 bg-red-600"
-          >
-            Delete Selected
-          </Button>
         )}
       </ul>
     );

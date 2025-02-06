@@ -3,14 +3,12 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
 
 export async function POST(req: Request) {
+  const ids = await req.json();
   try {
     const session = await auth();
     if (!session) {
       throw new Error("Not Authenticated");
     }
-
-    const body = await req.json();
-    const { ids } = body;
 
     const updatedGroups = await prisma.equipmentGroup.updateMany({
       where: {

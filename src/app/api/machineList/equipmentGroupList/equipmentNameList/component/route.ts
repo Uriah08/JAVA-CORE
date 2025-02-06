@@ -21,7 +21,7 @@ export async function GET(req: Request) {
     }
 
     const components = await prisma.component.findMany({
-      where: { equipmentNameId },
+      where: { equipmentNameId, isDelete: false },
     });
 
     return NextResponse.json({ components });
