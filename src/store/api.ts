@@ -28,7 +28,12 @@ type JobsResponse = {
   success: boolean;
 };
 
-type AreaResponse = { areas: Area[] };
+type AreaResponse = {
+  areas: Area[];
+  message: string;
+  success: boolean;
+};
+
 type EquipmentGroupResponse = { equipmentGroups: EquipmentGroup[] };
 type EquipmentNameResponse = { equipmentNames: EquipmentName[] };
 type ComponentResponse = { components: Component[] };
@@ -66,7 +71,7 @@ export const api = createApi({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["Client"]
+      invalidatesTags: ["Client"],
     }),
     changePassword: build.mutation({
       query: (data) => ({
@@ -126,25 +131,69 @@ export const api = createApi({
       invalidatesTags: ["Job"],
     }),
     getMachineList: build.query<AreaResponse, void>({
-      query: () => "/api/machineList",
+      query: () => ({
+        url: "/api/machineList",
+        method: "GET",
+      }),
       providesTags: ["Area"],
     }),
-
+    createMachineList: build.mutation({
+      query: (data) => ({
+        url: "/api/machineList",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Area"],
+    }),
     getEquipmentGroups: build.query<EquipmentGroupResponse, string>({
       query: (areaId) => `/api/machineList/equipmentGroupList?areaId=${areaId}`,
       providesTags: ["EquipmentGroup"],
     }),
-
+    createEquipmentGroup: build.mutation({
+      query: (data) => ({
+        url: "/api/machineList/equipmentGroupList",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["EquipmentGroup"],
+    }),
     getEquipmentNames: build.query<EquipmentNameResponse, string>({
       query: (groupId) =>
         `/api/machineList/equipmentGroupList/equipmentNameList?groupId=${groupId}`,
       providesTags: ["EquipmentName"],
     }),
-
+    createEquipmentName: build.mutation({
+      query: (data) => ({
+        url: "/api/machineList/equipmentGroupList/equipmentNameList",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["EquipmentName"],
+    }),
     getComponents: build.query<ComponentResponse, string>({
       query: (equipmentNameId) =>
         `/api/machineList/equipmentGroupList/equipmentNameList/component?equipmentNameId=${equipmentNameId}`,
       providesTags: ["Component"],
+    }),
+    createComponent: build.mutation({
+      query: (data) => ({
+        url: "/api/machineList/equipmentGroupList/equipmentNameList/component",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Component"],
     }),
   }),
 });
@@ -158,8 +207,12 @@ export const {
   useGetJobsQuery,
   useDeleteJobsMutation,
   useUpdateJobMutation,
-  useLazyGetMachineListQuery,
+  useGetMachineListQuery,
+  useCreateMachineListMutation,
   useLazyGetEquipmentGroupsQuery,
+  useCreateEquipmentGroupMutation,
   useLazyGetEquipmentNamesQuery,
+  useCreateEquipmentNameMutation,
   useLazyGetComponentsQuery,
+  useCreateComponentMutation,
 } = api;

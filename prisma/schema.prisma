@@ -120,8 +120,9 @@ model RouteMachineList {
 }
 
 model Area {
-  id   String @id @default(uuid())
-  name String
+  id       String  @id @default(cuid())
+  name     String
+  isDelete Boolean @default(false)
 
   equipmentGroups  EquipmentGroup[]
   RouteMachineList RouteMachineList[]
@@ -130,9 +131,10 @@ model Area {
 }
 
 model EquipmentGroup {
-  id     String  @id @default(uuid())
-  name   String
-  areaId String?
+  id       String  @id @default(cuid())
+  name     String
+  areaId   String?
+  isDelete Boolean @default(false)
 
   area             Area?              @relation(fields: [areaId], references: [id], onDelete: Cascade)
   equipmentNames   EquipmentName[]
@@ -142,9 +144,10 @@ model EquipmentGroup {
 }
 
 model EquipmentName {
-  id      String  @id @default(uuid())
-  name    String
-  groupId String?
+  id       String  @id @default(cuid())
+  name     String
+  groupId  String?
+  isDelete Boolean @default(false)
 
   group            EquipmentGroup?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
   components       Component[]
@@ -154,9 +157,10 @@ model EquipmentName {
 }
 
 model Component {
-  id              String  @id @default(uuid())
+  id              String  @id @default(cuid())
   name            String
   equipmentNameId String?
+  isDelete        Boolean @default(false)
 
   equipmentName    EquipmentName?     @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
   RouteMachineList RouteMachineList[]

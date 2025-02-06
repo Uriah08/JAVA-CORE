@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  useLazyGetMachineListQuery,
+  useGetMachineListQuery,
   useLazyGetEquipmentGroupsQuery,
   useLazyGetEquipmentNamesQuery,
   useLazyGetComponentsQuery,
@@ -10,12 +10,14 @@ import {
 import MachineList from "../../form/MachineList";
 import Loading from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 const List = () => {
-  const [
-    fetchAreas,
-    { data: areaData, isLoading: loadingAreas, error: areaError },
-  ] = useLazyGetMachineListQuery();
+  const {
+    data: areaData,
+    isLoading: loadingAreas,
+    error: areaError,
+  } = useGetMachineListQuery();
   const [
     fetchEquipmentGroups,
     { data: equipmentGroupData, isLoading: loadingGroups, error: groupError },
@@ -39,10 +41,6 @@ const List = () => {
   const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
-
-  useEffect(() => {
-    fetchAreas();
-  }, []);
 
   if (loadingAreas || loadingGroups || loadingNames || loadingComponents) {
     return (
@@ -131,7 +129,7 @@ const List = () => {
                 onClick={() => handleOpenDialog("Add New Area")}
                 className="bg-main"
               >
-                +
+                Add <Plus />
               </Button>
             </div>
             {areaData?.areas?.map((area) => (
@@ -156,7 +154,7 @@ const List = () => {
                 onClick={() => handleOpenDialog("Add New Group")}
                 className="bg-main"
               >
-                +
+                Add <Plus />
               </Button>
             </div>
             {equipmentGroupData?.equipmentGroups?.map((equipmentGroup: any) => (
@@ -181,7 +179,7 @@ const List = () => {
                 onClick={() => handleOpenDialog("Add New Name")}
                 className="bg-main"
               >
-                +
+                Add <Plus />
               </Button>
             </div>
             {equipmentNameData?.equipmentNames?.map((equipmentName: any) => (
@@ -206,7 +204,7 @@ const List = () => {
                 onClick={() => handleOpenDialog("Add New Component")}
                 className="bg-main"
               >
-                +
+                Add <Plus />
               </Button>
             </div>
             {componentData?.components?.map((component: any, index: any) => (
@@ -220,8 +218,10 @@ const List = () => {
       <MachineList
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
-        onSubmit={(name) => console.log("New Item:", name)}
         title={dialogTitle}
+        areaId={currentArea?.id}
+        groupId={currentEquipmentGroup?.id}
+        equipmentNameId={currentEquipmentName?.id}
       />
     </div>
   );

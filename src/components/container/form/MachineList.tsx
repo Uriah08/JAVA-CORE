@@ -1,3 +1,4 @@
+// Machinelist.tsx dialog
 "use client";
 
 import React, { useState } from "react";
@@ -10,26 +11,54 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  useCreateMachineListMutation,
+  useCreateEquipmentGroupMutation,
+  useCreateEquipmentNameMutation,
+  useCreateComponentMutation,
+} from "@/store/api";
 
 type AddItemModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (name: string) => void;
   title: string;
+  areaId?: string; // Optional for equipment groups
+  groupId?: string; // Optional for equipment names
+  equipmentNameId?: string; // Optional for components
 };
 
 const MachineList: React.FC<AddItemModalProps> = ({
   isOpen,
   onClose,
-  onSubmit,
   title,
+  areaId,
+  groupId,
+  equipmentNameId,
 }) => {
   const [itemName, setItemName] = useState("");
 
-  const handleSubmit = () => {
-    onSubmit(itemName);
-    setItemName("");
-    onClose();
+  // Hooks for mutations
+  const [createArea] = useCreateMachineListMutation();
+  const [createEquipmentGroup] = useCreateEquipmentGroupMutation();
+  const [createEquipmentName] = useCreateEquipmentNameMutation();
+  const [createComponent] = useCreateComponentMutation();
+
+  const handleSubmit = async () => {
+    try {
+      if (title === "Add New Area") {
+        await createArea({ name: itemName }).unwrap();
+      } else if (title === "Add New Group") {
+        await createEquipmentGroup({ name: itemName, areaId }).unwrap();
+      } else if (title === "Add New Name") {
+        await createEquipmentName({ name: itemName, groupId }).unwrap();
+      } else if (title === "Add New Component") {
+        await createComponent({ name: itemName, equipmentNameId }).unwrap();
+      }
+      setItemName("");
+      onClose();
+    } catch (error) {
+      console.error("Error adding item:", error);
+    }
   };
 
   return (

@@ -58,16 +58,12 @@ export const registerSchema = z.object({
       message: "Username must be at most 30 characters long",
     }),
   email: z.string().email().min(5).max(50),
-  password: z
-    .string()
-    .min(8, {
-      message: "Password must be at least 8 characters long",
-    }),
-    confirmPassword: z
-    .string()
-    .min(8, {
-      message: "Password must be at least 8 characters long",
-    })
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }),
+  confirmPassword: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }),
 });
 
 export const loginSchema = z.object({
@@ -83,19 +79,38 @@ export const loginSchema = z.object({
 });
 
 export const changePasswordSchema = z.object({
-  currentPassword: z.string().min(8,{
-    message: "Password must be 8 characters long"
+  currentPassword: z.string().min(8, {
+    message: "Password must be 8 characters long",
   }),
-  newPassword: z.string().min(8,{
-    message: "Password must be at least 8 characters long"
+  newPassword: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
   }),
-  confirmPassword: z.string().min(8,{
-    message: "Password must be at least 8 characters long"
-  })
-})
+  confirmPassword: z.string().min(8, {
+    message: "Password must be at least 8 characters long",
+  }),
+});
 
 export const routeSchema = z.object({
   client: z.string().min(1, "Client is required"),
   route: z.string().min(1, "Route name is required"),
   droppedMachines: z.array(z.string()).optional(),
+});
+
+export const areaSchema = z.object({
+  name: z.string().min(1, { message: "Area name is required" }),
+});
+
+export const equipmentGroupSchema = z.object({
+  name: z.string().min(1, { message: "Equipment group name is required" }),
+  areaId: z.string(),
+});
+
+export const equipmentNameSchema = z.object({
+  name: z.string().min(1, { message: "Equipment name is required" }),
+  groupId: z.string(),
+});
+
+export const componentSchema = z.object({
+  name: z.string().min(1, { message: "Component name is required" }),
+  equipmentNameId: z.string().optional(),
 });
