@@ -20,11 +20,14 @@ const ProfilePage = () => {
           <h1 className='text-2xl text-main'>{session?.user.name}</h1>
       </div>
       <div className='rounded-xl bg-white flex flex-col p-5 shadow-lg'>
+      <h1 className='text-2xl font-bold'>Search Client</h1>
+      </div>
+      <div className='rounded-xl bg-white flex flex-col p-5 shadow-lg'>
       <h1 className='text-2xl font-bold'>Change password</h1>
       <ChangePassword/>
       </div>
         </div>
-        <div className='w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg'>
+        <div className='w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg h-fit'>
         <h1 className='text-2xl font-bold'>Register Client</h1>
         <RegisterClient/>
         </div>
