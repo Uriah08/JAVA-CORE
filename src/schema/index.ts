@@ -114,3 +114,13 @@ export const componentSchema = z.object({
   name: z.string().min(1, { message: "Component name is required" }),
   equipmentNameId: z.string().optional(),
 });
+
+export const analysisAndReportSchema = z.object({
+  jobNo: z.string().min(1, { message: "Job number is required" }),
+  client: z.string().min(1, { message: "Client is required" }),
+  yearWeekNo: z.string().min(1, { message: "Year week number is required" }),
+  inspectionRoute: z
+    .string()
+    .min(1, { message: "Inspection route is required" }),
+  area: z.string().min(1, { message: "Area is required" }),
+});

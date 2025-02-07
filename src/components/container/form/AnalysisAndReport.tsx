@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { jobSchema } from "@/schema";
+import { analysisAndReportSchema } from "@/schema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,22 +34,13 @@ const AnalysisAndReportForm = () => {
 
   const [createJob, { isLoading: createJobLoading }] = useCreateJobMutation();
 
-  const form = useForm<z.infer<typeof jobSchema>>({
-    resolver: zodResolver(jobSchema),
+  const form = useForm<z.infer<typeof analysisAndReportSchema>>({
+    resolver: zodResolver(analysisAndReportSchema),
     defaultValues: {
       client: "",
       area: "",
-      dateSurveyed: new Date(),
       jobNo: "",
-      poNo: "",
-      woNo: "",
-      reportNo: "",
-      jobDescription: "",
-      method: "",
-      inspector: "",
       inspectionRoute: "",
-      equipmentUse: "",
-      dateRegistered: new Date(),
       yearWeekNo: "",
     },
   });
@@ -57,12 +48,10 @@ const AnalysisAndReportForm = () => {
   const { data, isLoading: clientLoading } = useGetClientsQuery();
   const clients = data?.clients || [];
 
-  async function onSubmit(values: z.infer<typeof jobSchema>) {
+  async function onSubmit(values: z.infer<typeof analysisAndReportSchema>) {
     try {
       const formattedValues = {
         ...values,
-        dateSurveyed: new Date(values.dateSurveyed),
-        dateRegistered: new Date(values.dateRegistered),
       };
 
       const response = await createJob(formattedValues).unwrap();
@@ -155,6 +144,20 @@ const AnalysisAndReportForm = () => {
     },
   ];
 
+  const jobnumber = [
+    { id: "JN-001", name: "Job Number 001" },
+    { id: "JN-002", name: "Job Number 002" },
+    { id: "JN-003", name: "Job Number 003" },
+    { id: "JN-004", name: "Job Number 004" },
+    { id: "JN-005", name: "Job Number 005" },
+  ];
+
+  const route = [
+    { id: "JN-001", name: "route 001" },
+    { id: "JN-002", name: "route 002" },
+    { id: "JN-003", name: "route 003" },
+  ];
+
   return (
     <Form {...form}>
       <form
@@ -177,7 +180,7 @@ const AnalysisAndReportForm = () => {
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          clientLoading ? "Loading..." : "Select a client"
+                          clientLoading ? "Loading..." : "Select Job Number"
                         }
                       />
                     </SelectTrigger>
@@ -190,9 +193,9 @@ const AnalysisAndReportForm = () => {
                           <Loading />
                         </div>
                       ) : (
-                        clients.map((client) => (
-                          <SelectItem key={client.id} value={client.id}>
-                            {client.name}
+                        jobnumber.map((jobnumber) => (
+                          <SelectItem key={jobnumber.id} value={jobnumber.id}>
+                            {jobnumber.name}
                           </SelectItem>
                         ))
                       )}
@@ -266,9 +269,9 @@ const AnalysisAndReportForm = () => {
                           <Loading />
                         </div>
                       ) : (
-                        clients.map((client) => (
-                          <SelectItem key={client.id} value={client.id}>
-                            {client.name}
+                        route.map((route) => (
+                          <SelectItem key={route.id} value={route.id}>
+                            {route.name}
                           </SelectItem>
                         ))
                       )}
@@ -307,7 +310,7 @@ const AnalysisAndReportForm = () => {
           </div>
 
           <hr className="h-auto border-l border-gray-300 mx-4 -mt-3" />
-          <div className="w-2/3">
+          <div className="w-3/4">
             <div className="flex md:flex-row flex-col gap-3 w-full"></div>
           </div>
         </div>
