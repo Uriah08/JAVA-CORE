@@ -51,8 +51,11 @@ const List = () => {
   const [deleteEquipmentName] = useSoftDeleteEquipmentNamesMutation();
   const [deleteComponent] = useSoftDeleteComponentsMutation();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentArea, setCurrentArea] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentEquipmentGroup, setCurrentEquipmentGroup] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentEquipmentName, setCurrentEquipmentName] = useState<any>(null);
   const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -69,7 +72,7 @@ const List = () => {
     setLoading((prev) => ({ ...prev, [key]: value }));
   };
   
-  // Update loading state when each request is triggered
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAreaClick = async (area: any) => {
     setLoadingState("areas", true);
     setCurrentArea(area);
@@ -80,6 +83,7 @@ const List = () => {
     setLoadingState("areas", false);
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEquipmentGroupClick = async (equipmentGroup: any) => {
     setLoadingState("groups", true);
     setCurrentEquipmentGroup(equipmentGroup);
@@ -89,6 +93,7 @@ const List = () => {
     setLoadingState("groups", false);
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEquipmentNameClick = async (equipmentName: any) => {
     setLoadingState("names", true);
     setCurrentEquipmentName(equipmentName);
@@ -211,11 +216,11 @@ const List = () => {
         </div>
         {anyLoading ? 
             <div className="w-full h-full overflow-hidden">
-              {[...Array(5)].map((_, index) => (
+              {[...Array(13)].map((_, index) => (
               <Skeleton
                 key={index}
                 className="w-full h-[53px] border-t animate-pulse"
-                style={{ animationDelay: `${index * 0.2}s` }} // Stagger the animations
+                style={{ animationDelay: `${index * 0.2}s` }}
               />
             ))}
             </div>
