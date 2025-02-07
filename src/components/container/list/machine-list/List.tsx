@@ -15,8 +15,10 @@ import MachineList from "../../form/MachineList";
 import ConfirmationDialog from "@/components/container/dialog/deletingList/ConfirmationDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash, X } from "lucide-react";
+import { EllipsisVertical, Plus, Trash } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const List = () => {
   const {
@@ -55,18 +57,6 @@ const List = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-
-  const loading =
-    loadingAreas || loadingGroups || loadingNames || loadingComponents;
-
-  if (loading) {
-    return (
-      <div className="p-5 flex flex-col items-center justify-center min-h-screen">
-        <Skeleton className="h-[500px] w-full rounded-lg mb-4" />
-        <p className="text-gray-500">Loading data, please wait...</p>
-      </div>
-    );
-  }
 
   if (areaError || groupError || nameError || componentError) {
     return <div className="text-red-600">Error loading data.</div>;
@@ -142,11 +132,13 @@ const List = () => {
     );
   };
 
+  const loading = loadingAreas || loadingGroups || loadingNames || loadingComponents
+
   const renderList = (items: { id: string; name: string }[], level: number) => {
     return (
-      <ul className="space-y-2">
+      <ul className="">
         <div className="flex justify-between items-center my-9">
-          <h1 className="text-lg items-center text-center text-gray-800">
+          <h1 className="text-lg items-center text-center text-gray-800 font-semibold">
             {level === 0
               ? "Select an area"
               : level === 1
@@ -170,21 +162,27 @@ const List = () => {
                   }`
                 )
               }
-              className="bg-main hover:bg-red-300"
+              className="bg-main hover:bg-follow"
+              disabled={loading}
             >
               Add <Plus />
             </Button>
             {isDeleting && selectedItems.length > 0 && (
               <Button
+                disabled={loading}
                 onClick={() => setIsConfirmDialogOpen(true)}
-                className="bg-main hover:bg-red-300"
+                className="bg-main hover:bg-follow"
               >
                 Delete Selected
               </Button>
             )}
             <Button
-              onClick={() => setIsDeleting((prev) => !prev)}
-              className="bg-white text-main hover:bg-red-300  "
+              onClick={() => 
+                {setIsDeleting((prev) => !prev)
+                setSelectedItems([])}}
+              className="text-main hover:text-main"
+              variant={"outline"}
+              disabled={loading}
             >
               {isDeleting ? (
                 <>Cancel</>
@@ -196,35 +194,70 @@ const List = () => {
             </Button>
           </div>
         </div>
-        {items.length === 0 ? (
-          <div className="flex flex-col items-center">
-            <p className="text-gray-500">No items available.</p>
-          </div>
-        ) : (
-          <>
-            {items.map((item) => (
+        {loading ? 
+            <div className="w-full h-full overflow-hidden">
+              {[...Array(5)].map((_, index) => (
+              <Skeleton
+                key={index}
+                className="w-full h-[53px] border-t animate-pulse"
+                style={{ animationDelay: `${index * 0.2}s` }} // Stagger the animations
+              />
+            ))}
+            </div>
+         : (
+          <>{
+            items.length === 0 ? (
+              <div className="flex flex-col items-center my-20">
+                <p className="text-gray-300 text-3xl font-bold">No items available.</p>
+              </div>
+            )
+            : items.map((item,index) => (
               <li
                 key={item.id}
-                className="p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 flex items-center justify-between"
-                onClick={() =>
-                  !isDeleting &&
-                  (level === 0
+                className={`p-2 border-t hover:bg-slate-100 cursor-pointer justify-between flex items-center ${
+                  index === items.length - 1 ? "border-b" : ""
+                } ${selectedItems.includes(item.id) ? "bg-slate-100" : ""}`}
+              ><div
+              className="flex gap-3 w-full"
+              onClick={() => {
+                if (isDeleting) {
+                  handleSelectItem(item.id);
+                } else {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                  level === 0
                     ? handleAreaClick(item)
                     : level === 1
                     ? handleEquipmentGroupClick(item)
                     : level === 2
                     ? handleEquipmentNameClick(item)
-                    : null)
+                    : null;
                 }
-              >
-                <span>{item.name}</span>
-                {isDeleting && (
-                  <Checkbox
-                    checked={selectedItems.includes(item.id)}
-                    onCheckedChange={() => handleSelectItem(item.id)}
-                    className="mx-2 border-main data-[state=checked]:bg-main data-[state=checked]:text-white"
-                  />
-                )}
+              }}>
+                <div className="flex gap-2 items-center">
+                  {isDeleting && (
+                    <Checkbox
+                      checked={selectedItems.includes(item.id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent <li> click event from firing
+                        handleSelectItem(item.id);
+                      }}
+                      className={`${isDeleting ? 'mx-2' : ''} border-main data-[state=checked]:bg-main data-[state=checked]:text-white`}
+                    />
+                  )}
+                  <span className={`${isDeleting ? 'px-2' : ''} py-1 rounded`}>{item.name}</span>
+                </div>
+                </div>
+                <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <EllipsisVertical className="text-zinc-500 z-20"/>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Rename</DropdownMenuItem>
+                <DropdownMenuItem>Delete</DropdownMenuItem>
+                </DropdownMenuContent>
+                </DropdownMenu>
               </li>
             ))}
           </>
@@ -234,20 +267,31 @@ const List = () => {
   };
 
   return (
-    <div className="p-5">
-      <div className="mb-4 text-sm font-semibold">
+    <div className="mt-5">
+      <div className="font-base flex">
+      <React.Fragment>
+                <span
+                  className={`cursor-pointer text-gray-600 hover:underline mr-1 ${breadcrumb.length > 0 ? '' : 'font-semibold text-gray-800'}`}
+                  onClick={() => handleBreadcrumbClick(0)}
+                >
+                  Machines
+                </span>
+                  <span className="text-sm text-gray-600 mx-2">{breadcrumb.length > 0 ? '>' : ''}</span>
+              </React.Fragment>
         {breadcrumb.length > 0 && (
-          <nav className="flex space-x-2">
+          <nav className="flex gap-2">
             {breadcrumb.map((item, index) => (
               <React.Fragment key={index}>
                 <span
-                  className="cursor-pointer text-gray-600 hover:underline"
+                  className={`cursor-pointer text-gray-600 hover:underline ${
+                    index === breadcrumb.length - 1 ? 'font-semibold text-gray-800' : ''
+                  }`}
                   onClick={() => handleBreadcrumbClick(index)}
                 >
                   {item}
                 </span>
                 {index < breadcrumb.length - 1 && (
-                  <span className="text-sm text-gray-600"> &gt; </span>
+                  <span className="text-sm text-gray-600 mx-1"> &gt; </span>
                 )}
               </React.Fragment>
             ))}
