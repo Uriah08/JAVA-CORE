@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { Session } from "next-auth";
 
-import { signOut } from "next-auth/react";
 import { Menu, X } from "lucide-react";
 
 const Hero = ({
@@ -32,7 +31,7 @@ const Hero = ({
             session?.user.role === "admin" ? (
               <Link href={'/job-registry'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Admin</Link>
             ) : (
-              <button onClick={() => signOut()} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign Out</button>
+              <Link href={'/profile'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Client</Link>
             )
             ) : (
               <Link href={'/auth/sign-in'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign In</Link>
@@ -61,7 +60,7 @@ const Hero = ({
             session?.user.role === "admin" ? (
               <Link href={'/job-registry'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Admin</Link>
             ) : (
-              <button onClick={() => signOut()} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign Out</button>
+              <Link href={'/profile'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Client</Link>
             )
           ) : (
             <Link href={'/auth/sign-in'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign In</Link>
