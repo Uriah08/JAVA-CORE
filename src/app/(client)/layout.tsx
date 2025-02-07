@@ -32,7 +32,7 @@ const sidebar = [
   {
     title: "Components",
     icon: Component,
-    link: "/components",
+    link: "/component",
   },
   {
     title: "Profile",
@@ -167,7 +167,11 @@ const ClientLayout = ({ children }: Props) => {
           </div>
         </div>
       </div>
-      <div className={`h-full w-full ${open ? loading ? '' : "lg:pl-[269px]" : ""}`}>
+      <div
+        className={`h-full w-full ${
+          open ? (loading ? "" : "lg:pl-[269px]") : ""
+        }`}
+      >
         {loading ? (
           <div className="w-full h-screen">
             <Loading />

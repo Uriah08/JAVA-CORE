@@ -53,7 +53,7 @@ const sidebar = [
     link: "/users",
   },
   {
-    title: "Data Base",
+    title: "Database",
     icon: Database,
     link: "/machine-list",
   },
@@ -185,7 +185,11 @@ const ProtectedLayout = ({ children }: Props) => {
           </div>
         </div>
       </div>
-      <div className={`h-full w-full ${open ? loading ? '' : "lg:pl-[269px]" : ""}`}>
+      <div
+        className={`h-full w-full ${
+          open ? (loading ? "" : "lg:pl-[269px]") : ""
+        }`}
+      >
         {loading ? (
           <div className="w-full h-screen">
             <Loading />
