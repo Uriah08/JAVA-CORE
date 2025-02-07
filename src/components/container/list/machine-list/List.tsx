@@ -19,29 +19,32 @@ import { EllipsisVertical, Plus, Trash } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
 const List = () => {
   const {
     data: areaData,
-    isLoading: loadingAreas,
     error: areaError,
   } = useGetMachineListQuery();
   const [
     fetchEquipmentGroups,
-    { data: equipmentGroupData, isLoading: loadingGroups, error: groupError },
+    { data: equipmentGroupData, error: groupError },
   ] = useLazyGetEquipmentGroupsQuery();
+  
   const [
     fetchEquipmentNames,
-    { data: equipmentNameData, isLoading: loadingNames, error: nameError },
+    { data: equipmentNameData, error: nameError },
   ] = useLazyGetEquipmentNamesQuery();
+  
   const [
     fetchComponents,
-    {
-      data: componentData,
-      isLoading: loadingComponents,
-      error: componentError,
-    },
+    { data: componentData, error: componentError },
   ] = useLazyGetComponentsQuery();
+  
+  const [loading, setLoading] = useState({
+    areas: false,
+    groups: false,
+    names: false,
+    components: false,
+  });
 
   const [deleteMachine] = useSoftDeleteMachineListMutation();
   const [deleteEquipmentGroup] = useSoftDeleteEquipmentGroupsMutation();
@@ -62,25 +65,36 @@ const List = () => {
     return <div className="text-red-600">Error loading data.</div>;
   }
 
+  const setLoadingState = (key: keyof typeof loading, value: boolean) => {
+    setLoading((prev) => ({ ...prev, [key]: value }));
+  };
+  
+  // Update loading state when each request is triggered
   const handleAreaClick = async (area: any) => {
+    setLoadingState("areas", true);
     setCurrentArea(area);
     setCurrentEquipmentGroup(null);
     setCurrentEquipmentName(null);
     setBreadcrumb([area.name]);
     await fetchEquipmentGroups(area.id);
+    setLoadingState("areas", false);
   };
-
+  
   const handleEquipmentGroupClick = async (equipmentGroup: any) => {
+    setLoadingState("groups", true);
     setCurrentEquipmentGroup(equipmentGroup);
     setCurrentEquipmentName(null);
     setBreadcrumb([breadcrumb[0], equipmentGroup.name]);
     await fetchEquipmentNames(equipmentGroup.id);
+    setLoadingState("groups", false);
   };
-
+  
   const handleEquipmentNameClick = async (equipmentName: any) => {
+    setLoadingState("names", true);
     setCurrentEquipmentName(equipmentName);
     setBreadcrumb([breadcrumb[0], breadcrumb[1], equipmentName.name]);
     await fetchComponents(equipmentName.id);
+    setLoadingState("names", false);
   };
 
   const handleBreadcrumbClick = (level: number) => {
@@ -101,7 +115,7 @@ const List = () => {
 
   const handleDeleteSelected = async () => {
     if (selectedItems.length === 0) return;
-
+  
     try {
       if (currentEquipmentName) {
         await deleteComponent(selectedItems).unwrap();
@@ -112,12 +126,14 @@ const List = () => {
       } else {
         await deleteMachine(selectedItems).unwrap();
       }
-
+  
       setSelectedItems([]);
       setIsDeleting(false);
       setIsConfirmDialogOpen(false);
     } catch (error) {
       console.error("Failed to delete items:", error);
+    } finally {
+      setLoadingState("components", false);
     }
   };
 
@@ -132,9 +148,8 @@ const List = () => {
     );
   };
 
-  const loading = loadingAreas || loadingGroups || loadingNames || loadingComponents
-
   const renderList = (items: { id: string; name: string }[], level: number) => {
+    const anyLoading = Object.values(loading).includes(true);
     return (
       <ul className="">
         <div className="flex justify-between items-center my-9">
@@ -163,13 +178,13 @@ const List = () => {
                 )
               }
               className="bg-main hover:bg-follow"
-              disabled={loading}
+              disabled={anyLoading}
             >
               Add <Plus />
             </Button>
             {isDeleting && selectedItems.length > 0 && (
               <Button
-                disabled={loading}
+              disabled={anyLoading}
                 onClick={() => setIsConfirmDialogOpen(true)}
                 className="bg-main hover:bg-follow"
               >
@@ -182,7 +197,7 @@ const List = () => {
                 setSelectedItems([])}}
               className="text-main hover:text-main"
               variant={"outline"}
-              disabled={loading}
+              disabled={anyLoading}
             >
               {isDeleting ? (
                 <>Cancel</>
@@ -194,7 +209,7 @@ const List = () => {
             </Button>
           </div>
         </div>
-        {loading ? 
+        {anyLoading ? 
             <div className="w-full h-full overflow-hidden">
               {[...Array(5)].map((_, index) => (
               <Skeleton
@@ -238,7 +253,7 @@ const List = () => {
                     <Checkbox
                       checked={selectedItems.includes(item.id)}
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent <li> click event from firing
+                        e.stopPropagation();
                         handleSelectItem(item.id);
                       }}
                       className={`${isDeleting ? 'mx-2' : ''} border-main data-[state=checked]:bg-main data-[state=checked]:text-white`}
