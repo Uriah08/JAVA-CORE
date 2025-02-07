@@ -86,6 +86,7 @@ export const columns: ColumnDef<ExtendedJob>[] = [
   },
   {
     accessorKey: "user",
+    accessorFn: (row) => row.user.name,
     header: ({ column }) => {
       return (
         <Button
@@ -97,6 +98,10 @@ export const columns: ColumnDef<ExtendedJob>[] = [
           <ArrowUpDown className="h-4 w-4" />
         </Button>
       )
+    },
+    filterFn: (row, columnId, value) => {
+      const rowValue = row.getValue(columnId) as string; // Assert value is a string
+      return rowValue.toLowerCase().includes(value.toLowerCase());
     },
     cell: ({ row }) => { 
       return (
