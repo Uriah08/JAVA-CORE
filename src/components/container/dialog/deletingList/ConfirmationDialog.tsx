@@ -7,15 +7,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog"; // Adjust the import based on your UI library
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
 type ConfirmationDialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => Promise<void>; // Async confirm action
+  onConfirm: () => Promise<void>;
   title: string;
-  message: string; // Message to display in the dialog
+  message: string;
 };
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
