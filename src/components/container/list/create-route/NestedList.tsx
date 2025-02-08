@@ -2,12 +2,19 @@
 
 import React, { useState } from "react";
 
+type Component = {
+  name: string;
+  id: string;
+  isDelete: boolean;
+  equipmentNameId: string | null;
+};
+
 type NestedData = {
-  id: number;
+  id: string;
   name: string;
   equipmentGroups?: NestedData[];
   equipmentNames?: NestedData[];
-  components?: string[];
+  components?: Component[];
 };
 
 type NestedListProps = {
@@ -45,9 +52,9 @@ const NestedList = ({ data, level = 0 }: NestedListProps) => {
               />
             ))}
           {data.components &&
-            data.components.map((component, index) => (
-              <div key={index} className="ml-4" draggable>
-                {component}
+            data.components.map((component) => (
+              <div key={component.id} className="ml-4" draggable>
+                {component.name}
               </div>
             ))}
         </div>

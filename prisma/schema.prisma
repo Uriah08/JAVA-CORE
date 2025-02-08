@@ -89,36 +89,6 @@ model User {
   @@map("users")
 }
 
-model Route {
-  id         String   @id @default(uuid())
-  userId     String
-  clientName String
-  routeName  String
-  createdAt  DateTime @default(now())
-
-  machines RouteMachineList[]
-  user     User               @relation(fields: [userId], references: [id])
-
-  @@map("routes")
-}
-
-model RouteMachineList {
-  id               String  @id @default(uuid())
-  routeId          String
-  areaId           String? @unique
-  equipmentGroupId String? @unique
-  equipmentNameId  String? @unique
-  componentId      String? @unique
-
-  route          Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
-  area           Area?           @relation(fields: [areaId], references: [id], onDelete: Cascade)
-  equipmentGroup EquipmentGroup? @relation(fields: [equipmentGroupId], references: [id], onDelete: Cascade)
-  equipmentName  EquipmentName?  @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
-  component      Component?      @relation(fields: [componentId], references: [id], onDelete: Cascade)
-
-  @@map("route_machine_list")
-}
-
 model Area {
   id       String  @id @default(cuid())
   name     String
@@ -149,9 +119,9 @@ model EquipmentName {
   groupId  String?
   isDelete Boolean @default(false)
 
-  group            EquipmentGroup?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  components       Component[]
-  RouteMachineList RouteMachineList[]
+  group              EquipmentGroup?      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  components         Component[]
+  RouteEquipmentName RouteEquipmentName[]
 
   @@map("equipmentname")
 }
@@ -162,8 +132,120 @@ model Component {
   equipmentNameId String?
   isDelete        Boolean @default(false)
 
-  equipmentName    EquipmentName?     @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
-  RouteMachineList RouteMachineList[]
+  equipmentName  EquipmentName?   @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+  RouteComponent RouteComponent[]
 
   @@map("component")
+}
+
+model Route {
+  id         String   @id @default(uuid())
+  userId     String
+  clientName String
+  routeName  String
+  createdAt  DateTime @default(now())
+
+  machines RouteMachineList[]
+  user     User               @relation(fields: [userId], references: [id])
+
+  @@map("routes")
+}
+
+model RouteMachineList {
+  id               String  @id @default(uuid())
+  routeId          String
+  areaId           String?
+  equipmentGroupId String?
+
+  route          Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  area           Area?           @relation(fields: [areaId], references: [id], onDelete: Cascade)
+  equipmentGroup EquipmentGroup? @relation(fields: [equipmentGroupId], references: [id], onDelete: Cascade)
+
+  routeEquipmentNames RouteEquipmentName[]
+  routeComponents     RouteComponent[]
+
+  @@map("route_machine_list")
+}
+
+model RouteEquipmentName {
+  id              String @id @default(uuid())
+  routeMachineId  String
+  equipmentNameId String
+
+  routeMachine  RouteMachineList @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
+  equipmentName EquipmentName?   @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+
+  @@map("route_equipment_name")
+}
+
+model RouteComponent {
+  id             String  @id @default(uuid())
+  routeMachineId String
+  componentId    String
+  action         String?
+  note           String?
+  image          String?
+  reportFigures  String?
+  details        String?
+
+  routeMachine RouteMachineList @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
+  component    Component        @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+  comments        RouteComponentComment[]
+  recommendations RouteComponentRecommendation[]
+  severities      RouteComponentSeverity[]
+  temperatures    RouteComponentTemperature[]
+  oilAnalyses     RouteComponentOilAnalysis[]
+
+  @@map("route_component")
+}
+
+model RouteComponentComment {
+  id               String @id @default(uuid())
+  routeComponentId String
+  comment          String
+
+  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_comment")
+}
+
+model RouteComponentRecommendation {
+  id               String @id @default(uuid())
+  routeComponentId String
+  recommendation   String
+
+  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_recommendation")
+}
+
+model RouteComponentSeverity {
+  id               String @id @default(uuid())
+  routeComponentId String
+  severity         String
+
+  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_severity")
+}
+
+model RouteComponentTemperature {
+  id               String @id @default(uuid())
+  routeComponentId String
+  temperature      Float
+
+  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_temperature")
+}
+
+model RouteComponentOilAnalysis {
+  id               String @id @default(uuid())
+  routeComponentId String
+  analysis         String
+
+  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_oil_analysis")
 }

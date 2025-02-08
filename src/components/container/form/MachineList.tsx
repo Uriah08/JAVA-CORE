@@ -1,4 +1,3 @@
-// Machinelist.tsx dialog
 "use client";
 
 import React, { useState } from "react";
@@ -22,9 +21,9 @@ type AddItemModalProps = {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  areaId?: string; // Optional for equipment groups
-  groupId?: string; // Optional for equipment names
-  equipmentNameId?: string; // Optional for components
+  areaId?: string;
+  groupId?: string;
+  equipmentNameId?: string;
 };
 
 const MachineList: React.FC<AddItemModalProps> = ({
@@ -37,7 +36,6 @@ const MachineList: React.FC<AddItemModalProps> = ({
 }) => {
   const [itemName, setItemName] = useState("");
 
-  // Hooks for mutations
   const [createArea] = useCreateMachineListMutation();
   const [createEquipmentGroup] = useCreateEquipmentGroupMutation();
   const [createEquipmentName] = useCreateEquipmentNameMutation();
