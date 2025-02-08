@@ -159,163 +159,172 @@ const AnalysisAndReportForm = () => {
   ];
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="gap-3 mt-0 flex flex-col"
-      >
-        <div className="flex md:flex-row flex-col gap-3 w-full">
-          <FormField
-            control={form.control}
-            name="area"
-            render={({ field }) => (
-              <FormItem className='"w-full md:w-1/2'>
-                <FormLabel>Job Number</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  value={field.value || ""}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={
-                          clientLoading ? "Loading..." : "Select Job Number"
-                        }
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <FormMessage />
-                  <SelectContent>
-                    <div className="flex flex-col max-h-[200px] overflow-auto">
-                      {clientLoading ? (
-                        <div>
-                          <Loading />
+    <div className="w-full p-5 flex flex-col gap-5">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="gap-3 mt-0 flex flex-col"
+        >
+          <div className="w-full h-full py-5 bg-white rounded-xl">
+            <div className="w-full h-16 rounded-t-xl -mt-5 flex items-center px-5 shadow-md">
+              <h1 className="text-2xl font-bold text-main">
+                Analysis and Reporting
+              </h1>
+            </div>
+            <div className="flex md:flex-row flex-col gap-3 w-full p-5">
+              <FormField
+                control={form.control}
+                name="area"
+                render={({ field }) => (
+                  <FormItem className='"w-full md:w-1/2'>
+                    <FormLabel>Job Number</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value || ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={
+                              clientLoading ? "Loading..." : "Select Job Number"
+                            }
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <FormMessage />
+                      <SelectContent>
+                        <div className="flex flex-col max-h-[200px] overflow-auto">
+                          {clientLoading ? (
+                            <div>
+                              <Loading />
+                            </div>
+                          ) : (
+                            jobnumber.map((jobnumber) => (
+                              <SelectItem
+                                key={jobnumber.id}
+                                value={jobnumber.id}
+                              >
+                                {jobnumber.name}
+                              </SelectItem>
+                            ))
+                          )}
                         </div>
-                      ) : (
-                        jobnumber.map((jobnumber) => (
-                          <SelectItem key={jobnumber.id} value={jobnumber.id}>
-                            {jobnumber.name}
-                          </SelectItem>
-                        ))
-                      )}
-                    </div>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="client"
-            render={({ field }) => (
-              <FormItem className='"w-full md:w-1/2'>
-                <FormLabel>Client</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="select Job Number first"
-                    {...field}
-                    readOnly
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="client"
-            render={({ field }) => (
-              <FormItem className='"w-full md:w-1/2'>
-                <FormLabel>Year and Week No.</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="select Job Number first"
-                    {...field}
-                    readOnly
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex md:flex-row flex-col gap-3 w-2/3">
-          <FormField
-            control={form.control}
-            name="client"
-            render={({ field }) => (
-              <FormItem className='"w-full md:w-1/2'>
-                <FormLabel>Route name</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  value={field.value || ""}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={
-                          clientLoading ? "Loading..." : "Select a route"
-                        }
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="client"
+                render={({ field }) => (
+                  <FormItem className='"w-full md:w-1/2'>
+                    <FormLabel>Client</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="select Job Number first"
+                        {...field}
+                        readOnly
                       />
-                    </SelectTrigger>
-                  </FormControl>
-                  <FormMessage />
-                  <SelectContent>
-                    <div className="flex flex-col max-h-[200px] overflow-auto">
-                      {clientLoading ? (
-                        <div>
-                          <Loading />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="client"
+                render={({ field }) => (
+                  <FormItem className='"w-full md:w-1/2'>
+                    <FormLabel>Year and Week No.</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="select Job Number first"
+                        {...field}
+                        readOnly
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex md:flex-row flex-col gap-3 w-2/3 px-5">
+              <FormField
+                control={form.control}
+                name="client"
+                render={({ field }) => (
+                  <FormItem className='"w-full md:w-1/2'>
+                    <FormLabel>Route name</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      value={field.value || ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={
+                              clientLoading ? "Loading..." : "Select a route"
+                            }
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <FormMessage />
+                      <SelectContent>
+                        <div className="flex flex-col max-h-[200px] overflow-auto">
+                          {clientLoading ? (
+                            <div>
+                              <Loading />
+                            </div>
+                          ) : (
+                            route.map((route) => (
+                              <SelectItem key={route.id} value={route.id}>
+                                {route.name}
+                              </SelectItem>
+                            ))
+                          )}
                         </div>
-                      ) : (
-                        route.map((route) => (
-                          <SelectItem key={route.id} value={route.id}>
-                            {route.name}
-                          </SelectItem>
-                        ))
-                      )}
-                    </div>
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="client"
-            render={({ field }) => (
-              <FormItem className='"w-full md:w-1/2'>
-                <FormLabel>Area</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="select Job Number first"
-                    {...field}
-                    readOnly
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex md:flex-row flex-col gap-3 w-full"></div>
-        <hr className="my-0 border-t border-gray-300 w-full" />{" "}
-        <div className="flex gap-5 w-full">
-          <div className="w-1/4">
-            <h2 className="text-lg font-semibold mb-3">Equipment List</h2>
-            {areas.map((area) => (
-              <NestedList key={area.id} data={area} />
-            ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="client"
+                render={({ field }) => (
+                  <FormItem className='"w-full md:w-1/2'>
+                    <FormLabel>Area</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="select Job Number first"
+                        {...field}
+                        readOnly
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
+          <div className="flex flex-col lg:flex-row gap-5 w-full">
+            <div className="w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg">
+              <h2 className="text-lg font-semibold mb-3">Equipment List</h2>
+              {areas.map((area) => (
+                <NestedList key={area.id} data={area} />
+              ))}
+            </div>
 
-          <hr className="h-auto border-l border-gray-300 mx-4 -mt-3" />
-          <div className="w-3/4">
-            <div className="flex md:flex-row flex-col gap-3 w-full"></div>
+            <div className="w-full lg:w-2/3 rounded-xl bg-white flex flex-col p-5 shadow-lg">
+              <h2 className="text-lg font-semibold mb-3">Details</h2>
+            </div>
           </div>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </div>
   );
 };
 
