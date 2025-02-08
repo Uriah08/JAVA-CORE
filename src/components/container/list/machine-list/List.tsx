@@ -22,6 +22,7 @@ import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuS
 const List = () => {
   const {
     data: areaData,
+    isLoading: areaLoading,
     error: areaError,
   } = useGetMachineListQuery();
   const [
@@ -214,7 +215,7 @@ const List = () => {
             </Button>
           </div>
         </div>
-        {anyLoading ? 
+        {anyLoading || areaLoading ? 
             <div className="w-full h-full overflow-hidden">
               {[...Array(13)].map((_, index) => (
               <Skeleton
