@@ -123,4 +123,5 @@ export const analysisAndReportSchema = z.object({
     .string()
     .min(1, { message: "Inspection route is required" }),
   area: z.string().min(1, { message: "Area is required" }),
+  reviewer: z.string()
 });

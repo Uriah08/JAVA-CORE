@@ -201,7 +201,7 @@ const CreateJobForm = () => {
             <FormItem className='w-full md:w-1/2'>
               <FormLabel>Job Number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your job number..." {...field} />
+                <Input className='text-sm' placeholder="Enter your job number..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -214,7 +214,7 @@ const CreateJobForm = () => {
             <FormItem className='w-full md:w-1/2'>
               <FormLabel>PO Number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your PO number..." {...field} />
+                <Input className='text-sm' placeholder="Enter your PO number..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -229,7 +229,7 @@ const CreateJobForm = () => {
             <FormItem className='w-full md:w-1/2'>
               <FormLabel>WO Number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your WO number..." {...field} />
+                <Input className='text-sm' placeholder="Enter your WO number..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -242,7 +242,7 @@ const CreateJobForm = () => {
             <FormItem className='w-full md:w-1/2'>
               <FormLabel>Report Number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your report number..." {...field} />
+                <Input className='text-sm' placeholder="Enter your report number..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -319,7 +319,7 @@ const CreateJobForm = () => {
             <FormItem className='w-full md:w-1/2'>
               <FormLabel>Inspection Route</FormLabel>
               <FormControl>
-                <Input placeholder="Enter inspection route..." {...field} />
+                <Input className='text-sm' placeholder="Enter inspection route..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -395,7 +395,7 @@ const CreateJobForm = () => {
             <FormItem className='w-full'>
               <FormLabel>Year and Week Number</FormLabel>
               <FormControl>
-                <Input placeholder="Enter year/week number..." {...field} />
+                <Input className='text-sm' placeholder="Enter year/week number..." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

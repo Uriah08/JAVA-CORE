@@ -16,6 +16,10 @@ export type ExtendedJob = Job & {
   };
 };
 
+type SearchJobsResponse = {
+  jobs?: ExtendedJob[];
+}
+
 type ClientsResponse = {
   clients: User[];
   message: string;
@@ -239,6 +243,10 @@ export const api = createApi({
       }),
       invalidatesTags: ["Component"],
     }),
+    searchJobNumber: build.query<SearchJobsResponse, string>({
+      query: (jobNumber) => `/api/search/job-number?job=${jobNumber}`,
+      providesTags: ["Job"],
+    })
   }),
 });
 
@@ -263,4 +271,5 @@ export const {
   useLazyGetComponentsQuery,
   useCreateComponentMutation,
   useSoftDeleteComponentsMutation,
+  useSearchJobNumberQuery,
 } = api;
