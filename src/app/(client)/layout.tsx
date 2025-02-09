@@ -5,7 +5,6 @@ import React from "react";
 
 import {
   User,
-  CircleHelp,
   LogOut,
   ChevronLeft,
   Database,
@@ -45,7 +44,7 @@ const ClientLayout = ({ children }: Props) => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [active, setActive] = React.useState("/job-registry");
+  const [active, setActive] = React.useState("/profile");
 
   const [open, setOpen] = React.useState(true);
   const [loading, setLoading] = React.useState(true);
@@ -137,7 +136,6 @@ const ClientLayout = ({ children }: Props) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-3 w-full">
             <button
               onClick={() => signOut()}
               className="flex gap-2 pl-8 relative py-3 rounded-lg duration-200 transition-all hover:bg-white hover:bg-opacity-20"
@@ -145,26 +143,6 @@ const ClientLayout = ({ children }: Props) => {
               <LogOut size={20} className="text-white" />
               <h1 className="font-medium text-sm text-white">Sign Out</h1>
             </button>
-            <div className="bg-white p-3 rounded-lg">
-              <div className="flex gap-3 items-center">
-                <CircleHelp
-                  size={30}
-                  className="text-white bg-main rounded-sm p-1"
-                />
-                <h1 className="font-medium">Need Help?</h1>
-              </div>
-              <Image
-                src={"/contact-logo.png"}
-                width={200}
-                height={200}
-                alt="help"
-                className="object-center size-36 object-contain -mt-5 ml-3"
-              />
-              <button className="bg-main w-full text-white rounded-lg py-1 -mt-10">
-                Contact Dev
-              </button>
-            </div>
-          </div>
         </div>
       </div>
       <div
