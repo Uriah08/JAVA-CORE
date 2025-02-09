@@ -27,25 +27,20 @@ const List = () => {
   } = useGetMachineListQuery();
   const [
     fetchEquipmentGroups,
-    { data: equipmentGroupData, error: groupError },
+    { data: equipmentGroupData, error: groupError, isFetching: equipmentGroupLoading },
   ] = useLazyGetEquipmentGroupsQuery();
   
   const [
     fetchEquipmentNames,
-    { data: equipmentNameData, error: nameError },
+    { data: equipmentNameData, error: nameError, isFetching: equipmentNamesLoading },
   ] = useLazyGetEquipmentNamesQuery();
   
   const [
     fetchComponents,
-    { data: componentData, error: componentError },
+    { data: componentData, error: componentError, isFetching: componentsLoading },
   ] = useLazyGetComponentsQuery();
-  
-  const [loading, setLoading] = useState({
-    areas: false,
-    groups: false,
-    names: false,
-    components: false,
-  });
+
+  const loading = areaLoading || equipmentGroupLoading || equipmentNamesLoading || componentsLoading
 
   const [deleteMachine] = useSoftDeleteMachineListMutation();
   const [deleteEquipmentGroup] = useSoftDeleteEquipmentGroupsMutation();
@@ -68,39 +63,29 @@ const List = () => {
   if (areaError || groupError || nameError || componentError) {
     return <div className="text-red-600">Error loading data.</div>;
   }
-
-  const setLoadingState = (key: keyof typeof loading, value: boolean) => {
-    setLoading((prev) => ({ ...prev, [key]: value }));
-  };
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAreaClick = async (area: any) => {
-    setLoadingState("areas", true);
     setCurrentArea(area);
     setCurrentEquipmentGroup(null);
     setCurrentEquipmentName(null);
     setBreadcrumb([area.name]);
     await fetchEquipmentGroups(area.id);
-    setLoadingState("areas", false);
   };
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEquipmentGroupClick = async (equipmentGroup: any) => {
-    setLoadingState("groups", true);
     setCurrentEquipmentGroup(equipmentGroup);
     setCurrentEquipmentName(null);
     setBreadcrumb([breadcrumb[0], equipmentGroup.name]);
     await fetchEquipmentNames(equipmentGroup.id);
-    setLoadingState("groups", false);
   };
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEquipmentNameClick = async (equipmentName: any) => {
-    setLoadingState("names", true);
     setCurrentEquipmentName(equipmentName);
     setBreadcrumb([breadcrumb[0], breadcrumb[1], equipmentName.name]);
     await fetchComponents(equipmentName.id);
-    setLoadingState("names", false);
   };
 
   const handleBreadcrumbClick = (level: number) => {
@@ -138,8 +123,6 @@ const List = () => {
       setIsConfirmDialogOpen(false);
     } catch (error) {
       console.error("Failed to delete items:", error);
-    } finally {
-      setLoadingState("components", false);
     }
   };
 
@@ -155,7 +138,6 @@ const List = () => {
   };
 
   const renderList = (items: { id: string; name: string }[], level: number) => {
-    const anyLoading = Object.values(loading).includes(true);
     return (
       <ul className="">
         <div className="flex justify-between items-center my-9">
@@ -184,13 +166,13 @@ const List = () => {
                 )
               }
               className="bg-main hover:bg-follow"
-              disabled={anyLoading}
+              disabled={loading}
             >
               Add <Plus />
             </Button>
             {isDeleting && selectedItems.length > 0 && (
               <Button
-              disabled={anyLoading}
+              disabled={loading}
                 onClick={() => setIsConfirmDialogOpen(true)}
                 className="bg-main hover:bg-follow"
               >
@@ -203,7 +185,7 @@ const List = () => {
                 setSelectedItems([])}}
               className="text-main hover:text-main"
               variant={"outline"}
-              disabled={anyLoading}
+              disabled={loading}
             >
               {isDeleting ? (
                 <>Cancel</>
@@ -215,7 +197,7 @@ const List = () => {
             </Button>
           </div>
         </div>
-        {anyLoading || areaLoading ? 
+        {loading ? 
             <div className="w-full h-full overflow-hidden">
               {[...Array(13)].map((_, index) => (
               <Skeleton
