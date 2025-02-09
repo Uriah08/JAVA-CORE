@@ -36,7 +36,7 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 
 import { jobSchema } from '@/schema'
-import { useGetClientsQuery } from '@/store/api'
+import { useGetClientsQuery, useGetMachineListQuery } from '@/store/api'
 import Loading from '@/components/ui/loading'
 
 import { useCreateJobMutation } from '@/store/api'
@@ -47,8 +47,11 @@ const CreateJobForm = () => {
 
   const [createJob, { isLoading: createJobLoading }] = useCreateJobMutation()
 
-  const { data, isLoading: clientLoading} = useGetClientsQuery();
-  const clients = data?.clients || []
+  const { data: clientData, isLoading: clientLoading} = useGetClientsQuery();
+  const clients = clientData?.clients || []
+
+  const { data: areaData, isLoading: areaLoading } = useGetMachineListQuery()
+  const areas = areaData?.areas || []
 
     const form = useForm<z.infer<typeof jobSchema>>({
         resolver: zodResolver(jobSchema),
@@ -137,14 +140,18 @@ const CreateJobForm = () => {
                     <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
                         <FormControl>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a area" />
+                                <SelectValue placeholder={areaLoading ? 'Loading...' : 'Select an Area'} />
                             </SelectTrigger>
                         </FormControl>
                         <FormMessage />
                         <SelectContent>
-                            <SelectItem value="area1">Area 1</SelectItem>
-                            <SelectItem value="area2">Area 2</SelectItem>
-                            <SelectItem value="area3">Area 3</SelectItem>
+                        <div className='flex flex-col max-h-[200px] overflow-auto'>
+                          {areaLoading ? <div><Loading/></div> : areas.map((area) => (
+                            <SelectItem key={area.id} value={area.id}>
+                              {area.name}
+                            </SelectItem>
+                          ))}
+                          </div>
                         </SelectContent>
                     </Select>
                 </FormItem>
@@ -257,7 +264,7 @@ const CreateJobForm = () => {
             <FormItem className='w-full'>
               <FormLabel>Job Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter your job description" {...field} className='resize-none'/>
+                <Textarea placeholder="Enter your job description" {...field} className='resize-none text-sm'/>
               </FormControl>
               <FormMessage />
             </FormItem>
