@@ -107,7 +107,10 @@ const DeleteList: React.FC<DeleteListProps> = ({ items, onDelete }) => {
           <p>Are you sure you want to delete {selectedItems.length} items?</p>
           <DialogFooter>
             <Button onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleConfirmDelete} className="bg-red-600">
+            <Button
+              onClick={handleConfirmDelete}
+              className="bg-main hover:bg-follow"
+            >
               Confirm
             </Button>
           </DialogFooter>

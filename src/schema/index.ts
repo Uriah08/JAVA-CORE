@@ -90,12 +90,6 @@ export const changePasswordSchema = z.object({
   }),
 });
 
-export const routeSchema = z.object({
-  client: z.string().min(1, "Client is required"),
-  route: z.string().min(1, "Route name is required"),
-  droppedMachines: z.array(z.string()).optional(),
-});
-
 export const areaSchema = z.object({
   name: z.string().min(1, { message: "Area name is required" }),
 });
@@ -115,6 +109,22 @@ export const componentSchema = z.object({
   equipmentNameId: z.string().optional(),
 });
 
+const CreateRouteSchema = z.object({
+  clientName: z.string().min(1, "Client name is required"),
+  routeName: z.string().min(1, "Route name is required"),
+  areaId: z.string().min(1, "Area is required"),
+  equipmentNames: z
+    .array(
+      z.object({
+        id: z.string().min(1, "Equipment name ID is required"),
+        components: z
+          .array(z.string().min(1))
+          .nonempty("At least one component is required"),
+      })
+    )
+    .nonempty("At least one equipment name is required"),
+});
+
 export const analysisAndReportSchema = z.object({
   jobNo: z.string().min(1, { message: "Job number is required" }),
   client: z.string().min(1, { message: "Client is required" }),
@@ -123,5 +133,5 @@ export const analysisAndReportSchema = z.object({
     .string()
     .min(1, { message: "Inspection route is required" }),
   area: z.string().min(1, { message: "Area is required" }),
-  reviewer: z.string()
+  reviewer: z.string(),
 });
