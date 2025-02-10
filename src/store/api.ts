@@ -247,6 +247,17 @@ export const api = createApi({
       query: (jobNumber) => `/api/search/job-number?job=${jobNumber}`,
       providesTags: ["Job"],
     }),
+    createRoute: build.mutation({
+      query: (data) => ({
+        url: "/api/createRoute/route",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Area", "EquipmentGroup", "EquipmentName", "Component"],
+    }),
   }),
 });
 
@@ -263,16 +274,14 @@ export const {
   useCreateMachineListMutation,
   useSoftDeleteMachineListMutation,
   useLazyGetEquipmentGroupsQuery,
-  useGetEquipmentGroupsQuery,
   useCreateEquipmentGroupMutation,
   useSoftDeleteEquipmentGroupsMutation,
   useLazyGetEquipmentNamesQuery,
-  useGetEquipmentNamesQuery,
   useCreateEquipmentNameMutation,
   useSoftDeleteEquipmentNamesMutation,
   useLazyGetComponentsQuery,
-  useGetComponentsQuery,
   useCreateComponentMutation,
   useSoftDeleteComponentsMutation,
   useSearchJobNumberQuery,
+  useCreateRouteMutation,
 } = api;

@@ -83,8 +83,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  jobs  Job[]
-  Route Route[]
+  jobs      Job[]
+  RouteList RouteList[]
 
   @@map("users")
 }
@@ -138,7 +138,7 @@ model Component {
   @@map("component")
 }
 
-model Route {
+model RouteList {
   id         String   @id @default(uuid())
   userId     String
   clientName String
@@ -157,7 +157,7 @@ model RouteMachineList {
   areaId           String?
   equipmentGroupId String?
 
-  route          Route           @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  RouteList      RouteList       @relation(fields: [routeId], references: [id], onDelete: Cascade)
   area           Area?           @relation(fields: [areaId], references: [id], onDelete: Cascade)
   equipmentGroup EquipmentGroup? @relation(fields: [equipmentGroupId], references: [id], onDelete: Cascade)
 

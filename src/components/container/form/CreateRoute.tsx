@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { routeSchema } from "@/schema";
+import { CreateRouteSchema } from "@/schema";
 import { useGetClientsQuery } from "@/store/api";
 import {
   useGetMachineListQuery,
@@ -124,15 +124,22 @@ const CreateRoute = () => {
     }
   };
 
-  const form = useForm<z.infer<typeof routeSchema>>({
-    resolver: zodResolver(routeSchema),
+  const form = useForm<z.infer<typeof CreateRouteSchema>>({
+    resolver: zodResolver(CreateRouteSchema),
     defaultValues: {
-      client: "",
-      route: "",
+      clientName: "",
+      routeName: "",
+      areaId: "",
+      equipmentNames: [
+        {
+          id: "",
+          components: [""],
+        },
+      ],
     },
   });
 
-  function onSubmit(values: z.infer<typeof routeSchema>) {
+  function onSubmit(values: z.infer<typeof CreateRouteSchema>) {
     console.log(values);
     form.reset();
   }
@@ -146,7 +153,7 @@ const CreateRoute = () => {
         <div className="flex md:flex-row flex-col gap-3 w-full">
           <FormField
             control={form.control}
-            name="client"
+            name="clientName"
             render={({ field }) => (
               <FormItem className="flex items-center gap-3 w-full md:w-1/3">
                 <FormLabel className="flex items-center h-full">
@@ -231,7 +238,7 @@ const CreateRoute = () => {
             <div className="flex md:flex-row flex-col gap-3 w-full">
               <FormField
                 control={form.control}
-                name="route"
+                name="routeName"
                 render={({ field }) => (
                   <FormItem className="w-full md:w-1/2">
                     <FormLabel className="text-lg font-semibold">
@@ -248,7 +255,7 @@ const CreateRoute = () => {
             <div className="my-3">
               <FormField
                 control={form.control}
-                name="client"
+                name="areaId"
                 render={({ field }) => (
                   <FormItem className="w-full md:w-1/2">
                     <FormLabel className="text-lg font-semibold">

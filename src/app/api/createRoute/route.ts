@@ -30,7 +30,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const newRoute = await prisma.route.create({
+    const newRoute = await prisma.routeList.create({
       data: {
         userId,
         clientName,
