@@ -117,9 +117,7 @@ export const CreateRouteSchema = z.object({
     .array(
       z.object({
         id: z.string().min(1, "Equipment name ID is required"),
-        components: z
-          .array(z.string().min(1))
-          .nonempty("At least one component is required"),
+        components: z.array(z.string()).optional(),
       })
     )
     .nonempty("At least one equipment name is required"),
@@ -136,19 +134,25 @@ export const analysisAndReportSchema = z.object({
   reviewer: z.string(),
 });
 
-export const symbols = [{
-  image:'N',
-  label: 'Normal'
-},{
-  image:'M',
-  label: 'Moderate'
-},{
-  image:'S',
-  label: 'Severe'
-},{
-  image:'C',
-  label: 'Critical'
-},{
-  image:'X',
-  label: 'Missed Points'
-}]
+export const symbols = [
+  {
+    image: "N",
+    label: "Normal",
+  },
+  {
+    image: "M",
+    label: "Moderate",
+  },
+  {
+    image: "S",
+    label: "Severe",
+  },
+  {
+    image: "C",
+    label: "Critical",
+  },
+  {
+    image: "X",
+    label: "Missed Points",
+  },
+];

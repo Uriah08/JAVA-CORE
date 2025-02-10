@@ -249,7 +249,7 @@ export const api = createApi({
     }),
     createRoute: build.mutation({
       query: (data) => ({
-        url: "/api/createRoute/route",
+        url: "/api/createRoute",
         method: "POST",
         body: data,
         headers: {

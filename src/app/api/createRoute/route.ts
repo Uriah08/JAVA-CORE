@@ -46,7 +46,7 @@ export async function POST(req: Request) {
               },
               routeComponents: {
                 create: equipmentNames.flatMap((equipment) =>
-                  equipment.components.map((componentId) => ({
+                  (equipment.components || []).map((componentId) => ({
                     componentId,
                   }))
                 ),

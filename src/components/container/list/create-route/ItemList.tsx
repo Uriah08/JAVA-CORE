@@ -2,15 +2,15 @@
 
 import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button"; // Import the Button component
+import { Button } from "@/components/ui/button";
 
 interface Component {
-  id: string | number;
+  id: string;
   name: string;
 }
 
 interface Item {
-  id: string | number;
+  id: string;
   name: string;
   components?: Component[];
   isEquipmentName?: boolean;
@@ -20,7 +20,8 @@ interface ItemListProps {
   items: Item[];
   loading: boolean;
   onItemClick: (item: Item) => void;
-  selectedItems: (string | number)[];
+  selectedItems: string[];
+  onEquipmentSelect: (item: Item) => void;
 }
 
 const ItemList: React.FC<ItemListProps> = ({
@@ -28,6 +29,7 @@ const ItemList: React.FC<ItemListProps> = ({
   loading,
   onItemClick,
   selectedItems,
+  onEquipmentSelect,
 }) => {
   return (
     <ul className="w-full">
@@ -60,11 +62,11 @@ const ItemList: React.FC<ItemListProps> = ({
               }
             }}
           >
-            <div className="flex justify-between w-full">
-              <div>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex-1">
                 <div className="font-semibold">{item.name}</div>
                 {item.components && item.components.length > 0 && (
-                  <ul className="ml-4">
+                  <ul className="ml-16">
                     {item.components.map((comp) => (
                       <li key={comp.id} className="text-gray-600">
                         {comp.name}
@@ -75,12 +77,14 @@ const ItemList: React.FC<ItemListProps> = ({
               </div>
               {item.isEquipmentName && (
                 <Button
-                  variant="outline"
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
+                    onEquipmentSelect(item);
                   }}
+                  className="ml-2 w-8 h-8 border bg-white  border-main rounded-full flex items-center justify-center text-main hover:bg-red-300"
                 >
-                  Add
+                  <span className="text-lg font-bold">+</span>
                 </Button>
               )}
             </div>

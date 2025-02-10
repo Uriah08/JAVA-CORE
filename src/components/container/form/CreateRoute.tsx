@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import Breadcrumb from "@/components/ui/breadcrumbs";
 import ItemList from "../list/create-route/ItemList";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateRouteSchema } from "@/schema";
@@ -30,9 +30,23 @@ import {
   useLazyGetEquipmentGroupsQuery,
   useLazyGetEquipmentNamesQuery,
   useLazyGetComponentsQuery,
+  useCreateRouteMutation,
 } from "@/store/api";
 import Loading from "@/components/ui/loading";
 import React from "react";
+import EquipmentSelector from "@/components/container/list/create-route/EquipmentSelector";
+
+interface Component {
+  id: string | number;
+  name: string;
+}
+
+interface Item {
+  id: string | number;
+  name: string;
+  components?: Component[];
+  isEquipmentName?: boolean;
+}
 
 const CreateRoute = () => {
   const { data, isLoading: clientLoading } = useGetClientsQuery();
@@ -67,8 +81,11 @@ const CreateRoute = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentEquipmentName, setCurrentEquipmentName] = useState<any>(null);
   const [equipmentList, setEquipmentList] = useState<any[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<Item[]>([]);
   const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [createRoute, { isLoading: isCreating, error: createError }] =
+    useCreateRouteMutation();
 
   if (areaError || groupError || nameError || componentError) {
     return <div className="text-red-600">Error loading data.</div>;
@@ -105,7 +122,7 @@ const CreateRoute = () => {
         return {
           ...equipment,
           components: componentResponse?.data?.components || [],
-          isEquipmentName: true, // Set this property for equipment names
+          isEquipmentName: true,
         };
       })
     );
@@ -126,6 +143,15 @@ const CreateRoute = () => {
       setBreadcrumb([breadcrumb[0]]);
     }
   };
+  const handleEquipmentSelect = (item: Item) => {
+    setSelectedEquipment((prev) => {
+      const isAlreadySelected = prev.some((e) => e.id === item.id);
+      if (isAlreadySelected) {
+        return prev;
+      }
+      return [...prev, item];
+    });
+  };
 
   const form = useForm<z.infer<typeof CreateRouteSchema>>({
     resolver: zodResolver(CreateRouteSchema),
@@ -133,18 +159,32 @@ const CreateRoute = () => {
       clientName: "",
       routeName: "",
       areaId: "",
-      equipmentNames: [
-        {
-          id: "",
-          components: [""],
-        },
-      ],
+      equipmentNames: [],
     },
   });
 
-  function onSubmit(values: z.infer<typeof CreateRouteSchema>) {
-    console.log(values);
-    form.reset();
+  async function onSubmit(values: z.infer<typeof CreateRouteSchema>) {
+    const equipmentNames = selectedEquipment.map((equipment) => ({
+      id: equipment.id,
+      components: equipment.components?.map((comp) => comp.id) || [],
+    }));
+
+    const finalValues = {
+      ...values,
+      equipmentNames,
+    };
+
+    try {
+      const response = await createRoute(finalValues).unwrap();
+      console.log("Route created successfully:", response);
+      setSelectedEquipment([]);
+      setTimeout(() => {
+        form.reset();
+      }, 0);
+      setSelectedEquipment([]);
+    } catch (error) {
+      console.error("Failed to create route:", error);
+    }
   }
 
   return (
@@ -158,10 +198,8 @@ const CreateRoute = () => {
             control={form.control}
             name="clientName"
             render={({ field }) => (
-              <FormItem className="flex items-center gap-3 w-full md:w-1/3">
-                <FormLabel className="flex items-center h-full">
-                  Client
-                </FormLabel>
+              <FormItem className="w-1/3">
+                <FormLabel className="text-lg font-semibold">Client</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -196,10 +234,19 @@ const CreateRoute = () => {
               </FormItem>
             )}
           />
+          <div className="flex-grow flex justify-end">
+            <Button
+              type="submit"
+              className="w-20 bg-red-700 hover:bg-red-300 text-white mt-8 py-2 rounded-md"
+              disabled={isCreating}
+            >
+              {isCreating ? "Creating..." : "Create"}
+            </Button>
+          </div>
         </div>
         <hr className="my-0 border-t border-gray-300 w-full" />{" "}
         <div className="flex gap-5 w-full">
-          <div className="w-2/5">
+          <div className="w-2/6">
             <h2 className="text-lg font-semibold mb-3">Machine List</h2>
             <div className="font-base flex flex-col">
               <Breadcrumb
@@ -228,100 +275,95 @@ const CreateRoute = () => {
                     : handleAreaClick
                 }
                 selectedItems={selectedItems}
+                onEquipmentSelect={handleEquipmentSelect}
               />
             </div>
           </div>
 
           <hr className="h-auto border-l border-gray-300 mx-4 -mt-3" />
-          <div className="w-3/5">
-            <div className="flex md:flex-row flex-col gap-3 w-full">
-              <FormField
-                control={form.control}
-                name="routeName"
-                render={({ field }) => (
-                  <FormItem className="w-full md:w-1/2">
-                    <FormLabel className="text-lg font-semibold">
-                      Create Route
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter route name..." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="my-3">
-              <FormField
-                control={form.control}
-                name="areaId"
-                render={({ field }) => (
-                  <FormItem className="w-full md:w-1/2">
-                    <FormLabel className="text-lg font-semibold">
-                      Area
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value || ""}
-                    >
+          <div className="w-4/6">
+            <div className="flex gap-5 w-full">
+              <div className="w-1/2">
+                <FormField
+                  control={form.control}
+                  name="areaId"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-lg font-semibold">
+                        Area
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value || ""}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={
+                                areaLoading ? "Loading..." : "Select an Area"
+                              }
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <FormMessage />
+                        <SelectContent>
+                          <div className="flex flex-col max-h-[200px] overflow-auto">
+                            {areaLoading ? (
+                              <div>
+                                <Loading />
+                              </div>
+                            ) : (
+                              areaData?.areas.map((area) => (
+                                <SelectItem key={area.id} value={area.id}>
+                                  {area.name}
+                                </SelectItem>
+                              ))
+                            )}
+                          </div>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="w-1/2">
+                <FormField
+                  control={form.control}
+                  name="routeName"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel className="text-lg font-semibold">
+                        Create Route
+                      </FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={
-                              areaLoading ? "Loading..." : "Select an Area"
-                            }
-                          />
-                        </SelectTrigger>
+                        <Input placeholder="Enter route name..." {...field} />
                       </FormControl>
                       <FormMessage />
-                      <SelectContent>
-                        <div className="flex flex-col max-h-[200px] overflow-auto">
-                          {areaLoading ? (
-                            <div>
-                              <Loading />
-                            </div>
-                          ) : (
-                            areaData?.areas.map((area) => (
-                              <SelectItem key={area.id} value={area.id}>
-                                {area.name}
-                              </SelectItem>
-                            ))
-                          )}
-                        </div>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-            <div className="my-3">
-              <h3 className="text-lg font-semibold">Selected Equipment</h3>
-              <ul className="list-disc ml-5">
-                {form.watch("equipmentNames").map((equipment, index) => (
-                  <li key={index} className="my-1">
-                    <span className="font-semibold">{equipment.id}</span>
-                    {equipment.components.length > 0 && (
-                      <ul className="ml-4">
-                        {equipment.components.map((compId) => (
-                          <li key={compId} className="text-gray-600">
-                            Component ID: {compId}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <FormField
+              control={form.control}
+              name="equipmentNames"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <EquipmentSelector
+                      field={field}
+                      selectedEquipment={selectedEquipment}
+                      setSelectedEquipment={setSelectedEquipment}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
-        <Button
-          type="submit"
-          className="w-20 absolute top-48 right-16 bg-red-700 hover:bg-red-300 text-white py-2 rounded-md"
-        >
-          Create
-        </Button>
       </form>
     </Form>
   );
