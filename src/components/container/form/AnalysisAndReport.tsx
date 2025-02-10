@@ -22,14 +22,38 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import { Search } from "lucide-react";
+import { EllipsisVertical, Search } from "lucide-react";
 
 import { useSearchJobNumberQuery } from "@/store/api";
 import { debounce } from "lodash";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
+import Comments from "../dialogs/Comments";
+
+export const symbols = [{
+  image:'N',
+  label: 'Normal'
+},{
+  image:'M',
+  label: 'Moderate'
+},{
+  image:'S',
+  label: 'Severe'
+},{
+  image:'C',
+  label: 'Critical'
+},{
+  image:'X',
+  label: 'Missed Points'
+}]
 
 const AnalysisAndReportForm = () => {
   const { toast } = useToast();
+
+  const [active, setActive] = React.useState('')
+  const [openComment, setOpenComment] = React.useState(false)
 
   const [searchTerm, setSearchTerm] = React.useState("")
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(searchTerm, {
@@ -276,53 +300,86 @@ const AnalysisAndReportForm = () => {
             </div>
 
             <div className="w-full lg:w-1/2 rounded-xl bg-white flex flex-col p-5 shadow-lg">
-              <h2 className="text-lg font-semibold mb-3 text-zinc-700">Severity History</h2>
-              <div className="flex flex-col md:flex-row gap-3">
-              <FormField
-                control={form.control}
-                name="client"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Comments</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a verified email to display" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="m@example.com">m@example.com</SelectItem>
-                        <SelectItem value="m@google.com">m@google.com</SelectItem>
-                        <SelectItem value="m@support.com">m@support.com</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="client"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Previous Comments</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a verified email to display" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="m@example.com">m@example.com</SelectItem>
-                        <SelectItem value="m@google.com">m@google.com</SelectItem>
-                        <SelectItem value="m@support.com">m@support.com</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="flex flex-col mb-3">
+            <h2 className="text-lg font-semibold mb-3 text-zinc-700">Severity History</h2>
+            <div className="flex gap-3 flex-wrap">
+              {symbols.map((symbol) => (
+                <div key={symbol.image} className="flex gap-1">
+                <Image src={`/severity/${symbol.image}.png`} width={40} height={40} alt='Symbol' className="w-5 object-cover"/>
+                <h1 className="text-sm text-zinc-600">{symbol.label}</h1>
+                </div>
+              ))}
               </div>
+            </div>
+            <div className="flex flex-col gap-3">
+            <div className="flex flex-col md:flex-row gap-3">
+              <div className="flex flex-col gap-3 w-full">
+                <h1 className="text-sm font-medium">Comments</h1>
+                <Button onClick={() => setActive(active === 'comments' ? '' : 'comments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'comments' && 'bg-slate-100'}`}>View Comments</Button>
+              </div>
+              <div className="flex flex-col gap-3 w-full">
+                <h1 className="text-sm font-medium">Previous Comments</h1>
+                <Button onClick={() => setActive(active === 'pcomments' ? '' : 'pcomments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'pcomments' && 'bg-slate-100'}`}>View Previous Comments</Button>
+              </div>
+              </div>
+            {(active === 'comments' || active === 'pcomments') && (
+                  <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
+                    <div className="flex justify-between items-center">
+                    <h1 className="font-semibold">{active === 'comments' ? 'Comments' : 'Previous Comments'}</h1>
+                    <h1 className="text-sm text-zinc-500">5</h1>
+                    </div>
+
+                    <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
+                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
+                        <Image src={`/severity/N.png`} width={40} height={40} alt='Symbol' className="w-5 object-cover"/>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
+                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
+                        </div>
+                      </div>
+                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
+                    </div>
+                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
+                        <Image src={`/severity/N.png`} width={40} height={40} alt='Symbol' className="w-5 object-cover"/>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
+                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
+                        </div>
+                      </div>
+                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
+                    </div>
+                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
+                        <Image src={`/severity/N.png`} width={40} height={40} alt='Symbol' className="w-5 object-cover"/>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
+                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
+                        </div>
+                      </div>
+                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
+                    </div>
+                    </div>
+
+                    {active === 'comments' && (
+                      <Dialog open={openComment} onOpenChange={setOpenComment}>
+                        <Button onClick={() => setOpenComment(!openComment)} type="button" className="w-full font-normal text-sm justify-start cursor-text" variant={'outline'}>Write a comment...</Button>
+                        <Comments/>
+                      </Dialog>
+                    )}
+                  </div>
+                )}
+            </div>
             </div>
           </div>
         </form>
