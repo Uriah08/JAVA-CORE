@@ -22,7 +22,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import { EllipsisVertical, Search } from "lucide-react";
+import { Edit, EllipsisVertical, ImageIcon, Plus, Search, Trash, View } from "lucide-react";
 
 import { useSearchJobNumberQuery } from "@/store/api";
 import { debounce } from "lodash";
@@ -41,6 +41,9 @@ const AnalysisAndReportForm = () => {
   const [active, setActive] = React.useState('')
   const [openComment, setOpenComment] = React.useState(false)
   const [openRecommendation, setOpenRecommendation] = React.useState(false)
+  const [activeDrawing, setActiveDrawing] = React.useState('view')
+  const [activeFigure, setActiveFigure] = React.useState('add')
+  const [activeDetail, setActiveDetail] = React.useState('add')
 
   const [searchTerm, setSearchTerm] = React.useState("")
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(searchTerm, {
@@ -437,6 +440,72 @@ const AnalysisAndReportForm = () => {
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <div className="flex flex-col gap-3 w-full">
                   <h1 className="text-sm font-medium">Equipment Drawing Photo</h1>
+                  <div className="border rounded-lg p-3">
+                    <div className="flex gap-3">
+                      <button onClick={() => setActiveDrawing('upload')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeDrawing === 'upload' && 'bg-zinc-200'}`}>
+                        <ImageIcon  className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">Upload</h1>
+                      </button>
+                      <button onClick={() => setActiveDrawing('delete')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeDrawing === 'delete' && 'bg-zinc-200'}`}>
+                        <Trash className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">Delete</h1>
+                      </button>
+                      <button onClick={() => setActiveDrawing('view')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeDrawing === 'view' && 'bg-zinc-200'}`}>
+                        <View className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">View</h1>
+                      </button>
+                    </div>
+                    <div className="w-full h-[1px] bg-zinc-200 mt-3"/>
+                  </div>
+                  </div>
+                  <div className="flex flex-col gap-3 w-full">
+                  <h1 className="text-sm font-medium">Report Figures</h1>
+                  <div className="border rounded-lg p-3">
+                  <div className="flex gap-3">
+                      <button onClick={() => setActiveFigure('add')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeFigure === 'add' && 'bg-zinc-200'}`}>
+                        <Plus  className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">Add</h1>
+                      </button>
+                      <button onClick={() => setActiveFigure('delete')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeFigure === 'delete' && 'bg-zinc-200'}`}>
+                        <Trash className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">Delete</h1>
+                      </button>
+                    </div>
+                    <div className="w-full h-[1px] bg-zinc-200 mt-3"/>
+                  </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
+                  <div className="flex flex-col gap-3 w-full">
+                  <h1 className="text-sm font-medium">Equipment Mechanical Details</h1>
+                  <div className="border rounded-lg p-3">
+                  <div className="flex gap-3">
+                      <button onClick={() => setActiveDetail('add')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeDetail === 'add' && 'bg-zinc-200'}`}>
+                        <Plus  className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">Add</h1>
+                      </button>
+                      <button onClick={() => setActiveDetail('edit')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeDetail === 'edit' && 'bg-zinc-200'}`}>
+                        <Edit className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">Edit</h1>
+                      </button>
+                      <button onClick={() => setActiveDetail('delete')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeDetail === 'delete' && 'bg-zinc-200'}`}>
+                        <Trash className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">Delete</h1>
+                      </button>
+                    </div>
+                    <div className="w-full h-[1px] bg-zinc-200 mt-3"/>
+                  </div>
+                  </div>
+                  <div className="flex flex-col gap-3 w-full">
+                  <div className="flex flex-col gap-3 w-full">
+                  <h1 className="text-sm font-medium">Temperature Record</h1>
+                  <div className="border rounded-lg p-3"></div>
+                  </div>
+                  <div className="flex flex-col gap-3 w-full">
+                  <h1 className="text-sm font-medium">Oil Analysis</h1>
+                  <div className="border rounded-lg p-3"></div>
+                  </div>
                   </div>
                 </div>
             </div>
