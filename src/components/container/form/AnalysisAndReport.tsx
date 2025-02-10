@@ -32,28 +32,15 @@ import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import Comments from "../dialogs/Comments";
 
-export const symbols = [{
-  image:'N',
-  label: 'Normal'
-},{
-  image:'M',
-  label: 'Moderate'
-},{
-  image:'S',
-  label: 'Severe'
-},{
-  image:'C',
-  label: 'Critical'
-},{
-  image:'X',
-  label: 'Missed Points'
-}]
+import { symbols } from "@/schema";
+import Recommendations from "../dialogs/Recommendations";
 
 const AnalysisAndReportForm = () => {
   const { toast } = useToast();
 
   const [active, setActive] = React.useState('')
   const [openComment, setOpenComment] = React.useState(false)
+  const [openRecommendation, setOpenRecommendation] = React.useState(false)
 
   const [searchTerm, setSearchTerm] = React.useState("")
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(searchTerm, {
@@ -292,14 +279,14 @@ const AnalysisAndReportForm = () => {
             </div>
           </div>
           <div className="flex flex-col lg:flex-row gap-5 w-full">
-            <div className="w-full lg:w-1/2 rounded-xl bg-white flex flex-col p-5 shadow-lg">
+            <div className="w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg">
               <h2 className="text-lg font-semibold mb-3 text-zinc-700">Equipment List</h2>
               {/* {areas.map((area) => (
                 <NestedList key={area.id} data={area} />
               ))} */}
             </div>
 
-            <div className="w-full lg:w-1/2 rounded-xl bg-white flex flex-col p-5 shadow-lg">
+            <div className="w-full lg:w-2/3 rounded-xl bg-white flex flex-col p-5 shadow-lg">
             <div className="flex flex-col mb-3">
             <h2 className="text-lg font-semibold mb-3 text-zinc-700">Severity History</h2>
             <div className="flex gap-3 flex-wrap">
@@ -322,27 +309,14 @@ const AnalysisAndReportForm = () => {
                 <Button onClick={() => setActive(active === 'pcomments' ? '' : 'pcomments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'pcomments' && 'bg-slate-100'}`}>View Previous Comments</Button>
               </div>
               </div>
-            {(active === 'comments' || active === 'pcomments') && (
+                {(active === 'comments' || active === 'pcomments') && (
                   <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
                     <div className="flex justify-between items-center">
                     <h1 className="font-semibold">{active === 'comments' ? 'Comments' : 'Previous Comments'}</h1>
-                    <h1 className="text-sm text-zinc-500">5</h1>
+                    <h1 className="text-sm text-zinc-500">2</h1>
                     </div>
 
                     <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
-                        <Image src={`/severity/N.png`} width={40} height={40} alt='Symbol' className="w-5 object-cover"/>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
-                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
-                        </div>
-                      </div>
-                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
-                    </div>
                     <div className="flex flex-col gap-2 p-3 border rounded-lg">
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
@@ -379,6 +353,92 @@ const AnalysisAndReportForm = () => {
                     )}
                   </div>
                 )}
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
+                <div className="flex flex-col gap-3 w-full">
+                <h1 className="text-sm font-medium">Recommendations</h1>
+                <Button onClick={() => setActive(active === 'recommendations' ? '' : 'recommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'recommendations' && 'bg-slate-100'}`}>View Recommendations</Button>
+              </div>
+              <div className="flex flex-col gap-3 w-full">
+                <h1 className="text-sm font-medium">Previous Recommendations</h1>
+                <Button onClick={() => setActive(active === 'precommendations' ? '' : 'precommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'precommendations' && 'bg-slate-100'}`}>View Previous Recommendations</Button>
+              </div>
+                </div>
+                {(active === 'recommendations' || active === 'precommendations') && (
+                  <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
+                    <div className="flex justify-between items-center">
+                    <h1 className="font-semibold">{active === 'recommendations' ? 'Recommendations' : 'Previous Recommendations'}</h1>
+                    <h1 className="text-sm text-zinc-500">2</h1>
+                    </div>
+                    
+                    <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
+                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
+                        <h1 className="font-bold">P1</h1>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
+                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
+                        </div>
+                      </div>
+                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
+                    </div>
+                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
+                        <h1 className="font-bold">P2</h1>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
+                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
+                        </div>
+                      </div>
+                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
+                    </div>
+                    </div>
+
+                    {active === 'recommendations' && (
+                      <Dialog open={openRecommendation} onOpenChange={setOpenRecommendation}>
+                        <Button onClick={() => setOpenRecommendation(!openRecommendation)} type="button" className="w-full font-normal text-sm justify-start cursor-text" variant={'outline'}>Write a recommendation...</Button>
+                        <Recommendations/>
+                      </Dialog>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">Client&apos;s Action and WO Number</h1>
+                    <div className="border rounded-lg p-3">
+                      <h1 className="font-semibold">Client Action</h1>
+                      <div className="border rounded-lg p-3 mt-2 max-h-[130px] overflow-auto">
+                        <p className="text-sm text-zinc-600 indent-10">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores est laboriosam temporibus aliquam tempore itaque nihil atque, ducimus quibusdam placeat illum, maiores eveniet pariatur quia, ex aut tenetur dignissimos! Sequi? Asperiores est laboriosam temporibus aliquam tempore itaque nihil atque, ducimus quibusdam placeat illum, maiores eveniet pariatur quia, ex aut tenetur dignissimos! Sequi? Asperiores est laboriosam temporibus aliquam tempore itaque nihil atque, ducimus quibusdam placeat illum, maiores eveniet pariatur quia, ex aut tenetur dignissimos! Sequi?</p>
+                        <h1 className="w-full text-end text-xs text-zinc-500 mt-2">Jan 1, 2025</h1>
+                      </div>
+                      <h1 className="font-semibold mt-3">WO Number</h1>
+                      <Input readOnly placeholder="Client WO Number" className="mt-2 text-sm"/>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">Analyst Note</h1>
+                    <div className="border rounded-lg p-3 flex flex-col h-full">
+                      <h1 className="font-semibold">Analyst Name</h1>
+                      <Input readOnly placeholder="Analyst Name" className="mt-2 text-sm"/>
+                      <div className="border rounded-lg p-3 mt-2 max-h-[165px] overflow-auto">
+                        <p className="text-sm text-zinc-600 indent-10">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores est laboriosam temporibus aliquam tempore itaque nihil atque, ducimus quibusdam placeat illum, maiores eveniet pariatur quia, ex aut tenetur dignissimos! Sequi? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores est laboriosam temporibus aliquam tempore itaque nihil atque, ducimus quibusdam placeat illum, maiores eveniet pariatur quia, ex aut tenetur dignissimos! Sequi Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores est laboriosam temporibus aliquam tempore itaque nihil atque, ducimus quibusdam placeat illum, maiores eveniet pariatur quia, ex aut tenetur dignissimos! Sequi</p>
+                        <h1 className="w-full text-end text-xs text-zinc-500 mt-2">Jan 1, 2025</h1>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
+                  <div className="flex flex-col gap-3 w-full">
+                  <h1 className="text-sm font-medium">Equipment Drawing Photo</h1>
+                  </div>
+                </div>
             </div>
             </div>
           </div>

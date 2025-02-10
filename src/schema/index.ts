@@ -135,3 +135,20 @@ export const analysisAndReportSchema = z.object({
   area: z.string().min(1, { message: "Area is required" }),
   reviewer: z.string(),
 });
+
+export const symbols = [{
+  image:'N',
+  label: 'Normal'
+},{
+  image:'M',
+  label: 'Moderate'
+},{
+  image:'S',
+  label: 'Severe'
+},{
+  image:'C',
+  label: 'Critical'
+},{
+  image:'X',
+  label: 'Missed Points'
+}]
