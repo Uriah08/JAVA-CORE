@@ -193,7 +193,6 @@ model RouteComponent {
 
   comments        RouteComponentComment[]
   recommendations RouteComponentRecommendation[]
-  severities      RouteComponentSeverity[]
   temperatures    RouteComponentTemperature[]
   oilAnalyses     RouteComponentOilAnalysis[]
 
@@ -201,9 +200,11 @@ model RouteComponent {
 }
 
 model RouteComponentComment {
-  id               String @id @default(uuid())
+  id               String   @id @default(uuid())
   routeComponentId String
+  severity         String
   comment          String
+  createdAt        DateTime @default(now())
 
   routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
 
@@ -211,29 +212,22 @@ model RouteComponentComment {
 }
 
 model RouteComponentRecommendation {
-  id               String @id @default(uuid())
+  id               String   @id @default(uuid())
   routeComponentId String
+  priority         String
   recommendation   String
+  createdAt        DateTime @default(now())
 
   routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
 
   @@map("route_component_recommendation")
 }
 
-model RouteComponentSeverity {
-  id               String @id @default(uuid())
-  routeComponentId String
-  severity         String
-
-  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
-
-  @@map("route_component_severity")
-}
-
 model RouteComponentTemperature {
-  id               String @id @default(uuid())
+  id               String   @id @default(uuid())
   routeComponentId String
   temperature      Float
+  createdAt        DateTime @default(now())
 
   routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
 
@@ -241,9 +235,10 @@ model RouteComponentTemperature {
 }
 
 model RouteComponentOilAnalysis {
-  id               String @id @default(uuid())
+  id               String   @id @default(uuid())
   routeComponentId String
   analysis         String
+  createdAt        DateTime @default(now())
 
   routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
 

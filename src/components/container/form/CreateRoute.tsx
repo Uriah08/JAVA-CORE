@@ -66,6 +66,7 @@ const CreateRoute = () => {
   const [currentEquipmentGroup, setCurrentEquipmentGroup] = useState<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentEquipmentName, setCurrentEquipmentName] = useState<any>(null);
+  const [equipmentList, setEquipmentList] = useState<any[]>([]);
   const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -94,17 +95,23 @@ const CreateRoute = () => {
     setCurrentEquipmentGroup(equipmentGroup);
     setCurrentEquipmentName(null);
     setBreadcrumb([breadcrumb[0], equipmentGroup.name]);
-    await fetchEquipmentNames(equipmentGroup.id);
-    setLoadingState("groups", false);
-  };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEquipmentNameClick = async (equipmentName: any) => {
-    setLoadingState("names", true);
-    setCurrentEquipmentName(equipmentName);
-    setBreadcrumb([breadcrumb[0], breadcrumb[1], equipmentName.name]);
-    await fetchComponents(equipmentName.id);
-    setLoadingState("names", false);
+    const equipmentNamesResponse = await fetchEquipmentNames(equipmentGroup.id);
+    const equipmentNames = equipmentNamesResponse?.data?.equipmentNames || [];
+
+    const equipmentWithComponents = await Promise.all(
+      equipmentNames.map(async (equipment: any) => {
+        const componentResponse = await fetchComponents(equipment.id);
+        return {
+          ...equipment,
+          components: componentResponse?.data?.components || [],
+          isEquipmentName: true, // Set this property for equipment names
+        };
+      })
+    );
+
+    setLoadingState("groups", false);
+    setEquipmentList(equipmentWithComponents);
   };
 
   const handleBreadcrumbClick = (level: number) => {
@@ -117,9 +124,6 @@ const CreateRoute = () => {
       setCurrentEquipmentGroup(null);
       setCurrentEquipmentName(null);
       setBreadcrumb([breadcrumb[0]]);
-    } else if (level === 2) {
-      setCurrentEquipmentName(null);
-      setBreadcrumb([breadcrumb[0], breadcrumb[1]]);
     }
   };
 
@@ -204,10 +208,8 @@ const CreateRoute = () => {
               />
               <ItemList
                 items={
-                  currentEquipmentName
-                    ? componentData?.components || []
-                    : currentEquipmentGroup
-                    ? equipmentNameData?.equipmentNames || []
+                  currentEquipmentGroup
+                    ? equipmentList
                     : currentArea
                     ? equipmentGroupData?.equipmentGroups || []
                     : areaData?.areas || []
@@ -221,14 +223,11 @@ const CreateRoute = () => {
                 onItemClick={
                   currentEquipmentName
                     ? () => {}
-                    : currentEquipmentGroup
-                    ? handleEquipmentNameClick
                     : currentArea
                     ? handleEquipmentGroupClick
                     : handleAreaClick
                 }
                 selectedItems={selectedItems}
-                isDraggable={!!currentEquipmentGroup && !currentEquipmentName}
               />
             </div>
           </div>
@@ -295,6 +294,25 @@ const CreateRoute = () => {
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="my-3">
+              <h3 className="text-lg font-semibold">Selected Equipment</h3>
+              <ul className="list-disc ml-5">
+                {form.watch("equipmentNames").map((equipment, index) => (
+                  <li key={index} className="my-1">
+                    <span className="font-semibold">{equipment.id}</span>
+                    {equipment.components.length > 0 && (
+                      <ul className="ml-4">
+                        {equipment.components.map((compId) => (
+                          <li key={compId} className="text-gray-600">
+                            Component ID: {compId}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
