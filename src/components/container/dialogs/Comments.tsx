@@ -3,7 +3,7 @@ import { DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import React from 'react'
-import { symbols } from '../form/AnalysisAndReport'
+import { symbols } from '@/schema'
 import Image from 'next/image'
 
 const Comments = () => {
