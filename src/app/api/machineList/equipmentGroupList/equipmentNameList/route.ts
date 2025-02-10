@@ -22,6 +22,9 @@ export async function GET(req: Request) {
 
     const equipmentNames = await prisma.equipmentName.findMany({
       where: { groupId, isDelete: false },
+      include: {
+        components: true,
+      },
     });
 
     return NextResponse.json({ equipmentNames });

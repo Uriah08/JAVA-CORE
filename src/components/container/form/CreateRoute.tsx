@@ -32,7 +32,6 @@ import {
   useLazyGetComponentsQuery,
 } from "@/store/api";
 import Loading from "@/components/ui/loading";
-import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
 const CreateRoute = () => {
@@ -229,6 +228,7 @@ const CreateRoute = () => {
                     : handleAreaClick
                 }
                 selectedItems={selectedItems}
+                isDraggable={!!currentEquipmentGroup && !currentEquipmentName}
               />
             </div>
           </div>
