@@ -34,6 +34,10 @@ import Comments from "../dialogs/Comments";
 
 import { symbols } from "@/schema";
 import Recommendations from "../dialogs/Recommendations";
+import { EquipmentUpload } from "../analysis/EquipmentUpload";
+import { EquipmentView } from "../analysis/EquipmentView";
+import { FigureUpload } from "../analysis/FigureUpload";
+import { FigureView } from "../analysis/FigureView";
 
 const AnalysisAndReportForm = () => {
   const { toast } = useToast();
@@ -456,6 +460,8 @@ const AnalysisAndReportForm = () => {
                       </button>
                     </div>
                     <div className="w-full h-[1px] bg-zinc-200 mt-3"/>
+                    {activeDrawing === 'upload' && <EquipmentUpload/>}
+                    {(activeDrawing === 'view' || activeDrawing === 'delete') && <EquipmentView isDelete={activeDrawing === 'delete'}/>}
                   </div>
                   </div>
                   <div className="flex flex-col gap-3 w-full">
@@ -470,14 +476,20 @@ const AnalysisAndReportForm = () => {
                         <Trash className="text-zinc-600" size={15}/>
                         <h1 className="text-sm text-zinc-600">Delete</h1>
                       </button>
+                      <button onClick={() => setActiveFigure('view')} type="button" className={`flex gap-1 items-center px-2 py-1 rounded-md ${activeFigure === 'view' && 'bg-zinc-200'}`}>
+                        <View className="text-zinc-600" size={15}/>
+                        <h1 className="text-sm text-zinc-600">View</h1>
+                      </button>
                     </div>
                     <div className="w-full h-[1px] bg-zinc-200 mt-3"/>
+                    {activeFigure === 'add' && <FigureUpload/>}
+                    {(activeFigure === 'view' || activeFigure === 'delete') && <FigureView isDelete={activeFigure === 'delete'}/>}
                   </div>
                   </div>
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
-                  <div className="flex flex-col gap-3 w-full">
+                  <div className="flex flex-col gap-3 w-full md:w-1/2">
                   <h1 className="text-sm font-medium">Equipment Mechanical Details</h1>
                   <div className="border rounded-lg p-3">
                   <div className="flex gap-3">
@@ -497,14 +509,64 @@ const AnalysisAndReportForm = () => {
                     <div className="w-full h-[1px] bg-zinc-200 mt-3"/>
                   </div>
                   </div>
-                  <div className="flex flex-col gap-3 w-full">
+                  <div className="flex flex-col gap-3 w-full md:w-1/2">
                   <div className="flex flex-col gap-3 w-full">
                   <h1 className="text-sm font-medium">Temperature Record</h1>
-                  <div className="border rounded-lg p-3"></div>
+                  <div className="border rounded-lg flex overflow-auto">
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Current</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40°C</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40°C</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40°C</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40°C</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40°C</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40°C</h1>
+                    </div>
+                  </div>
                   </div>
                   <div className="flex flex-col gap-3 w-full">
                   <h1 className="text-sm font-medium">Oil Analysis</h1>
-                  <div className="border rounded-lg p-3"></div>
+                  <div className="border rounded-lg flex overflow-auto">
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Current</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40</h1>
+                    </div>
+                    <div className="flex flex-col border-r w-full">
+                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">Previous</h1>
+                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">40</h1>
+                    </div>
+                  </div>
                   </div>
                   </div>
                 </div>
