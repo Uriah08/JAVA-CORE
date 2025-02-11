@@ -22,7 +22,16 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import { Edit, EllipsisVertical, ImageIcon, PanelRight, Plus, Search, Trash, View } from "lucide-react";
+import { 
+  Edit, 
+  EllipsisVertical, 
+  ImageIcon, 
+  PanelRight, 
+  Plus, 
+  Search, 
+  Trash, 
+  View 
+} from "lucide-react";
 
 import { useSearchJobNumberQuery } from "@/store/api";
 import { debounce } from "lodash";
@@ -584,4 +593,4 @@ const AnalysisAndReportForm = () => {
   );
 };
 
-export default AnalysisAndReportForm;
+export default AnalysisAndReportForm
