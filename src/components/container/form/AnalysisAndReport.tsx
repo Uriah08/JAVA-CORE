@@ -22,7 +22,16 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import { Edit, EllipsisVertical, ImageIcon, Plus, Search, Trash, View } from "lucide-react";
+import { 
+  Edit, 
+  EllipsisVertical, 
+  ImageIcon, 
+  PanelRight, 
+  Plus, 
+  Search, 
+  Trash, 
+  View 
+} from "lucide-react";
 
 import { useSearchJobNumberQuery } from "@/store/api";
 import { debounce } from "lodash";
@@ -48,6 +57,8 @@ const AnalysisAndReportForm = () => {
   const [activeDrawing, setActiveDrawing] = React.useState('view')
   const [activeFigure, setActiveFigure] = React.useState('add')
   const [activeDetail, setActiveDetail] = React.useState('add')
+
+  const [hideList, setHideList] = React.useState(false)
 
   const [searchTerm, setSearchTerm] = React.useState("")
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(searchTerm, {
@@ -286,16 +297,19 @@ const AnalysisAndReportForm = () => {
             </div>
           </div>
           <div className="flex flex-col lg:flex-row gap-5 w-full">
-            <div className="w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg">
+            <div className={`w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg ${hideList && 'hidden'}`}>
               <h2 className="text-lg font-semibold mb-3 text-zinc-700">Equipment List</h2>
               {/* {areas.map((area) => (
                 <NestedList key={area.id} data={area} />
               ))} */}
             </div>
 
-            <div className="w-full lg:w-2/3 rounded-xl bg-white flex flex-col p-5 shadow-lg">
+            <div className={`w-full rounded-xl bg-white flex flex-col p-5 shadow-lg ${!hideList && 'lg:w-2/3'}`}>
             <div className="flex flex-col mb-3">
-            <h2 className="text-lg font-semibold mb-3 text-zinc-700">Severity History</h2>
+              <div className='flex gap-3 items-center mb-3'>
+                <PanelRight onClick={() => setHideList(!hideList)} className={`transform cursor-pointer lg:rotate-0 rotate-90 ${hideList ? 'text-zinc-700' : 'text-zinc-500'}`} size={20}/>
+                <h2 className="text-lg font-semibold text-zinc-700">Severity History</h2>
+              </div>
             <div className="flex gap-3 flex-wrap">
               {symbols.map((symbol) => (
                 <div key={symbol.image} className="flex gap-1">
@@ -579,4 +593,4 @@ const AnalysisAndReportForm = () => {
   );
 };
 
-export default AnalysisAndReportForm;
+export default AnalysisAndReportForm
