@@ -237,8 +237,10 @@ const List = () => {
               ><div
               className="flex gap-3 w-full"
               onClick={() => {
-                if(breadcrumb.length === 3) {
-                  componentClick(item.id)
+                if(session?.user.role === 'user') {
+                  if(breadcrumb.length === 3) {
+                    componentClick(item.id)
+                  }
                 }
                 if (isDeleting) {
                   handleSelectItem(item.id);
