@@ -50,11 +50,11 @@ import { FigureView } from "../analysis/FigureView";
 const AnalysisAndReportForm = () => {
   const { toast } = useToast();
 
-  const [openComment, setOpenComment] = React.useState(false);
-  const [openRecommendation, setOpenRecommendation] = React.useState(false);
-  const [activeDrawing, setActiveDrawing] = React.useState("view");
-  const [activeFigure, setActiveFigure] = React.useState("add");
-  const [activeDetail, setActiveDetail] = React.useState("add");
+  const [openComment, setOpenComment] = React.useState(false)
+  const [openRecommendation, setOpenRecommendation] = React.useState(false)
+  const [activeDrawing, setActiveDrawing] = React.useState('view')
+  const [activeFigure, setActiveFigure] = React.useState('add')
+  const [activeDetail, setActiveDetail] = React.useState('add')
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(
@@ -409,452 +409,442 @@ const AnalysisAndReportForm = () => {
               </div>
             </div>
             <div className="flex flex-col gap-3">
+
               {/* ####################### COMMENTS ######################### */}
 
-              <div className="flex flex-col md:flex-row gap-3">
-                <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">Comments</h1>
 
-                  {/* <Button onClick={() => setActive(active === 'comments' ? '' : 'comments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'comments' && 'bg-slate-100'}`}>View Comments</Button> */}
-                </div>
-                {/* <div className="flex flex-col gap-3 w-full">
+            <div className="flex flex-col md:flex-row gap-3">
+              <div className="flex flex-col gap-3 w-full">
+                <h1 className="text-sm font-medium">Comments</h1>
+
+                {/* <Button onClick={() => setActive(active === 'comments' ? '' : 'comments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'comments' && 'bg-slate-100'}`}>View Comments</Button> */}
+              </div>
+              {/* <div className="flex flex-col gap-3 w-full">
                 <h1 className="text-sm font-medium">Previous Comments</h1>
                 <Button onClick={() => setActive(active === 'pcomments' ? '' : 'pcomments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'pcomments' && 'bg-slate-100'}`}>View Previous Comments</Button>
               </div> */}
 
-                <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
-                  <div className="flex justify-between items-center">
+              </div>
+                  <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
+                    <div className="flex justify-between items-center">
                     <h1 className="font-semibold">Previous Comment</h1>
                     <h1 className="text-sm text-zinc-500">2</h1>
-                  </div>
-
-                  <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                          <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
-                            admin
-                          </h1>
-                          <Image
-                            src={`/severity/N.png`}
-                            width={40}
-                            height={40}
-                            alt="Symbol"
-                            className="w-5 object-cover"
-                          />
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
-                          <EllipsisVertical
-                            className="text-zinc-500 cursor-pointer"
-                            size={20}
-                          />
-                        </div>
-                      </div>
-                      <p className="text-sm text-zinc-700">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Nulla iure totam recusandae cupiditate magni,
-                        dolore in dicta eos ea! Reprehenderit inventore enim at
-                        recusandae et dolorem libero sequi, id corporis.
-                      </p>
                     </div>
-                    <p className="text-sm text-zinc-700">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                      Nulla iure totam recusandae cupiditate magni, dolore in
-                      dicta eos ea! Reprehenderit inventore enim at recusandae
-                      et dolorem libero sequi, id corporis.
-                    </p>
+
+                    <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
+                      <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
+                              admin
+                            </h1>
+                            <Image
+                              src={`/severity/N.png`}
+                              width={40}
+                              height={40}
+                              alt="Symbol"
+                              className="w-5 object-cover"
+                            />
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <h1 className="text-xs text-zinc-500">
+                              Jan 1, 2025
+                            </h1>
+                            <EllipsisVertical
+                              className="text-zinc-500 cursor-pointer"
+                              size={20}
+                            />
+                          </div>
+                        </div>
+                        <p className="text-sm text-zinc-700">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit. Nulla iure totam recusandae cupiditate magni,
+                          dolore in dicta eos ea! Reprehenderit inventore enim
+                          at recusandae et dolorem libero sequi, id corporis.
+                        </p>
+                      </div>
+                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
+                    </div>
+                    </div>
+
+                      <Dialog open={openComment} onOpenChange={setOpenComment}>
+                        <Button
+                          onClick={() => setOpenComment(!openComment)}
+                          type="button"
+                          className="w-full font-normal text-sm justify-start cursor-text"
+                          variant={"outline"}
+                        >
+                          Write a comment...
+                        </Button>
+                        <Comments />
+                      </Dialog>
+
                   </div>
-                </div>
 
-                <Dialog open={openComment} onOpenChange={setOpenComment}>
-                  <Button
-                    onClick={() => setOpenComment(!openComment)}
-                    type="button"
-                    className="w-full font-normal text-sm justify-start cursor-text"
-                    variant={"outline"}
-                  >
-                    Write a comment...
-                  </Button>
-                  <Comments />
-                </Dialog>
-              </div>
+                  {/* ####################### RECOMMENDATIONS ######################### */}
 
-              {/* ####################### RECOMMENDATIONS ######################### */}
-
-              <div className="flex flex-col md:flex-row gap-3 mt-3">
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
                 <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">Recommendations</h1>
+                <h1 className="text-sm font-medium">Recommendations</h1>
 
-                  {/* <Button onClick={() => setActive(active === 'recommendations' ? '' : 'recommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'recommendations' && 'bg-slate-100'}`}>View Recommendations</Button> */}
-                </div>
-                {/* <div className="flex flex-col gap-3 w-full">
+                {/* <Button onClick={() => setActive(active === 'recommendations' ? '' : 'recommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'recommendations' && 'bg-slate-100'}`}>View Recommendations</Button> */}
+              </div>
+              {/* <div className="flex flex-col gap-3 w-full">
                 <h1 className="text-sm font-medium">Previous Recommendations</h1>
                 <Button onClick={() => setActive(active === 'precommendations' ? '' : 'precommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'precommendations' && 'bg-slate-100'}`}>View Previous Recommendations</Button>
               </div> */}
-              </div>
 
-              <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
-                <div className="flex justify-between items-center">
-                  <h1 className="font-semibold">Previous Recommendation</h1>
-                  <h1 className="text-sm text-zinc-500">2</h1>
                 </div>
 
-                <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                  <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                  <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
                     <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
-                          admin
-                        </h1>
+                    <h1 className="font-semibold">Previous Recommendation</h1>
+                    <h1 className="text-sm text-zinc-500">2</h1>
+                    </div>
+                    
+                    <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
+                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
                         <h1 className="font-bold">P2</h1>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
+                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
+                        </div>
                       </div>
-                      <div className="flex gap-2 items-center">
-                        <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
-                        <EllipsisVertical
-                          className="text-zinc-500 cursor-pointer"
-                          size={20}
-                        />
+                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
+                    </div>
+                    </div>
+
+                      <Dialog open={openRecommendation} onOpenChange={setOpenRecommendation}>
+                        <Button onClick={() => setOpenRecommendation(!openRecommendation)} type="button" className="w-full font-normal text-sm justify-start cursor-text" variant={'outline'}>Write a recommendation...</Button>
+                        <Recommendations/>
+                      </Dialog>
+
+                  </div>
+
+                  {/* ####################### CLIENT ACTIONS AND WO NUMBER ######################### */}
+
+
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">
+                      Client&apos;s Action and WO Number
+                    </h1>
+                    <div className="border rounded-lg p-3">
+                      <h1 className="font-semibold">Client Action</h1>
+                      <div className="border rounded-lg p-3 mt-2 max-h-[130px] overflow-auto">
+                        <p className="text-sm text-zinc-600 indent-10">
+                          Lorem ipsum dolor sit amet consectetur, adipisicing
+                          elit. Asperiores est laboriosam temporibus aliquam
+                          tempore itaque nihil atque, ducimus quibusdam placeat
+                          illum, maiores eveniet pariatur quia, ex aut tenetur
+                          dignissimos! Sequi? Asperiores est laboriosam
+                          temporibus aliquam tempore itaque nihil atque, ducimus
+                          quibusdam placeat illum, maiores eveniet pariatur
+                          quia, ex aut tenetur dignissimos! Sequi? Asperiores
+                          est laboriosam temporibus aliquam tempore itaque nihil
+                          atque, ducimus quibusdam placeat illum, maiores
+                          eveniet pariatur quia, ex aut tenetur dignissimos!
+                          Sequi?
+                        </p>
+                        <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
+                          Jan 1, 2025
+                        </h1>
+                      </div>
+                      <h1 className="font-semibold mt-3">WO Number</h1>
+                      <Input
+                        readOnly
+                        placeholder="Client WO Number"
+                        className="mt-2 text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">Analyst Note</h1>
+                    <div className="border rounded-lg p-3 flex flex-col h-full">
+                      <h1 className="font-semibold">Analyst Name</h1>
+                      <Input
+                        readOnly
+                        placeholder="Analyst Name"
+                        className="mt-2 text-sm"
+                      />
+                      <div className="border rounded-lg p-3 mt-2 max-h-[165px] overflow-auto">
+                        <p className="text-sm text-zinc-600 indent-10">
+                          Lorem ipsum dolor sit amet consectetur, adipisicing
+                          elit. Asperiores est laboriosam temporibus aliquam
+                          tempore itaque nihil atque, ducimus quibusdam placeat
+                          illum, maiores eveniet pariatur quia, ex aut tenetur
+                          dignissimos! Sequi? Lorem ipsum dolor sit amet
+                          consectetur, adipisicing elit. Asperiores est
+                          laboriosam temporibus aliquam tempore itaque nihil
+                          atque, ducimus quibusdam placeat illum, maiores
+                          eveniet pariatur quia, ex aut tenetur dignissimos!
+                          Sequi Lorem ipsum dolor sit amet consectetur,
+                          adipisicing elit. Asperiores est laboriosam temporibus
+                          aliquam tempore itaque nihil atque, ducimus quibusdam
+                          placeat illum, maiores eveniet pariatur quia, ex aut
+                          tenetur dignissimos! Sequi
+                        </p>
+                        <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
+                          Jan 1, 2025
+                        </h1>
                       </div>
                     </div>
-                    <p className="text-sm text-zinc-700">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                      Nulla iure totam recusandae cupiditate magni, dolore in
-                      dicta eos ea! Reprehenderit inventore enim at recusandae
-                      et dolorem libero sequi, id corporis.
-                    </p>
                   </div>
                 </div>
 
-                <Dialog
-                  open={openRecommendation}
-                  onOpenChange={setOpenRecommendation}
-                >
-                  <Button
-                    onClick={() => setOpenRecommendation(!openRecommendation)}
-                    type="button"
-                    className="w-full font-normal text-sm justify-start cursor-text"
-                    variant={"outline"}
-                  >
-                    Write a recommendation...
-                  </Button>
-                  <Recommendations />
-                </Dialog>
-              </div>
+                {/* ####################### EQUIPMENT DRAWING ######################### */}
 
-              {/* ####################### CLIENT ACTIONS AND WO NUMBER ######################### */}
-
-              <div className="flex flex-col md:flex-row gap-3 mt-3">
-                <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">
-                    Client&apos;s Action and WO Number
-                  </h1>
-                  <div className="border rounded-lg p-3">
-                    <h1 className="font-semibold">Client Action</h1>
-                    <div className="border rounded-lg p-3 mt-2 max-h-[130px] overflow-auto">
-                      <p className="text-sm text-zinc-600 indent-10">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Asperiores est laboriosam temporibus aliquam
-                        tempore itaque nihil atque, ducimus quibusdam placeat
-                        illum, maiores eveniet pariatur quia, ex aut tenetur
-                        dignissimos! Sequi? Asperiores est laboriosam temporibus
-                        aliquam tempore itaque nihil atque, ducimus quibusdam
-                        placeat illum, maiores eveniet pariatur quia, ex aut
-                        tenetur dignissimos! Sequi? Asperiores est laboriosam
-                        temporibus aliquam tempore itaque nihil atque, ducimus
-                        quibusdam placeat illum, maiores eveniet pariatur quia,
-                        ex aut tenetur dignissimos! Sequi?
-                      </p>
-                      <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-                        Jan 1, 2025
-                      </h1>
-                    </div>
-                    <h1 className="font-semibold mt-3">WO Number</h1>
-                    <Input
-                      readOnly
-                      placeholder="Client WO Number"
-                      className="mt-2 text-sm"
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">Analyst Note</h1>
-                  <div className="border rounded-lg p-3 flex flex-col h-full">
-                    <h1 className="font-semibold">Analyst Name</h1>
-                    <Input
-                      readOnly
-                      placeholder="Analyst Name"
-                      className="mt-2 text-sm"
-                    />
-                    <div className="border rounded-lg p-3 mt-2 max-h-[165px] overflow-auto">
-                      <p className="text-sm text-zinc-600 indent-10">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Asperiores est laboriosam temporibus aliquam
-                        tempore itaque nihil atque, ducimus quibusdam placeat
-                        illum, maiores eveniet pariatur quia, ex aut tenetur
-                        dignissimos! Sequi? Lorem ipsum dolor sit amet
-                        consectetur, adipisicing elit. Asperiores est laboriosam
-                        temporibus aliquam tempore itaque nihil atque, ducimus
-                        quibusdam placeat illum, maiores eveniet pariatur quia,
-                        ex aut tenetur dignissimos! Sequi Lorem ipsum dolor sit
-                        amet consectetur, adipisicing elit. Asperiores est
-                        laboriosam temporibus aliquam tempore itaque nihil
-                        atque, ducimus quibusdam placeat illum, maiores eveniet
-                        pariatur quia, ex aut tenetur dignissimos! Sequi
-                      </p>
-                      <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-                        Jan 1, 2025
-                      </h1>
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">
+                      Equipment Drawing Photo
+                    </h1>
+                    <div className="border rounded-lg p-3">
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setActiveDrawing("upload")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeDrawing === "upload" && "bg-zinc-200"
+                          }`}
+                        >
+                          <ImageIcon className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">Upload</h1>
+                        </button>
+                        <button
+                          onClick={() => setActiveDrawing("delete")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeDrawing === "delete" && "bg-zinc-200"
+                          }`}
+                        >
+                          <Trash className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">Delete</h1>
+                        </button>
+                        <button
+                          onClick={() => setActiveDrawing("view")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeDrawing === "view" && "bg-zinc-200"
+                          }`}
+                        >
+                          <View className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">View</h1>
+                        </button>
+                      </div>
+                      <div className="w-full h-[1px] bg-zinc-200 mt-3" />
+                      {activeDrawing === "upload" && <EquipmentUpload />}
+                      {(activeDrawing === "view" ||
+                        activeDrawing === "delete") && (
+                        <EquipmentView isDelete={activeDrawing === "delete"} />
+                      )}
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* ####################### EQUIPMENT DRAWING ######################### */}
-
-              <div className="flex flex-col md:flex-row gap-3 mt-3">
-                <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">
-                    Equipment Drawing Photo
-                  </h1>
-                  <div className="border rounded-lg p-3">
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => setActiveDrawing("upload")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeDrawing === "upload" && "bg-zinc-200"
-                        }`}
-                      >
-                        <ImageIcon className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">Upload</h1>
-                      </button>
-                      <button
-                        onClick={() => setActiveDrawing("delete")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeDrawing === "delete" && "bg-zinc-200"
-                        }`}
-                      >
-                        <Trash className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">Delete</h1>
-                      </button>
-                      <button
-                        onClick={() => setActiveDrawing("view")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeDrawing === "view" && "bg-zinc-200"
-                        }`}
-                      >
-                        <View className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">View</h1>
-                      </button>
-                    </div>
-                    <div className="w-full h-[1px] bg-zinc-200 mt-3" />
-                    {activeDrawing === "upload" && <EquipmentUpload />}
-                    {(activeDrawing === "view" ||
-                      activeDrawing === "delete") && (
-                      <EquipmentView isDelete={activeDrawing === "delete"} />
-                    )}
-                  </div>
-                </div>
 
                 {/* ####################### REPORT FIGURES ######################### */}
 
-                <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">Report Figures</h1>
-                  <div className="border rounded-lg p-3">
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => setActiveFigure("add")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeFigure === "add" && "bg-zinc-200"
-                        }`}
-                      >
-                        <Plus className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">Add</h1>
-                      </button>
-                      <button
-                        onClick={() => setActiveFigure("delete")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeFigure === "delete" && "bg-zinc-200"
-                        }`}
-                      >
-                        <Trash className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">Delete</h1>
-                      </button>
-                      <button
-                        onClick={() => setActiveFigure("view")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeFigure === "view" && "bg-zinc-200"
-                        }`}
-                      >
-                        <View className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">View</h1>
-                      </button>
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">Report Figures</h1>
+                    <div className="border rounded-lg p-3">
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setActiveFigure("add")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeFigure === "add" && "bg-zinc-200"
+                          }`}
+                        >
+                          <Plus className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">Add</h1>
+                        </button>
+                        <button
+                          onClick={() => setActiveFigure("delete")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeFigure === "delete" && "bg-zinc-200"
+                          }`}
+                        >
+                          <Trash className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">Delete</h1>
+                        </button>
+                        <button
+                          onClick={() => setActiveFigure("view")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeFigure === "view" && "bg-zinc-200"
+                          }`}
+                        >
+                          <View className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">View</h1>
+                        </button>
+                      </div>
+                      <div className="w-full h-[1px] bg-zinc-200 mt-3" />
+                      {activeFigure === "add" && <FigureUpload />}
+                      {(activeFigure === "view" ||
+                        activeFigure === "delete") && (
+                        <FigureView isDelete={activeFigure === "delete"} />
+                      )}
                     </div>
-                    <div className="w-full h-[1px] bg-zinc-200 mt-3" />
-                    {activeFigure === "add" && <FigureUpload />}
-                    {(activeFigure === "view" || activeFigure === "delete") && (
-                      <FigureView isDelete={activeFigure === "delete"} />
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* ####################### EQUIPMENT MECHANICAL DETAILS ######################### */}
-
-              <div className="flex flex-col md:flex-row gap-3 mt-3">
-                <div className="flex flex-col gap-3 w-full md:w-1/2">
-                  <h1 className="text-sm font-medium">
-                    Equipment Mechanical Details
-                  </h1>
-                  <div className="border rounded-lg p-3">
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => setActiveDetail("add")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeDetail === "add" && "bg-zinc-200"
-                        }`}
-                      >
-                        <Plus className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">Add</h1>
-                      </button>
-                      <button
-                        onClick={() => setActiveDetail("edit")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeDetail === "edit" && "bg-zinc-200"
-                        }`}
-                      >
-                        <Edit className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">Edit</h1>
-                      </button>
-                      <button
-                        onClick={() => setActiveDetail("delete")}
-                        type="button"
-                        className={`flex gap-1 items-center px-2 py-1 rounded-md ${
-                          activeDetail === "delete" && "bg-zinc-200"
-                        }`}
-                      >
-                        <Trash className="text-zinc-600" size={15} />
-                        <h1 className="text-sm text-zinc-600">Delete</h1>
-                      </button>
-                    </div>
-                    <div className="w-full h-[1px] bg-zinc-200 mt-3" />
                   </div>
                 </div>
 
-                {/* ####################### TEMPARATURE AND OIL ANALYSIS ######################### */}
+                {/* ####################### EQUIPMENT MECHANICAL DETAILS ######################### */}
 
-                <div className="flex flex-col gap-3 w-full md:w-1/2">
-                  <div className="flex flex-col gap-3 w-full">
-                    <h1 className="text-sm font-medium">Temperature Record</h1>
-                    <div className="border rounded-lg flex overflow-auto">
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Current
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40°C
-                        </h1>
+                <div className="flex flex-col md:flex-row gap-3 mt-3">
+                  <div className="flex flex-col gap-3 w-full md:w-1/2">
+                    <h1 className="text-sm font-medium">
+                      Equipment Mechanical Details
+                    </h1>
+                    <div className="border rounded-lg p-3">
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setActiveDetail("add")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeDetail === "add" && "bg-zinc-200"
+                          }`}
+                        >
+                          <Plus className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">Add</h1>
+                        </button>
+                        <button
+                          onClick={() => setActiveDetail("edit")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeDetail === "edit" && "bg-zinc-200"
+                          }`}
+                        >
+                          <Edit className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">Edit</h1>
+                        </button>
+                        <button
+                          onClick={() => setActiveDetail("delete")}
+                          type="button"
+                          className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                            activeDetail === "delete" && "bg-zinc-200"
+                          }`}
+                        >
+                          <Trash className="text-zinc-600" size={15} />
+                          <h1 className="text-sm text-zinc-600">Delete</h1>
+                        </button>
                       </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40°C
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40°C
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40°C
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40°C
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40°C
-                        </h1>
-                      </div>
+                      <div className="w-full h-[1px] bg-zinc-200 mt-3" />
                     </div>
                   </div>
-                  <div className="flex flex-col gap-3 w-full">
-                    <h1 className="text-sm font-medium">Oil Analysis</h1>
-                    <div className="border rounded-lg flex overflow-auto">
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Current
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40
-                        </h1>
+
+                  {/* ####################### TEMPARATURE AND OIL ANALYSIS ######################### */}
+
+                  <div className="flex flex-col gap-3 w-full md:w-1/2">
+                    <div className="flex flex-col gap-3 w-full">
+                      <h1 className="text-sm font-medium">
+                        Temperature Record
+                      </h1>
+                      <div className="border rounded-lg flex overflow-auto">
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Current
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40°C
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40°C
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40°C
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40°C
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40°C
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40°C
+                          </h1>
+                        </div>
                       </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40
-                        </h1>
-                      </div>
-                      <div className="flex flex-col border-r w-full">
-                        <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                          Previous
-                        </h1>
-                        <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                          40
-                        </h1>
+                    </div>
+                    <div className="flex flex-col gap-3 w-full">
+                      <h1 className="text-sm font-medium">Oil Analysis</h1>
+                      <div className="border rounded-lg flex overflow-auto">
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Current
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40
+                          </h1>
+                        </div>
+                        <div className="flex flex-col border-r w-full">
+                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
+                            Previous
+                          </h1>
+                          <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
+                            40
+                          </h1>
+                        </div>
                       </div>
                     </div>
                   </div>
