@@ -575,7 +575,7 @@ const AnalysisAndReportForm = () => {
                   </div>
                 </div>
 
-                {/* ####################### EQUIPMENT MECHANICAL DETAILS REQUIRED ######################### */}
+                {/* ####################### EQUIPMENT MECHANICAL DETAILS ######################### */}
 
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <div className="flex flex-col gap-3 w-full md:w-1/2">
@@ -599,7 +599,7 @@ const AnalysisAndReportForm = () => {
                   </div>
                   </div>
 
-                  {/* ####################### TEMPARATURE AND OIL ANALYSIS REQUIRED ######################### */}
+                  {/* ####################### TEMPARATURE AND OIL ANALYSIS ######################### */}
 
                   <div className="flex flex-col gap-3 w-full md:w-1/2">
                   <div className="flex flex-col gap-3 w-full">
