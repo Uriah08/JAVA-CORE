@@ -72,13 +72,14 @@ export type ExtendedRouteList = RouteList & {
       component: {
         id: string;
         name: string;
+        equipmentId: string;
       };
     }[];
   }[];
 };
 
 type SearchRouteListResponse = {
-  routeList: ExtendedRouteList[];
+  routeList?: ExtendedRouteList[];
   message: string;
   success: boolean;
 };

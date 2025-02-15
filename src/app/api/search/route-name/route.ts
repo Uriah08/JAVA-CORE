@@ -16,7 +16,6 @@ export async function GET(req: Request) {
       where: {
         routeName: {
           contains: routeName as string,
-          mode: "insensitive",
         },
       },
       select: {
@@ -53,6 +52,7 @@ export async function GET(req: Request) {
                 component: {
                   select: {
                     name: true,
+                    equipmentNameId: true,
                   },
                 },
               },
@@ -62,10 +62,8 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log("✅ Found Routes:", routeData);
-
     return NextResponse.json(
-      { message: "Search Successful", success: true, routeData },
+      { message: "Search Successful", success: true, routeList: routeData },
       { status: 200 }
     );
   } catch (error) {
