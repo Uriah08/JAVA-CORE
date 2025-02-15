@@ -8,6 +8,7 @@ import {
   EquipmentGroup,
   EquipmentName,
   Component,
+  RouteList,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
@@ -42,6 +43,46 @@ type EquipmentGroupResponse = { equipmentGroups: EquipmentGroup[] };
 type EquipmentNameResponse = { equipmentNames: EquipmentName[] };
 type ComponentResponse = { components: Component[] };
 
+type RouteListResponse = {
+  routeList: RouteList[];
+  message: string;
+  success: boolean;
+};
+
+export type ExtendedRouteList = RouteList & {
+  machines: {
+    id: string;
+    area: {
+      id: string;
+      name: string;
+    };
+    equipmentGroup: {
+      id: string;
+      name: string;
+    };
+    routeEquipmentNames: {
+      id: string;
+      equipmentName: {
+        id: string;
+        name: string;
+      };
+    }[];
+    routeComponents: {
+      id: string;
+      component: {
+        id: string;
+        name: string;
+      };
+    }[];
+  }[];
+};
+
+type SearchRouteListResponse = {
+  routeList: ExtendedRouteList[];
+  message: string;
+  success: boolean;
+};
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -54,6 +95,7 @@ export const api = createApi({
     "EquipmentGroup",
     "EquipmentName",
     "Component",
+    "RouteList",
   ],
   endpoints: (build) => ({
     loginUser: build.mutation({
@@ -247,6 +289,13 @@ export const api = createApi({
       query: (jobNumber) => `/api/search/job-number?job=${jobNumber}`,
       providesTags: ["Job"],
     }),
+    getRouteList: build.query<RouteListResponse, void>({
+      query: () => ({
+        url: "/api/createRoute",
+        method: "GET",
+      }),
+      providesTags: ["RouteList"],
+    }),
     createRoute: build.mutation({
       query: (data) => ({
         url: "/api/createRoute",
@@ -257,6 +306,10 @@ export const api = createApi({
         },
       }),
       invalidatesTags: ["Area", "EquipmentGroup", "EquipmentName", "Component"],
+    }),
+    searchRouteList: build.query<SearchRouteListResponse, string>({
+      query: (routeName) => `/api/search/route-name?routeName=${routeName}`,
+      providesTags: ["RouteList"],
     }),
   }),
 });
@@ -284,4 +337,6 @@ export const {
   useSoftDeleteComponentsMutation,
   useSearchJobNumberQuery,
   useCreateRouteMutation,
+  useGetRouteListQuery,
+  useSearchRouteListQuery,
 } = api;
