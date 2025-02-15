@@ -67,14 +67,6 @@ export type ExtendedRouteList = RouteList & {
         name: string;
       };
     }[];
-    routeComponents: {
-      id: string;
-      component: {
-        id: string;
-        name: string;
-        equipmentId: string;
-      };
-    }[];
   }[];
 };
 

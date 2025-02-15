@@ -119,11 +119,13 @@ const AnalysisAndReportForm = () => {
         id: string;
         equipmentName: { id: string; name: string };
       }[];
-      routeComponents: {
-        id: string;
-        component: { id: string; name: string; equipmentId: string };
-      }[];
     }[];
+  } | null>(null);
+
+  const [selectedEquipment, setSelectedEquipment] = React.useState<{
+    id: string;
+    name: string;
+    components: string[];
   } | null>(null);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
@@ -408,9 +410,25 @@ const AnalysisAndReportForm = () => {
               }`}
             >
               <h2 className="text-lg font-semibold mb-3 text-zinc-700">
-                Equipment List
+                {selectedEquipment ? selectedEquipment.name : "Equipment List"}
               </h2>
-              {selectedRouteList ? (
+              {selectedEquipment ? (
+                <div className="space-y-4">
+                  <button
+                    onClick={() => setSelectedEquipment(null)}
+                    className="text-sm font-medium text-main hover:text-follow"
+                  >
+                    &larr; Back to Equipment List
+                  </button>
+                  {selectedEquipment.components.map((component, index) => (
+                    <div key={index} className="bg-zinc-100 p-2 rounded-md">
+                      <h4 className="text-sm font-medium text-zinc-600">
+                        {component}
+                      </h4>
+                    </div>
+                  ))}
+                </div>
+              ) : selectedRouteList ? (
                 <div className="space-y-4">
                   {selectedRouteList.machines?.map((machine) => (
                     <div key={machine.id} className="bg-zinc-50 p-3 rounded-lg">
@@ -421,21 +439,22 @@ const AnalysisAndReportForm = () => {
                         {machine.routeEquipmentNames?.map((equipment) => (
                           <div
                             key={equipment.id}
-                            className="bg-zinc-100 p-2 rounded-md"
+                            className="bg-zinc-100 p-2 rounded-md cursor-pointer hover:bg-zinc-200"
+                            onClick={() =>
+                              setSelectedEquipment({
+                                id: equipment.id,
+                                name: equipment.equipmentName?.name,
+                                components: [
+                                  "Component 1",
+                                  "Component 2",
+                                  "Component 3",
+                                ],
+                              })
+                            }
                           >
                             <h4 className="text-sm font-medium text-zinc-600">
                               {equipment.equipmentName?.name}
                             </h4>
-                            <div className="ml-4 mt-1 space-y-1">
-                              {machine.routeComponents?.map((component) => (
-                                <div
-                                  key={component.id}
-                                  className="text-sm text-zinc-500"
-                                >
-                                  {component.component?.name}
-                                </div>
-                              ))}
-                            </div>
                           </div>
                         ))}
                       </div>

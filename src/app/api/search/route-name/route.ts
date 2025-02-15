@@ -46,17 +46,6 @@ export async function GET(req: Request) {
                 },
               },
             },
-            routeComponents: {
-              select: {
-                id: true,
-                component: {
-                  select: {
-                    name: true,
-                    equipmentNameId: true,
-                  },
-                },
-              },
-            },
           },
         },
       },
