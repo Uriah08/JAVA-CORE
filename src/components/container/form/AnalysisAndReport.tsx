@@ -450,7 +450,7 @@ const AnalysisAndReportForm = () => {
 
                   </div>
 
-                  {/* ####################### RECOMMENDATIONS ######################### */}
+                  {/* ####################### RECOMMENDATION ######################### */}
 
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                 <div className="flex flex-col gap-3 w-full">
@@ -494,7 +494,7 @@ const AnalysisAndReportForm = () => {
 
                   </div>
 
-                  {/* ####################### CLIENT ACTIONS AND WO NUMBER ######################### */}
+                  {/* ####################### CLIENT ACTIONS AND WO NUMBER REQUIRED ######################### */}
 
 
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
@@ -523,7 +523,7 @@ const AnalysisAndReportForm = () => {
                   </div>
                 </div>
 
-                {/* ####################### EQUIPMENT DRAWING ######################### */}
+                {/* ####################### EQUIPMENT DRAWING REQUIRED ######################### */}
 
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <div className="flex flex-col gap-3 w-full">
