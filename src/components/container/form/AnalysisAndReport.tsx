@@ -380,7 +380,7 @@ const AnalysisAndReportForm = () => {
             <div className="flex md:flex-row flex-col gap-3 w-2/3 px-5"></div>
           </div>
           <div className="flex flex-col lg:flex-row gap-5 w-full">
-            <div className="w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg">
+            <div className={`w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg ${hideList && 'hidden'}`}>
               <h2 className="text-lg font-semibold mb-3 text-zinc-700">
                 Equipment List
               </h2>
