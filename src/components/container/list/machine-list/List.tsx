@@ -19,7 +19,13 @@ import { EllipsisVertical, Plus, Trash } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+import { useSession } from "next-auth/react";
+
 const List = () => {
+
+  const { data: session } = useSession();
+
   const {
     data: areaData,
     isLoading: areaLoading,
@@ -150,7 +156,7 @@ const List = () => {
               ? "Select a name"
               : "Components"}
           </h1>
-          <div className="flex space-x-2">
+          <div className={`flex space-x-2 ${session?.user.role !== 'admin' && 'hidden'}`}>
             <Button
               onClick={() =>
                 handleOpenDialog(
@@ -252,7 +258,7 @@ const List = () => {
                 </div>
                 <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <EllipsisVertical className="text-zinc-500 z-20"/>
+                  <EllipsisVertical className={`text-zinc-500 z-20 ${session?.user.role !== 'admin' && 'hidden'}`}/>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>

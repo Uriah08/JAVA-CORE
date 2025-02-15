@@ -40,7 +40,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const session = await auth();
-    if (!session) {
+    if (!session || (session.user.id !== process.env.ADMIN)) {
       throw new Error("Not Authenticated");
     }
 

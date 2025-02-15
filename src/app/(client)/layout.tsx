@@ -26,7 +26,7 @@ const sidebar = [
   {
     title: "Database",
     icon: Database,
-    link: "/machine-list",
+    link: "/read-machine-list",
   },
   {
     title: "Components",
