@@ -50,11 +50,12 @@ import { FigureView } from "../analysis/FigureView";
 const AnalysisAndReportForm = () => {
   const { toast } = useToast();
 
-  const [openComment, setOpenComment] = React.useState(false)
-  const [openRecommendation, setOpenRecommendation] = React.useState(false)
-  const [activeDrawing, setActiveDrawing] = React.useState('view')
-  const [activeFigure, setActiveFigure] = React.useState('add')
-  const [activeDetail, setActiveDetail] = React.useState('add')
+  const [active, setActive] = React.useState("");
+  const [openComment, setOpenComment] = React.useState(false);
+  const [openRecommendation, setOpenRecommendation] = React.useState(false);
+  const [activeDrawing, setActiveDrawing] = React.useState("view");
+  const [activeFigure, setActiveFigure] = React.useState("add");
+  const [activeDetail, setActiveDetail] = React.useState("add");
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(
@@ -407,28 +408,48 @@ const AnalysisAndReportForm = () => {
                   ))}
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-3">
-
-              {/* ####################### COMMENTS ######################### */}
-
-
-            <div className="flex flex-col md:flex-row gap-3">
-              <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Comments</h1>
-
-                {/* <Button onClick={() => setActive(active === 'comments' ? '' : 'comments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'comments' && 'bg-slate-100'}`}>View Comments</Button> */}
-              </div>
-              {/* <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Previous Comments</h1>
-                <Button onClick={() => setActive(active === 'pcomments' ? '' : 'pcomments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'pcomments' && 'bg-slate-100'}`}>View Previous Comments</Button>
-              </div> */}
-
-              </div>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col md:flex-row gap-3">
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">Comments</h1>
+                    <Button
+                      onClick={() =>
+                        setActive(active === "comments" ? "" : "comments")
+                      }
+                      type="button"
+                      variant={"outline"}
+                      className={`font-normal justify-start ${
+                        active === "comments" && "bg-slate-100"
+                      }`}
+                    >
+                      View Comments
+                    </Button>
+                  </div>
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">Previous Comments</h1>
+                    <Button
+                      onClick={() =>
+                        setActive(active === "pcomments" ? "" : "pcomments")
+                      }
+                      type="button"
+                      variant={"outline"}
+                      className={`font-normal justify-start ${
+                        active === "pcomments" && "bg-slate-100"
+                      }`}
+                    >
+                      View Previous Comments
+                    </Button>
+                  </div>
+                </div>
+                {(active === "comments" || active === "pcomments") && (
                   <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
                     <div className="flex justify-between items-center">
-                    <h1 className="font-semibold">Previous Comment</h1>
-                    <h1 className="text-sm text-zinc-500">2</h1>
+                      <h1 className="font-semibold">
+                        {active === "comments"
+                          ? "Comments"
+                          : "Previous Comments"}
+                      </h1>
+                      <h1 className="text-sm text-zinc-500">2</h1>
                     </div>
 
                     <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
@@ -463,10 +484,40 @@ const AnalysisAndReportForm = () => {
                           at recusandae et dolorem libero sequi, id corporis.
                         </p>
                       </div>
-                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
-                    </div>
+                      <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
+                              admin
+                            </h1>
+                            <Image
+                              src={`/severity/N.png`}
+                              width={40}
+                              height={40}
+                              alt="Symbol"
+                              className="w-5 object-cover"
+                            />
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <h1 className="text-xs text-zinc-500">
+                              Jan 1, 2025
+                            </h1>
+                            <EllipsisVertical
+                              className="text-zinc-500 cursor-pointer"
+                              size={20}
+                            />
+                          </div>
+                        </div>
+                        <p className="text-sm text-zinc-700">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit. Nulla iure totam recusandae cupiditate magni,
+                          dolore in dicta eos ea! Reprehenderit inventore enim
+                          at recusandae et dolorem libero sequi, id corporis.
+                        </p>
+                      </div>
                     </div>
 
+                    {active === "comments" && (
                       <Dialog open={openComment} onOpenChange={setOpenComment}>
                         <Button
                           onClick={() => setOpenComment(!openComment)}
@@ -478,55 +529,134 @@ const AnalysisAndReportForm = () => {
                         </Button>
                         <Comments />
                       </Dialog>
-
+                    )}
                   </div>
-
-                  {/* ####################### RECOMMENDATIONS ######################### */}
-
+                )}
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
-                <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Recommendations</h1>
-
-                {/* <Button onClick={() => setActive(active === 'recommendations' ? '' : 'recommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'recommendations' && 'bg-slate-100'}`}>View Recommendations</Button> */}
-              </div>
-              {/* <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Previous Recommendations</h1>
-                <Button onClick={() => setActive(active === 'precommendations' ? '' : 'precommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'precommendations' && 'bg-slate-100'}`}>View Previous Recommendations</Button>
-              </div> */}
-
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">Recommendations</h1>
+                    <Button
+                      onClick={() =>
+                        setActive(
+                          active === "recommendations" ? "" : "recommendations"
+                        )
+                      }
+                      type="button"
+                      variant={"outline"}
+                      className={`font-normal justify-start ${
+                        active === "recommendations" && "bg-slate-100"
+                      }`}
+                    >
+                      View Recommendations
+                    </Button>
+                  </div>
+                  <div className="flex flex-col gap-3 w-full">
+                    <h1 className="text-sm font-medium">
+                      Previous Recommendations
+                    </h1>
+                    <Button
+                      onClick={() =>
+                        setActive(
+                          active === "precommendations"
+                            ? ""
+                            : "precommendations"
+                        )
+                      }
+                      type="button"
+                      variant={"outline"}
+                      className={`font-normal justify-start ${
+                        active === "precommendations" && "bg-slate-100"
+                      }`}
+                    >
+                      View Previous Recommendations
+                    </Button>
+                  </div>
                 </div>
-
+                {(active === "recommendations" ||
+                  active === "precommendations") && (
                   <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
                     <div className="flex justify-between items-center">
-                    <h1 className="font-semibold">Previous Recommendation</h1>
-                    <h1 className="text-sm text-zinc-500">2</h1>
+                      <h1 className="font-semibold">
+                        {active === "recommendations"
+                          ? "Recommendations"
+                          : "Previous Recommendations"}
+                      </h1>
+                      <h1 className="text-sm text-zinc-500">2</h1>
                     </div>
-                    
+
                     <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                        <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">admin</h1>
-                        <h1 className="font-bold">P2</h1>
+                      <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
+                              admin
+                            </h1>
+                            <h1 className="font-bold">P1</h1>
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <h1 className="text-xs text-zinc-500">
+                              Jan 1, 2025
+                            </h1>
+                            <EllipsisVertical
+                              className="text-zinc-500 cursor-pointer"
+                              size={20}
+                            />
+                          </div>
                         </div>
-                        <div className="flex gap-2 items-center">
-                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
-                          <EllipsisVertical className="text-zinc-500 cursor-pointer" size={20}/>
-                        </div>
+                        <p className="text-sm text-zinc-700">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit. Nulla iure totam recusandae cupiditate magni,
+                          dolore in dicta eos ea! Reprehenderit inventore enim
+                          at recusandae et dolorem libero sequi, id corporis.
+                        </p>
                       </div>
-                      <p className="text-sm text-zinc-700">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla iure totam recusandae cupiditate magni, dolore in dicta eos ea! Reprehenderit inventore enim at recusandae et dolorem libero sequi, id corporis.</p>
-                    </div>
+                      <div className="flex flex-col gap-2 p-3 border rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-2">
+                            <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
+                              admin
+                            </h1>
+                            <h1 className="font-bold">P2</h1>
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <h1 className="text-xs text-zinc-500">
+                              Jan 1, 2025
+                            </h1>
+                            <EllipsisVertical
+                              className="text-zinc-500 cursor-pointer"
+                              size={20}
+                            />
+                          </div>
+                        </div>
+                        <p className="text-sm text-zinc-700">
+                          Lorem ipsum, dolor sit amet consectetur adipisicing
+                          elit. Nulla iure totam recusandae cupiditate magni,
+                          dolore in dicta eos ea! Reprehenderit inventore enim
+                          at recusandae et dolorem libero sequi, id corporis.
+                        </p>
+                      </div>
                     </div>
 
-                      <Dialog open={openRecommendation} onOpenChange={setOpenRecommendation}>
-                        <Button onClick={() => setOpenRecommendation(!openRecommendation)} type="button" className="w-full font-normal text-sm justify-start cursor-text" variant={'outline'}>Write a recommendation...</Button>
-                        <Recommendations/>
+                    {active === "recommendations" && (
+                      <Dialog
+                        open={openRecommendation}
+                        onOpenChange={setOpenRecommendation}
+                      >
+                        <Button
+                          onClick={() =>
+                            setOpenRecommendation(!openRecommendation)
+                          }
+                          type="button"
+                          className="w-full font-normal text-sm justify-start cursor-text"
+                          variant={"outline"}
+                        >
+                          Write a recommendation...
+                        </Button>
+                        <Recommendations />
                       </Dialog>
-
+                    )}
                   </div>
-
-                  {/* ####################### CLIENT ACTIONS AND WO NUMBER ######################### */}
-
+                )}
 
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <div className="flex flex-col gap-3 w-full">
@@ -596,8 +726,6 @@ const AnalysisAndReportForm = () => {
                   </div>
                 </div>
 
-                {/* ####################### EQUIPMENT DRAWING ######################### */}
-
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <div className="flex flex-col gap-3 w-full">
                     <h1 className="text-sm font-medium">
@@ -644,9 +772,6 @@ const AnalysisAndReportForm = () => {
                       )}
                     </div>
                   </div>
-
-                {/* ####################### REPORT FIGURES ######################### */}
-
                   <div className="flex flex-col gap-3 w-full">
                     <h1 className="text-sm font-medium">Report Figures</h1>
                     <div className="border rounded-lg p-3">
@@ -692,8 +817,6 @@ const AnalysisAndReportForm = () => {
                   </div>
                 </div>
 
-                {/* ####################### EQUIPMENT MECHANICAL DETAILS ######################### */}
-
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <div className="flex flex-col gap-3 w-full md:w-1/2">
                     <h1 className="text-sm font-medium">
@@ -735,9 +858,6 @@ const AnalysisAndReportForm = () => {
                       <div className="w-full h-[1px] bg-zinc-200 mt-3" />
                     </div>
                   </div>
-
-                  {/* ####################### TEMPARATURE AND OIL ANALYSIS ######################### */}
-
                   <div className="flex flex-col gap-3 w-full md:w-1/2">
                     <div className="flex flex-col gap-3 w-full">
                       <h1 className="text-sm font-medium">
