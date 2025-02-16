@@ -52,16 +52,18 @@ export type ExtendedRouteComponent = RouteComponent & {
   comments: {
     severity: String;
     comment: String;
+    createdAt: Date;
   }[];
   recommendations: {
     priority: String;
     recommendation: String;
-  };
+    createdAt: Date;
+  }[];
   temperatures: {
     temperature: string;
   }[];
   oilAnalyses: {
-    analysis: true;
+    analysis: string;
   }[];
 };
 
@@ -323,12 +325,15 @@ export const api = createApi({
       query: (routeName) => `/api/search/route-name?routeName=${routeName}`,
       providesTags: ["RouteList"],
     }),
-    getRouteComponents: build.query<RouteComponentResponse, string[]>({
-      query: (componentIds) => {
-        const queryString = componentIds
+    getRouteComponents: build.query<
+      RouteComponentResponse,
+      { componentIds: string[]; routeMachineId: string }
+    >({
+      query: ({ componentIds, routeMachineId }) => {
+        const componentQuery = componentIds
           .map((id) => `componentId=${id}`)
           .join("&");
-        return `/api/createRoute/routeMachineList/routeComponents?${queryString}`;
+        return `/api/createRoute/routeMachineList/routeComponents?${componentQuery}&routeMachineId=${routeMachineId}`;
       },
       providesTags: ["RouteComponent"],
     }),

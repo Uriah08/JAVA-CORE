@@ -137,13 +137,26 @@ const AnalysisAndReportForm = () => {
   } | null>(null);
 
   const componentIds = selectedEquipment?.components.map((c) => c.id) || [];
+  const routeMachineId = selectedRouteList?.machines[0]?.id || "";
 
   const { data: routeComponentsData, isFetching: routeComponentsLoading } =
-    useGetRouteComponentsQuery(componentIds, {
-      skip: componentIds.length === 0,
-    });
+    useGetRouteComponentsQuery(
+      { componentIds, routeMachineId },
+      { skip: componentIds.length === 0 || !routeMachineId }
+    );
 
   const routeComponents = routeComponentsData?.routeList || [];
+
+  const [selectedComponent, setSelectedComponent] = React.useState<{
+    id: string;
+    name: string;
+    comments: { severity: String; comment: String; createdAt: Date }[];
+    recommendations: {
+      priority: String;
+      recommendation: String;
+      createdAt: Date;
+    }[];
+  } | null>(null);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
     resolver: zodResolver(analysisAndReportSchema),
@@ -174,6 +187,14 @@ const AnalysisAndReportForm = () => {
       });
     }
   }
+
+  const severityMap: Record<string, string> = {
+    Normal: "N.png",
+    Moderate: "M.png",
+    Severe: "S.png",
+    Critical: "C.png",
+    Missed: "X.png",
+  };
 
   return (
     <div className="w-full flex flex-col gap-5">
@@ -453,7 +474,35 @@ const AnalysisAndReportForm = () => {
                     </div>
                   ) : routeComponents.length > 0 ? (
                     routeComponents.map((component, index) => (
-                      <div key={index} className="border p-2 rounded-md">
+                      <div
+                        key={index}
+                        className={`border p-2 rounded-md cursor-pointer ${
+                          selectedComponent?.id === component.component.id
+                            ? "bg-red-300"
+                            : "hover:bg-zinc-200"
+                        }`}
+                        onClick={() => {
+                          console.log(
+                            "Component selected:",
+                            component.component.name
+                          );
+                          console.log(
+                            "Comments for this component:",
+                            component.comments || []
+                          );
+                          console.log(
+                            "Recommendations for this component:",
+                            component.recommendations || []
+                          );
+
+                          setSelectedComponent({
+                            id: component.component.id,
+                            name: component.component.name,
+                            comments: component.comments || [],
+                            recommendations: component.recommendations || [],
+                          });
+                        }}
+                      >
                         <h4 className="text-sm font-medium text-zinc-600">
                           {component.component.name}
                         </h4>
@@ -468,7 +517,7 @@ const AnalysisAndReportForm = () => {
               ) : selectedRouteList ? (
                 <div className="space-y-4">
                   {selectedRouteList.machines?.map((machine) => (
-                    <div key={machine.id} className=" rounded-lg">
+                    <div key={machine.id} className="rounded-lg">
                       <h3 className="font-bold text-zinc-700">
                         {machine.equipmentGroup?.name}
                       </h3>
@@ -554,50 +603,61 @@ const AnalysisAndReportForm = () => {
                 <div className="flex flex-col md:flex-row gap-3">
                   <div className="flex flex-col gap-3 w-full">
                     <h1 className="text-sm font-medium">Comments</h1>
-
-                    {/* <Button onClick={() => setActive(active === 'comments' ? '' : 'comments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'comments' && 'bg-slate-100'}`}>View Comments</Button> */}
                   </div>
-                  {/* <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Previous Comments</h1>
-                <Button onClick={() => setActive(active === 'pcomments' ? '' : 'pcomments')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'pcomments' && 'bg-slate-100'}`}>View Previous Comments</Button>
-              </div> */}
                 </div>
                 <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
                   <div className="flex justify-between items-center">
                     <h1 className="font-semibold">Previous Comment</h1>
-                    <h1 className="text-sm text-zinc-500">2</h1>
+                    <h1 className="text-sm text-zinc-500">
+                      {selectedComponent
+                        ? selectedComponent.comments.length
+                        : 0}
+                    </h1>
                   </div>
-
                   <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                          <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
-                            admin
-                          </h1>
-                          <Image
-                            src={`/severity/N.png`}
-                            width={40}
-                            height={40}
-                            alt="Symbol"
-                            className="w-5 object-cover"
-                          />
+                    {selectedComponent &&
+                    selectedComponent.comments.length > 0 ? (
+                      selectedComponent.comments.map((comment, idx) => (
+                        <div
+                          key={idx}
+                          className="flex flex-col gap-2 p-3 border rounded-lg"
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                              <Image
+                                src={`/severity/${
+                                  severityMap[String(comment.severity)] ||
+                                  "N.png"
+                                }`}
+                                width={40}
+                                height={40}
+                                alt="Symbol"
+                                className="w-5 object-cover"
+                              />
+                              <h1 className="text-sm text-zinc-600">
+                                {comment.severity}
+                              </h1>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                              <h1 className="text-xs text-zinc-500">
+                                {comment.createdAt
+                                  ? new Date(
+                                      comment.createdAt
+                                    ).toLocaleDateString()
+                                  : "N/A"}
+                              </h1>
+                            </div>
+                          </div>
+                          <p className="text-sm text-zinc-700">
+                            {comment.comment}
+                          </p>
                         </div>
-                        <div className="flex gap-2 items-center">
-                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
-                          <EllipsisVertical
-                            className="text-zinc-500 cursor-pointer"
-                            size={20}
-                          />
-                        </div>
-                      </div>
-                      <p className="text-sm text-zinc-700">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Nulla iure totam recusandae cupiditate magni,
-                        dolore in dicta eos ea! Reprehenderit inventore enim at
-                        recusandae et dolorem libero sequi, id corporis.
+                      ))
+                    ) : (
+                      <p className="text-sm text-zinc-400">
+                        No comments available.
                       </p>
-                    </div>
+                    )}
                   </div>
 
                   <Dialog open={openComment} onOpenChange={setOpenComment}>
@@ -618,45 +678,45 @@ const AnalysisAndReportForm = () => {
                 <div className="flex flex-col md:flex-row gap-3 mt-3">
                   <div className="flex flex-col gap-3 w-full">
                     <h1 className="text-sm font-medium">Recommendations</h1>
-
-                    {/* <Button onClick={() => setActive(active === 'recommendations' ? '' : 'recommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'recommendations' && 'bg-slate-100'}`}>View Recommendations</Button> */}
                   </div>
-                  {/* <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Previous Recommendations</h1>
-                <Button onClick={() => setActive(active === 'precommendations' ? '' : 'precommendations')} type="button" variant={'outline'} className={`font-normal justify-start ${active === 'precommendations' && 'bg-slate-100'}`}>View Previous Recommendations</Button>
-              </div> */}
                 </div>
 
                 <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
                   <div className="flex justify-between items-center">
                     <h1 className="font-semibold">Previous Recommendation</h1>
-                    <h1 className="text-sm text-zinc-500">2</h1>
+                    <h1 className="text-sm text-zinc-500">
+                      {selectedComponent?.recommendations.length || 0}
+                    </h1>
                   </div>
 
                   <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                    <div className="flex flex-col gap-2 p-3 border rounded-lg">
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                          <h1 className="text-sm bg-main text-white rounded-full px-3 py-1 w-fit">
-                            admin
-                          </h1>
-                          <h1 className="font-bold">P2</h1>
+                    {selectedComponent &&
+                    selectedComponent.comments.length > 0 ? (
+                      selectedComponent?.recommendations.map((rec, index) => (
+                        <div
+                          key={index}
+                          className="flex flex-col gap-2 p-3 border rounded-lg"
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                              <h1 className="font-bold">{rec.priority}</h1>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                              <h1 className="text-xs text-zinc-500">
+                                {new Date(rec.createdAt).toLocaleDateString()}
+                              </h1>
+                            </div>
+                          </div>
+                          <p className="text-sm text-zinc-700">
+                            {rec.recommendation}
+                          </p>
                         </div>
-                        <div className="flex gap-2 items-center">
-                          <h1 className="text-xs text-zinc-500">Jan 1, 2025</h1>
-                          <EllipsisVertical
-                            className="text-zinc-500 cursor-pointer"
-                            size={20}
-                          />
-                        </div>
-                      </div>
-                      <p className="text-sm text-zinc-700">
-                        Lorem ipsum, dolor sit amet consectetur adipisicing
-                        elit. Nulla iure totam recusandae cupiditate magni,
-                        dolore in dicta eos ea! Reprehenderit inventore enim at
-                        recusandae et dolorem libero sequi, id corporis.
+                      ))
+                    ) : (
+                      <p className="text-sm text-zinc-400">
+                        No Recommendation available.
                       </p>
-                    </div>
+                    )}
                   </div>
 
                   <Dialog

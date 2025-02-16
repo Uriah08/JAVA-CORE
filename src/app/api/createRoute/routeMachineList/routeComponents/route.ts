@@ -11,10 +11,11 @@ export async function GET(req: Request) {
 
     const url = new URL(req.url);
     const componentIds = url.searchParams.getAll("componentId") || [];
+    const routeMachineId = url.searchParams.get("routeMachineId");
 
-    if (!componentIds?.length) {
+    if (!componentIds?.length || !routeMachineId) {
       return NextResponse.json(
-        { message: "Missing component IDs", success: false },
+        { message: "Missing component IDs or routeMachineId", success: false },
         { status: 400 }
       );
     }
@@ -22,8 +23,8 @@ export async function GET(req: Request) {
     const routeComponents = await prisma.routeComponent.findMany({
       where: {
         componentId: { in: componentIds },
+        routeMachineId: routeMachineId,
       },
-      distinct: ["componentId"],
       select: {
         id: true,
         action: true,
@@ -45,9 +46,11 @@ export async function GET(req: Request) {
           select: {
             severity: true,
             comment: true,
+            createdAt: true,
           },
         },
         recommendations: {
+          take: 10,
           orderBy: {
             createdAt: "desc",
           },
