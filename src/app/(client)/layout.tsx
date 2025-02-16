@@ -44,7 +44,7 @@ const ClientLayout = ({ children }: Props) => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [active, setActive] = React.useState("/profile");
+  const [active, setActive] = React.useState("/read-machine-list");
 
   const [open, setOpen] = React.useState(true);
   const [loading, setLoading] = React.useState(true);
