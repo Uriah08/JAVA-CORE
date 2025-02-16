@@ -426,7 +426,7 @@ const AnalysisAndReportForm = () => {
                 hideList && "hidden"
               }`}
             >
-              <h2 className="text-lg font-semibold mb-3 text-zinc-700">
+              <h2 className="text-lg font-semibold mb-3 text-black">
                 {selectedEquipment ? selectedEquipment.name : "Equipment List"}
               </h2>
 
@@ -453,7 +453,7 @@ const AnalysisAndReportForm = () => {
                     </div>
                   ) : routeComponents.length > 0 ? (
                     routeComponents.map((component, index) => (
-                      <div key={index} className="bg-zinc-100 p-2 rounded-md">
+                      <div key={index} className="border p-2 rounded-md">
                         <h4 className="text-sm font-medium text-zinc-600">
                           {component.component.name}
                         </h4>
@@ -468,21 +468,16 @@ const AnalysisAndReportForm = () => {
               ) : selectedRouteList ? (
                 <div className="space-y-4">
                   {selectedRouteList.machines?.map((machine) => (
-                    <div key={machine.id} className="bg-zinc-50 p-3 rounded-lg">
-                      <h3 className="font-medium text-zinc-700">
+                    <div key={machine.id} className=" rounded-lg">
+                      <h3 className="font-bold text-zinc-700">
                         {machine.equipmentGroup?.name}
                       </h3>
                       <div className="ml-4 mt-2 space-y-2">
                         {machine.routeEquipmentNames?.map((equipment) => (
                           <div
                             key={equipment.id}
-                            className="bg-zinc-100 p-2 rounded-md cursor-pointer hover:bg-zinc-200"
+                            className="border font-bold p-2 rounded-md cursor-pointer hover:bg-zinc-200"
                             onClick={() => {
-                              console.log(
-                                "Before setting selectedEquipment:",
-                                equipment.equipmentName?.components
-                              );
-
                               setSelectedEquipment({
                                 id: equipment.id,
                                 name: equipment.equipmentName?.name,
@@ -504,11 +499,6 @@ const AnalysisAndReportForm = () => {
                                   ).values()
                                 ),
                               });
-
-                              console.log(
-                                "After setting selectedEquipment:",
-                                selectedEquipment
-                              );
                             }}
                           >
                             <h4 className="text-sm font-medium text-zinc-600">
@@ -524,7 +514,7 @@ const AnalysisAndReportForm = () => {
                 <p className="text-zinc-400">No route selected.</p>
               )}
             </div>
-            ;
+
             <div
               className={`w-full rounded-xl bg-white flex flex-col p-5 shadow-lg ${
                 !hideList && "lg:w-2/3"
