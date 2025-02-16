@@ -9,6 +9,7 @@ import {
   EquipmentName,
   Component,
   RouteList,
+  RouteComponent,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
@@ -43,8 +44,29 @@ type EquipmentGroupResponse = { equipmentGroups: EquipmentGroup[] };
 type EquipmentNameResponse = { equipmentNames: EquipmentName[] };
 type ComponentResponse = { components: Component[] };
 
-type RouteListResponse = {
-  routeList: RouteList[];
+export type ExtendedRouteComponent = RouteComponent & {
+  component: {
+    id: string;
+    name: string;
+  };
+  comments: {
+    severity: String;
+    comment: String;
+  }[];
+  recommendations: {
+    priority: String;
+    recommendation: String;
+  };
+  temperatures: {
+    temperature: string;
+  }[];
+  oilAnalyses: {
+    analysis: true;
+  }[];
+};
+
+type RouteComponentResponse = {
+  routeList: ExtendedRouteComponent[];
   message: string;
   success: boolean;
 };
@@ -65,6 +87,9 @@ export type ExtendedRouteList = RouteList & {
       equipmentName: {
         id: string;
         name: string;
+        components: {
+          id: string;
+        }[];
       };
     }[];
   }[];
@@ -89,6 +114,7 @@ export const api = createApi({
     "EquipmentName",
     "Component",
     "RouteList",
+    "RouteComponent",
   ],
   endpoints: (build) => ({
     loginUser: build.mutation({
@@ -282,13 +308,6 @@ export const api = createApi({
       query: (jobNumber) => `/api/search/job-number?job=${jobNumber}`,
       providesTags: ["Job"],
     }),
-    getRouteList: build.query<RouteListResponse, void>({
-      query: () => ({
-        url: "/api/createRoute",
-        method: "GET",
-      }),
-      providesTags: ["RouteList"],
-    }),
     createRoute: build.mutation({
       query: (data) => ({
         url: "/api/createRoute",
@@ -303,6 +322,15 @@ export const api = createApi({
     searchRouteList: build.query<SearchRouteListResponse, string>({
       query: (routeName) => `/api/search/route-name?routeName=${routeName}`,
       providesTags: ["RouteList"],
+    }),
+    getRouteComponents: build.query<RouteComponentResponse, string[]>({
+      query: (componentIds) => {
+        const queryString = componentIds
+          .map((id) => `componentId=${id}`)
+          .join("&");
+        return `/api/createRoute/routeMachineList/routeComponents?${queryString}`;
+      },
+      providesTags: ["RouteComponent"],
     }),
   }),
 });
@@ -330,6 +358,6 @@ export const {
   useSoftDeleteComponentsMutation,
   useSearchJobNumberQuery,
   useCreateRouteMutation,
-  useGetRouteListQuery,
   useSearchRouteListQuery,
+  useGetRouteComponentsQuery,
 } = api;

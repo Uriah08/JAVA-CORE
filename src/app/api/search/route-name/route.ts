@@ -42,6 +42,11 @@ export async function GET(req: Request) {
                 equipmentName: {
                   select: {
                     name: true,
+                    components: {
+                      select: {
+                        id: true,
+                      },
+                    },
                   },
                 },
               },

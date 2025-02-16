@@ -33,7 +33,11 @@ import {
   PanelRight,
 } from "lucide-react";
 
-import { useSearchJobNumberQuery, useSearchRouteListQuery } from "@/store/api";
+import {
+  useSearchJobNumberQuery,
+  useSearchRouteListQuery,
+  useGetRouteComponentsQuery,
+} from "@/store/api";
 import { debounce } from "lodash";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
@@ -117,7 +121,11 @@ const AnalysisAndReportForm = () => {
       equipmentGroup: { id: string; name: string };
       routeEquipmentNames: {
         id: string;
-        equipmentName: { id: string; name: string };
+        equipmentName: {
+          id: string;
+          name: string;
+          components: { id: string }[];
+        };
       }[];
     }[];
   } | null>(null);
@@ -125,8 +133,17 @@ const AnalysisAndReportForm = () => {
   const [selectedEquipment, setSelectedEquipment] = React.useState<{
     id: string;
     name: string;
-    components: string[];
+    components: { id: string; name: string }[];
   } | null>(null);
+
+  const componentIds = selectedEquipment?.components.map((c) => c.id) || [];
+
+  const { data: routeComponentsData, isFetching: routeComponentsLoading } =
+    useGetRouteComponentsQuery(componentIds, {
+      skip: componentIds.length === 0,
+    });
+
+  const routeComponents = routeComponentsData?.routeList || [];
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
     resolver: zodResolver(analysisAndReportSchema),
@@ -412,6 +429,7 @@ const AnalysisAndReportForm = () => {
               <h2 className="text-lg font-semibold mb-3 text-zinc-700">
                 {selectedEquipment ? selectedEquipment.name : "Equipment List"}
               </h2>
+
               {selectedEquipment ? (
                 <div className="space-y-4">
                   <button
@@ -420,13 +438,32 @@ const AnalysisAndReportForm = () => {
                   >
                     &larr; Back to Equipment List
                   </button>
-                  {selectedEquipment.components.map((component, index) => (
-                    <div key={index} className="bg-zinc-100 p-2 rounded-md">
-                      <h4 className="text-sm font-medium text-zinc-600">
-                        {component}
-                      </h4>
+
+                  {routeComponentsLoading ? (
+                    <div className="w-full h-full overflow-hidden flex flex-col gap-2 mt-2">
+                      {[...Array(5)].map((_, index) => (
+                        <Skeleton
+                          key={index}
+                          className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
+                          style={{
+                            animationDelay: `${index * 0.2}s`,
+                          }}
+                        />
+                      ))}
                     </div>
-                  ))}
+                  ) : routeComponents.length > 0 ? (
+                    routeComponents.map((component, index) => (
+                      <div key={index} className="bg-zinc-100 p-2 rounded-md">
+                        <h4 className="text-sm font-medium text-zinc-600">
+                          {component.component.name}
+                        </h4>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-zinc-400">
+                      No components found.
+                    </p>
+                  )}
                 </div>
               ) : selectedRouteList ? (
                 <div className="space-y-4">
@@ -440,17 +477,39 @@ const AnalysisAndReportForm = () => {
                           <div
                             key={equipment.id}
                             className="bg-zinc-100 p-2 rounded-md cursor-pointer hover:bg-zinc-200"
-                            onClick={() =>
+                            onClick={() => {
+                              console.log(
+                                "Before setting selectedEquipment:",
+                                equipment.equipmentName?.components
+                              );
+
                               setSelectedEquipment({
                                 id: equipment.id,
                                 name: equipment.equipmentName?.name,
-                                components: [
-                                  "Component 1",
-                                  "Component 2",
-                                  "Component 3",
-                                ],
-                              })
-                            }
+                                components: Array.from(
+                                  new Map(
+                                    (
+                                      equipment.equipmentName?.components || []
+                                    ).map((component) => [
+                                      component.id,
+                                      {
+                                        id: component.id,
+                                        name:
+                                          routeComponents?.find(
+                                            (comp) =>
+                                              comp.componentId === component.id
+                                          )?.component.name || "Unknown",
+                                      },
+                                    ])
+                                  ).values()
+                                ),
+                              });
+
+                              console.log(
+                                "After setting selectedEquipment:",
+                                selectedEquipment
+                              );
+                            }}
                           >
                             <h4 className="text-sm font-medium text-zinc-600">
                               {equipment.equipmentName?.name}
@@ -465,7 +524,7 @@ const AnalysisAndReportForm = () => {
                 <p className="text-zinc-400">No route selected.</p>
               )}
             </div>
-
+            ;
             <div
               className={`w-full rounded-xl bg-white flex flex-col p-5 shadow-lg ${
                 !hideList && "lg:w-2/3"
