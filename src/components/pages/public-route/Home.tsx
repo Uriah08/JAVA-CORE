@@ -22,6 +22,12 @@ const HomePage = () => {
         router.push('/job-registry')
       }
     }
+    if(session?.user.role === "user") {
+      if (localStorage.getItem("redirected") === "false") {
+        localStorage.setItem("redirected", "true");
+        router.push('/read-machine-list')
+      }
+    }
   }, [router, session?.user.role])
   return (
     <>
