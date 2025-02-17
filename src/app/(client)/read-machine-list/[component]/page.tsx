@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { useParams } from "next/navigation";
+import { ArrowLeft, Search } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { symbols } from "@/schema";
 import { Dialog } from "@/components/ui/dialog";
@@ -25,15 +25,22 @@ const symbol1 = [
 ]
 
 const ComponentPage = () => {
+  const router = useRouter()
+  const machinesPage = () => {
+    router.push("/read-machine-list")
+  }
   const params = useParams();
   console.log(params);
   
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="w-full h-screen p-5 flex xl:flex-row flex-col gap-5">
+    <div className="w-full h-full p-5 flex xl:flex-row flex-col gap-5">
             <div className="w-full xl:w-1/3 p-5 bg-white rounded-xl shadow-lg">
-            <h1 className="text-2xl font-bold">Equipment List</h1>
+            <div className='flex flex-row gap-5 items-center'>
+              <ArrowLeft onClick={machinesPage} className='text-main hover:text-follow cursor-pointer'/>
+              <h1 className="text-2xl font-bold">Equipment List</h1>
+            </div>
             <div className="relative w-full mt-5">
             <Input className="rounded-full pl-10" placeholder="Search equipments..."/>
             <Search className="text-zinc-500 absolute top-2 left-3" size={20}/>
@@ -168,6 +175,20 @@ const ComponentPage = () => {
                  </div>
                </div>
              </div>
+             </div>
+             <div className="flex flex-col gap-3 w-full mt-5">
+               <h1 className="text-sm font-medium">
+                 Details
+               </h1>
+               <div className="border rounded-lg p-3">
+                 <div className="relative">
+                  <Search className="absolute top-2 left-3 text-zinc-400" size={20}/>
+                  <Input className="w-full pl-9" placeholder="Search equipment details..."/>
+                 </div>
+                 <div className="w-full py-10">
+                  <h1 className="text-zinc-300 font-bold text-2xl text-center">No details</h1>
+                 </div>
+               </div>
              </div>
             </div>
         </div>

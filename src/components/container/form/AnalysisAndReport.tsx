@@ -24,7 +24,6 @@ import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import {
   Edit,
-  EllipsisVertical,
   ImageIcon,
   Plus,
   Search,
@@ -154,10 +153,10 @@ const AnalysisAndReportForm = () => {
     id: string;
     routeComponentID: string;
     name: string;
-    comments: { severity: String; comment: String; createdAt: Date }[];
+    comments: { severity: string; comment: string; createdAt: Date }[];
     recommendations: {
-      priority: String;
-      recommendation: String;
+      priority: string;
+      recommendation: string;
       createdAt: Date;
     }[];
   } | null>(null);
@@ -179,7 +178,7 @@ const AnalysisAndReportForm = () => {
         });
       }
     }
-  }, [routeComponents]);
+  }, [routeComponents, selectedComponent]);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
     resolver: zodResolver(analysisAndReportSchema),
