@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import Recommendation from "@/components/container/dialogs/Recommendations";
 
 export const findUserById = async (id: string) => {
   const user = prisma.user.findUnique({
@@ -156,3 +157,15 @@ export const symbols = [
     label: "Missed Points",
   },
 ];
+
+export const routeComponentCommentSchema = z.object({
+  routeComponentId: z.string(),
+  severity: z.string().min(1, "Severity is required"),
+  comment: z.string().min(1, "Comment is required"),
+});
+
+export const routeComponentRecommendationSchema = z.object({
+  routeComponentId: z.string(),
+  priority: z.string().min(1, "Priority is required"),
+  recommendation: z.string().min(1, "Recommendation is required"),
+});

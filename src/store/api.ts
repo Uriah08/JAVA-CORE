@@ -117,6 +117,8 @@ export const api = createApi({
     "Component",
     "RouteList",
     "RouteComponent",
+    "RouteComponentComment",
+    "RouteComponentRecommendation",
   ],
   endpoints: (build) => ({
     loginUser: build.mutation({
@@ -337,6 +339,28 @@ export const api = createApi({
       },
       providesTags: ["RouteComponent"],
     }),
+    createComment: build.mutation({
+      query: (data) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/comments`,
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["RouteComponentComment"],
+    }),
+    createRecommendation: build.mutation({
+      query: (data) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/recommendations`,
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["RouteComponentComment"],
+    }),
   }),
 });
 
@@ -365,4 +389,6 @@ export const {
   useCreateRouteMutation,
   useSearchRouteListQuery,
   useGetRouteComponentsQuery,
+  useCreateCommentMutation,
+  useCreateRecommendationMutation,
 } = api;

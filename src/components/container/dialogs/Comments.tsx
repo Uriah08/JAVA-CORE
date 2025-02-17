@@ -1,38 +1,120 @@
-import { Button } from '@/components/ui/button'
-import { DialogContent, DialogTitle } from '@/components/ui/dialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import React from 'react'
-import { symbols } from '@/schema'
-import Image from 'next/image'
+import React, { useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useCreateCommentMutation } from "@/store/api";
+import { toast } from "@/hooks/use-toast";
+import { symbols, routeComponentCommentSchema } from "@/schema";
+import { z } from "zod";
 
-const Comments = () => {
-  return (
-    <DialogContent>
-        <DialogTitle>Add comments</DialogTitle>
-        <Textarea placeholder='Enter your comment...' className='resize-none text-sm'/>
-        <Select>
-            <SelectTrigger>
-                <SelectValue placeholder='Select severity'/>
-            </SelectTrigger>
-            <SelectContent>
-                {symbols.map((symbol) => (
-                    <SelectItem key={symbol.image} value={symbol.label}>
-                        <div className='flex gap-3'>
-                            <Image src={`/severity/${symbol.image}.png`} width={40} height={40} alt='Symbol' className="w-5 object-cover"/>
-                            {symbol.label}
-                        </div>
-                    </SelectItem>
-                ))}
-                  
-                </SelectContent>
-        </Select>
-        <div className='flex gap-3 w-full justify-end'>
-            <Button variant={'outline'}>Cancel</Button>
-            <Button className='bg-main text-white hover:bg-follow'>Add</Button>
-        </div>
-    </DialogContent>
-  )
+interface CommentsProps {
+  routeComponentId: string | undefined;
+  onClose: () => void;
+  refetch: () => void;
 }
 
-export default Comments
+const Comments: React.FC<CommentsProps> = ({
+  routeComponentId,
+  onClose,
+  refetch,
+}) => {
+  const [comment, setComment] = useState<string>("");
+  const [severity, setSeverity] = useState<string>("");
+  const [createComment, { isLoading }] = useCreateCommentMutation();
+
+  const handleSubmit = async () => {
+    if (!routeComponentId) {
+      toast({
+        title: "Error",
+        description: "No component selected.",
+      });
+      return;
+    }
+
+    const payload = {
+      routeComponentId,
+      severity,
+      comment,
+    };
+
+    console.log("Payload:", payload);
+
+    try {
+      routeComponentCommentSchema.parse(payload);
+
+      await createComment(payload).unwrap();
+      toast({ title: "Success", description: "Comment added successfully." });
+      setComment("");
+      setSeverity("");
+      refetch();
+      onClose();
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Validation Error",
+          description: error.errors.map((e) => e.message).join(", "),
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error?.data?.message || "An unexpected error occurred.",
+        });
+      }
+    }
+  };
+
+  return (
+    <DialogContent>
+      <DialogTitle>Add Comment</DialogTitle>
+      <Textarea
+        placeholder="Enter your comment..."
+        className="resize-none text-sm"
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+      />
+      <Select onValueChange={setSeverity}>
+        <SelectTrigger>
+          <SelectValue placeholder="Select severity" />
+        </SelectTrigger>
+        <SelectContent>
+          {symbols.map(({ image, label }) => (
+            <SelectItem key={image} value={label}>
+              <div className="flex gap-3 items-center">
+                <Image
+                  src={`/severity/${image}.png`}
+                  width={20}
+                  height={20}
+                  alt={label}
+                  className="w-5 object-cover"
+                />
+                {label}
+              </div>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <div className="flex gap-3 w-full justify-end">
+        <Button variant="outline" onClick={onClose} disabled={isLoading}>
+          Cancel
+        </Button>
+        <Button
+          className="bg-main text-white hover:bg-follow"
+          onClick={handleSubmit}
+          disabled={isLoading}
+        >
+          {isLoading ? "Adding..." : "Add"}
+        </Button>
+      </div>
+    </DialogContent>
+  );
+};
+
+export default Comments;
