@@ -163,7 +163,6 @@ const AnalysisAndReportForm = () => {
 
   React.useEffect(() => {
     if (routeComponents.length > 0 && selectedComponent) {
-      // Find the updated component in the new routeComponents data
       const updatedComponent = routeComponents.find(
         (comp) => comp.component.id === selectedComponent.id
       );
@@ -178,7 +177,7 @@ const AnalysisAndReportForm = () => {
         });
       }
     }
-  }, [routeComponents, selectedComponent]);
+  }, [routeComponents]);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
     resolver: zodResolver(analysisAndReportSchema),
@@ -222,9 +221,14 @@ const AnalysisAndReportForm = () => {
         >
           <div className="w-full h-full bg-white rounded-xl p-5 shadow-lg">
             <div className="flex flex-col ">
-              <h1 className="text-2xl font-bold text-black">
-                Analysis and Reporting
-              </h1>
+              <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold text-black">
+                  Analysis and Reporting
+                </h1>
+                <Button className="bg-main hover:bg-follow text-white ">
+                  Submit
+                </Button>
+              </div>
               <h2 className="text-lg font-semibold mb-3 mt-3 text-zinc-700">
                 Information
               </h2>

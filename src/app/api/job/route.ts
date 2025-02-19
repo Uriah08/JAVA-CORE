@@ -78,8 +78,13 @@ export async function GET() {
                     select: {
                         name: true,
                     },
+                },
+                AnalysisReport: {
+                    select: {
+                        routeId: true
+                    }   
                 }
-            },
+             },
         })
         return NextResponse.json({ message: 'Job created successfully', success: true, jobs}, { status: 201 });
     } catch (error) {

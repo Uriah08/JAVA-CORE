@@ -40,6 +40,7 @@ model Job {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("jobs")
+  AnalysisReport AnalysisReport[]
 }
 
 model Account {
@@ -243,4 +244,12 @@ model RouteComponentOilAnalysis {
   routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
 
   @@map("route_component_oil_analysis")
+}
+
+model AnalysisReport {
+  id               String @id @default(uuid())
+  jobId            String
+  routeId          String
+
+  jobRegistry Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
 }

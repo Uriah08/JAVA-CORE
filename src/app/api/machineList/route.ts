@@ -15,7 +15,6 @@ export async function GET() {
         isDelete: false,
       },
     });
-
     return NextResponse.json({ areas });
   } catch (error) {
     console.error("Error fetching areas:", error);
@@ -29,7 +28,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const session = await auth();
-    if (!session || (session.user.id !== process.env.ADMIN)) {
+    if (!session || session.user.id !== process.env.ADMIN) {
       throw new Error("Not Authenticated");
     }
 

@@ -13,24 +13,31 @@ import {
 } from "@/store/api";
 import MachineList from "../../form/MachineList";
 import ConfirmationDialog from "@/components/container/dialog/deletingList/ConfirmationDialog";
+import SingleDeleteConfirmationDialog from "../../dialog/deletingList/SingleDeleteDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { EllipsisVertical, Plus, Trash } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
-import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import { useSession } from "next-auth/react";
 
 import { useRouter } from "next/navigation";
+import UpdatingDialog from "../../dialog/updatingList/UpdatingDialog";
 
 const List = () => {
-
   const router = useRouter();
 
   const componentClick = (name: string) => {
-    router.push(`/read-machine-list/${name}`)
-  }
+    router.push(`/read-machine-list/${name}`);
+  };
 
   const { data: session } = useSession();
 
@@ -39,22 +46,39 @@ const List = () => {
     isLoading: areaLoading,
     error: areaError,
   } = useGetMachineListQuery();
+
   const [
     fetchEquipmentGroups,
-    { data: equipmentGroupData, error: groupError, isFetching: equipmentGroupLoading },
+    {
+      data: equipmentGroupData,
+      error: groupError,
+      isFetching: equipmentGroupLoading,
+    },
   ] = useLazyGetEquipmentGroupsQuery();
-  
+
   const [
     fetchEquipmentNames,
-    { data: equipmentNameData, error: nameError, isFetching: equipmentNamesLoading },
+    {
+      data: equipmentNameData,
+      error: nameError,
+      isFetching: equipmentNamesLoading,
+    },
   ] = useLazyGetEquipmentNamesQuery();
-  
+
   const [
     fetchComponents,
-    { data: componentData, error: componentError, isFetching: componentsLoading },
+    {
+      data: componentData,
+      error: componentError,
+      isFetching: componentsLoading,
+    },
   ] = useLazyGetComponentsQuery();
 
-  const loading = areaLoading || equipmentGroupLoading || equipmentNamesLoading || componentsLoading
+  const loading =
+    areaLoading ||
+    equipmentGroupLoading ||
+    equipmentNamesLoading ||
+    componentsLoading;
 
   const [deleteMachine] = useSoftDeleteMachineListMutation();
   const [deleteEquipmentGroup] = useSoftDeleteEquipmentGroupsMutation();
@@ -73,11 +97,17 @@ const List = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isSingleDeleteConfirmDialogOpen, setSingleDeleteConfirmDialogOpen] =
+    useState(false);
+  const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [updateDialogTitle, setUpdateDialogTitle] = useState("");
+  const [isUpdatingDialogOpen, setIsUpdatingDialogOpen] = useState(false);
+  const [updatingItemId, setUpdatingItemId] = useState("");
 
   if (areaError || groupError || nameError || componentError) {
     return <div className="text-red-600">Error loading data.</div>;
   }
-  
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAreaClick = async (area: any) => {
     setCurrentArea(area);
@@ -86,7 +116,7 @@ const List = () => {
     setBreadcrumb([area.name]);
     await fetchEquipmentGroups(area.id);
   };
-  
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEquipmentGroupClick = async (equipmentGroup: any) => {
     setCurrentEquipmentGroup(equipmentGroup);
@@ -94,7 +124,7 @@ const List = () => {
     setBreadcrumb([breadcrumb[0], equipmentGroup.name]);
     await fetchEquipmentNames(equipmentGroup.id);
   };
-  
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEquipmentNameClick = async (equipmentName: any) => {
     setCurrentEquipmentName(equipmentName);
@@ -120,7 +150,7 @@ const List = () => {
 
   const handleDeleteSelected = async () => {
     if (selectedItems.length === 0) return;
-  
+
     try {
       if (currentEquipmentName) {
         await deleteComponent(selectedItems).unwrap();
@@ -131,7 +161,7 @@ const List = () => {
       } else {
         await deleteMachine(selectedItems).unwrap();
       }
-  
+
       setSelectedItems([]);
       setIsDeleting(false);
       setIsConfirmDialogOpen(false);
@@ -140,9 +170,34 @@ const List = () => {
     }
   };
 
+  const handleDeleteItem = async (id: string) => {
+    try {
+      if (currentEquipmentName) {
+        await deleteComponent([id]).unwrap();
+      } else if (currentEquipmentGroup) {
+        await deleteEquipmentName([id]).unwrap();
+      } else if (currentArea) {
+        await deleteEquipmentGroup([id]).unwrap();
+      } else {
+        await deleteMachine([id]).unwrap();
+      }
+
+      setIsDeleting(false);
+      setSingleDeleteConfirmDialogOpen(false);
+    } catch (error) {
+      console.error("Failed to delete item:", error);
+    }
+  };
+
   const handleOpenDialog = (title: string) => {
     setDialogTitle(title);
     setIsDialogOpen(true);
+  };
+
+  const handleUpdatingOpenDialog = (title: string, id: string) => {
+    setUpdateDialogTitle(title);
+    setUpdatingItemId(id);
+    setIsUpdatingDialogOpen(true);
   };
 
   const handleSelectItem = (id: string) => {
@@ -164,7 +219,11 @@ const List = () => {
               ? "Select a name"
               : "Components"}
           </h1>
-          <div className={`flex space-x-2 ${session?.user.role !== 'admin' && 'hidden'}`}>
+          <div
+            className={`flex space-x-2 ${
+              session?.user.role !== "admin" && "hidden"
+            }`}
+          >
             <Button
               onClick={() =>
                 handleOpenDialog(
@@ -186,7 +245,7 @@ const List = () => {
             </Button>
             {isDeleting && selectedItems.length > 0 && (
               <Button
-              disabled={loading}
+                disabled={loading}
                 onClick={() => setIsConfirmDialogOpen(true)}
                 className="bg-main hover:bg-follow"
               >
@@ -194,9 +253,10 @@ const List = () => {
               </Button>
             )}
             <Button
-              onClick={() => 
-                {setIsDeleting((prev) => !prev)
-                setSelectedItems([])}}
+              onClick={() => {
+                setIsDeleting((prev) => !prev);
+                setSelectedItems([]);
+              }}
               className="text-main hover:text-main"
               variant={"outline"}
               disabled={loading}
@@ -211,77 +271,118 @@ const List = () => {
             </Button>
           </div>
         </div>
-        {loading ? 
-            <div className="w-full h-full overflow-hidden">
-              {[...Array(13)].map((_, index) => (
+        {loading ? (
+          <div className="w-full h-full overflow-hidden">
+            {[...Array(5)].map((_, index) => (
               <Skeleton
                 key={index}
                 className="w-full h-[53px] border-t animate-pulse"
                 style={{ animationDelay: `${index * 0.2}s` }}
               />
             ))}
-            </div>
-         : (
-          <>{
-            items.length === 0 ? (
+          </div>
+        ) : (
+          <>
+            {items.length === 0 ? (
               <div className="flex flex-col items-center my-20">
-                <p className="text-gray-300 text-3xl font-bold">No items available.</p>
+                <p className="text-gray-300 text-3xl font-bold">
+                  No items available.
+                </p>
               </div>
-            )
-            : items.map((item,index) => (
-              <li
-                key={item.id}
-                className={`p-2 border-t hover:bg-slate-100 cursor-pointer justify-between flex items-center ${
-                  index === items.length - 1 ? "border-b" : ""
-                } ${selectedItems.includes(item.id) ? "bg-slate-100" : ""}`}
-              ><div
-              className="flex gap-3 w-full"
-              onClick={() => {
-                if(session?.user.role === 'user') {
-                  if(breadcrumb.length === 3) {
-                    componentClick(item.id)
-                  }
-                }
-                if (isDeleting) {
-                  handleSelectItem(item.id);
-                } else {
-                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                  level === 0
-                    ? handleAreaClick(item)
-                    : level === 1
-                    ? handleEquipmentGroupClick(item)
-                    : level === 2
-                    ? handleEquipmentNameClick(item)
-                    : null;
-                }
-              }}>
-                <div className="flex gap-2 items-center">
-                  {isDeleting && (
-                    <Checkbox
-                      checked={selectedItems.includes(item.id)}
-                      onClick={(e) => {
-                        e.stopPropagation();
+            ) : (
+              items.map((item, index) => (
+                <li
+                  key={item.id}
+                  className={`p-2 border-t hover:bg-slate-100 cursor-pointer justify-between flex items-center ${
+                    index === items.length - 1 ? "border-b" : ""
+                  } ${selectedItems.includes(item.id) ? "bg-slate-100" : ""}`}
+                >
+                  <div
+                    className="flex gap-3 w-full"
+                    onClick={() => {
+                      if (session?.user.role === "user") {
+                        if (breadcrumb.length === 3) {
+                          componentClick(item.id);
+                        }
+                      }
+                      if (isDeleting) {
                         handleSelectItem(item.id);
-                      }}
-                      className={`${isDeleting ? 'mx-2' : ''} border-main data-[state=checked]:bg-main data-[state=checked]:text-white`}
-                    />
-                  )}
-                  <span className={`${isDeleting ? 'px-2' : ''} py-1 rounded`}>{item.name}</span>
-                </div>
-                </div>
-                <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <EllipsisVertical className={`text-zinc-500 z-20 ${session?.user.role !== 'admin' && 'hidden'}`}/>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Rename</DropdownMenuItem>
-                <DropdownMenuItem>Delete</DropdownMenuItem>
-                </DropdownMenuContent>
-                </DropdownMenu>
-              </li>
-            ))}
+                      } else {
+                        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+                        level === 0
+                          ? handleAreaClick(item)
+                          : level === 1
+                          ? handleEquipmentGroupClick(item)
+                          : level === 2
+                          ? handleEquipmentNameClick(item)
+                          : null;
+                      }
+                    }}
+                  >
+                    <div className="flex gap-2 items-center">
+                      {isDeleting && (
+                        <Checkbox
+                          checked={selectedItems.includes(item.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelectItem(item.id);
+                          }}
+                          className={`${
+                            isDeleting ? "mx-2" : ""
+                          } border-main data-[state=checked]:bg-main data-[state=checked]:text-white`}
+                        />
+                      )}
+                      <span
+                        className={`${isDeleting ? "px-2" : ""} py-1 rounded`}
+                      >
+                        {item.name}
+                      </span>
+                    </div>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <EllipsisVertical
+                        className={`text-zinc-500 z-20 ${
+                          session?.user.role !== "admin" && "hidden"
+                        }`}
+                      />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setUpdatingItemId(item.id);
+                          handleUpdatingOpenDialog(
+                            `Update ${
+                              level === 0
+                                ? "Area Name"
+                                : level === 1
+                                ? "Group Name"
+                                : level === 2
+                                ? "Equipment Name"
+                                : "Component Name"
+                            }`,
+                            item.id
+                          );
+                          setIsUpdatingDialogOpen(true);
+                        }}
+                      >
+                        Rename
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setItemToDelete(item.id);
+                          setSingleDeleteConfirmDialogOpen(true);
+                        }}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </li>
+              ))
+            )}
           </>
         )}
       </ul>
@@ -291,22 +392,28 @@ const List = () => {
   return (
     <div className="mt-5">
       <div className="font-base flex">
-      <React.Fragment>
-                <span
-                  className={`cursor-pointer text-gray-600 hover:underline mr-1 ${breadcrumb.length > 0 ? '' : 'font-semibold text-gray-800'}`}
-                  onClick={() => handleBreadcrumbClick(0)}
-                >
-                  Machines
-                </span>
-                  <span className="text-sm text-gray-600 mx-2">{breadcrumb.length > 0 ? '>' : ''}</span>
-              </React.Fragment>
+        <React.Fragment>
+          <span
+            className={`cursor-pointer text-gray-600 hover:underline mr-1 ${
+              breadcrumb.length > 0 ? "" : "font-semibold text-gray-800"
+            }`}
+            onClick={() => handleBreadcrumbClick(0)}
+          >
+            Machines
+          </span>
+          <span className="text-sm text-gray-600 mx-2">
+            {breadcrumb.length > 0 ? ">" : ""}
+          </span>
+        </React.Fragment>
         {breadcrumb.length > 0 && (
           <nav className="flex gap-2">
             {breadcrumb.map((item, index) => (
               <React.Fragment key={index}>
                 <span
                   className={`cursor-pointer text-gray-600 hover:underline ${
-                    index === breadcrumb.length - 1 ? 'font-semibold text-gray-800' : ''
+                    index === breadcrumb.length - 1
+                      ? "font-semibold text-gray-800"
+                      : ""
                   }`}
                   onClick={() => handleBreadcrumbClick(index)}
                 >
@@ -345,6 +452,23 @@ const List = () => {
         onConfirm={handleDeleteSelected}
         title="Confirm Deletion"
         message={`Are you sure you want to delete ${selectedItems.length} item(s)?`}
+      />
+      <SingleDeleteConfirmationDialog
+        isOpen={isSingleDeleteConfirmDialogOpen}
+        onClose={() => setSingleDeleteConfirmDialogOpen(false)}
+        onConfirm={async () => {
+          if (itemToDelete) {
+            await handleDeleteItem(itemToDelete);
+          }
+        }}
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete this item?`}
+      />
+      <UpdatingDialog
+        isOpen={isUpdatingDialogOpen}
+        onClose={() => setIsUpdatingDialogOpen(false)}
+        title={updateDialogTitle}
+        id={updatingItemId}
       />
     </div>
   );
