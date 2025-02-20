@@ -4,9 +4,9 @@ import Image from "next/image";
 const Services = () => {
   return (
     <div>
-      <div className="h-screen">
-        <div className="w-screen h-screen grid grid-cols-[2fr_3fr] gap-28 items-center py-16 px-10">
-          <div className="flex justify-end">
+      <div className="h-full my-10">
+        <div className="w-screen h-full grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-28 items-center py-16 px-10">
+          <div className="justify-end hidden lg:flex">
             <Image
               src="/machine1.jpg"
               width={450}
@@ -35,6 +35,7 @@ const Services = () => {
                 alt="Machine small"
                 className="object-cover"
               />
+              
             </div>
           </div>
         </div>
@@ -97,7 +98,7 @@ const Services = () => {
           </div>
 
           {/* Service 10 */}
-          <div className="bg-white bg-opacity-10 rounded-lg p-6 text-center col-span-full sm:col-span-2 lg:col-span-1 lg:col-start-2">
+          <div className="bg-white bg-opacity-10 rounded-lg p-6 text-center lg:col-span-3">
             <h2 className="text-xl font-semibold">Training & Consultation</h2>
           </div>
         </div>
