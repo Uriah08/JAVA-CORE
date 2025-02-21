@@ -261,14 +261,14 @@ export const columns: ColumnDef<ExtendedJob>[] = [
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(job.id)}>
-                    Copy registry ID
+                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(job.jobNumber)}>
+                    Copy Job Number
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => openDialog("analyst")}>Assign Analyst</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => openDialog("reviewer")}>Assign Reviewer</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => openDialog("status")}>Update Status</DropdownMenuItem>
-                  <DropdownMenuItem>View Other</DropdownMenuItem>
+                  <DropdownMenuItem>View Analysis</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
           

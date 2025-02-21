@@ -67,6 +67,12 @@ export type ExtendedRouteComponent = RouteComponent & {
   }[];
 };
 
+type RouteResponse = {
+  routes: RouteList[];
+  message: string;
+  success: boolean;
+}
+
 type RouteComponentResponse = {
   routeList: ExtendedRouteComponent[];
   message: string;
@@ -367,6 +373,10 @@ export const api = createApi({
       }),
       invalidatesTags: ["Area", "EquipmentGroup", "EquipmentName", "Component"],
     }),
+    getRoute: build.query<RouteResponse, string>({
+      query: (clientId) => `/api/createRoute?clientId=${clientId}`,
+      providesTags: ["RouteList"],
+    }),
     searchRouteList: build.query<SearchRouteListResponse, string>({
       query: (routeName) => `/api/search/route-name?routeName=${routeName}`,
       providesTags: ["RouteList"],
@@ -435,6 +445,7 @@ export const {
   useUpdateComponentMutation,
   useSearchJobNumberQuery,
   useCreateRouteMutation,
+  useGetRouteQuery,
   useSearchRouteListQuery,
   useGetRouteComponentsQuery,
   useCreateCommentMutation,

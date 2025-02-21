@@ -47,20 +47,20 @@ const About = () => {
         <div className="grid grid-cols-2 gap-10 items-center w-full max-w-4xl">
           <div className="flex flex-col items-center">
             <div className="relative">
-              <p className="text-white absolute left-1/2 transform -translate-x-1/2 top-9 whitespace-nowrap">
+              <p className="text-white absolute left-1/2 transform -translate-x-1/2 top-5 sm:top-9 whitespace-nowrap">
                 years of experience
               </p>
-              <h2 className="text-8xl font-extrabold text-red-500 text-center">
+              <h2 className="text-7xl sm:text-8xl font-extrabold text-red-500 text-center">
                 10+
               </h2>
             </div>
           </div>
           <div className="flex flex-col items-center">
             <div className="relative">
-              <p className="text-white absolute left-1/2 transform -translate-x-1/2 top-9 whitespace-nowrap">
+              <p className="text-white absolute left-1/2 transform -translate-x-1/2 top-5 sm:top-9 whitespace-nowrap">
                 machinery expertise
               </p>
-              <h2 className="text-8xl font-extrabold text-red-500 text-center">
+              <h2 className="text-7xl sm:text-8xl font-extrabold text-red-500 text-center">
                 100+
               </h2>
             </div>
