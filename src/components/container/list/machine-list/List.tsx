@@ -465,7 +465,7 @@ const List = () => {
           }
         }}
         title="Confirm Deletion"
-        message={`Are you sure you want to delete ${itemToDeleteName}}?`}
+        message={`Are you sure you want to delete ${itemToDeleteName}?`}
       />
       <UpdatingDialog
         isOpen={isUpdatingDialogOpen}

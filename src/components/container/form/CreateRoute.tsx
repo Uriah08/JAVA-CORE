@@ -37,18 +37,38 @@ import React from "react";
 import EquipmentSelector from "@/components/container/list/create-route/EquipmentSelector";
 
 interface Component {
-  id: string | number;
+  id: string;
   name: string;
 }
 
 interface Item {
-  id: string | number;
+  id: string;
   name: string;
   components?: Component[];
   isEquipmentName?: boolean;
 }
 
+interface EquipmentGroup {
+  id: string;
+  name: string;
+}
+
+interface Area {
+  id: string;
+  name: string;
+}
+
 const CreateRoute = () => {
+  const form = useForm<z.infer<typeof CreateRouteSchema>>({
+    resolver: zodResolver(CreateRouteSchema),
+    defaultValues: {
+      clientId: "",
+      routeName: "",
+      areaId: "",
+      equipmentNames: [],
+    },
+  });
+
   const { data, isLoading: clientLoading } = useGetClientsQuery();
   const clients = data?.clients || [];
   const {
@@ -61,10 +81,10 @@ const CreateRoute = () => {
     { data: equipmentGroupData, error: groupError },
   ] = useLazyGetEquipmentGroupsQuery();
 
-  const [fetchEquipmentNames, { data: equipmentNameData, error: nameError }] =
+  const [fetchEquipmentNames, { error: nameError }] =
     useLazyGetEquipmentNamesQuery();
 
-  const [fetchComponents, { data: componentData, error: componentError }] =
+  const [fetchComponents, { error: componentError }] =
     useLazyGetComponentsQuery();
 
   const [loading, setLoading] = useState({
@@ -74,16 +94,16 @@ const CreateRoute = () => {
     components: false,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [currentArea, setCurrentArea] = useState<any>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [currentEquipmentGroup, setCurrentEquipmentGroup] = useState<any>(null);
+  const [currentArea, setCurrentArea] = useState<Area | null>(null);
+
+  const [currentEquipmentGroup, setCurrentEquipmentGroup] =
+    useState<EquipmentGroup | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentEquipmentName, setCurrentEquipmentName] = useState<any>(null);
-  const [equipmentList, setEquipmentList] = useState<any[]>([]);
+  const [equipmentList, setEquipmentList] = useState<Item[]>([]);
   const [selectedEquipment, setSelectedEquipment] = useState<Item[]>([]);
   const [breadcrumb, setBreadcrumb] = useState<string[]>([]);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedItems] = useState<string[]>([]);
   const [createRoute, { isLoading: isCreating, error: createError }] =
     useCreateRouteMutation();
 
@@ -95,8 +115,7 @@ const CreateRoute = () => {
     setLoading((prev) => ({ ...prev, [key]: value }));
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleAreaClick = async (area: any) => {
+  const handleAreaClick = async (area: Area) => {
     setLoadingState("areas", true);
     setCurrentArea(area);
     setCurrentEquipmentGroup(null);
@@ -106,8 +125,7 @@ const CreateRoute = () => {
     setLoadingState("areas", false);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEquipmentGroupClick = async (equipmentGroup: any) => {
+  const handleEquipmentGroupClick = async (equipmentGroup: EquipmentGroup) => {
     setLoadingState("groups", true);
     setCurrentEquipmentGroup(equipmentGroup);
     setCurrentEquipmentName(null);
@@ -117,7 +135,7 @@ const CreateRoute = () => {
     const equipmentNames = equipmentNamesResponse?.data?.equipmentNames || [];
 
     const equipmentWithComponents = await Promise.all(
-      equipmentNames.map(async (equipment: any) => {
+      equipmentNames.map(async (equipment: Item) => {
         const componentResponse = await fetchComponents(equipment.id);
         return {
           ...equipment,
@@ -153,20 +171,10 @@ const CreateRoute = () => {
     });
   };
 
-  const form = useForm<z.infer<typeof CreateRouteSchema>>({
-    resolver: zodResolver(CreateRouteSchema),
-    defaultValues: {
-      clientName: "",
-      routeName: "",
-      areaId: "",
-      equipmentNames: [],
-    },
-  });
-
   async function onSubmit(values: z.infer<typeof CreateRouteSchema>) {
-    const equipmentNames = selectedEquipment.map((equipment) => ({
-      id: equipment.id,
-      components: equipment.components?.map((comp) => comp.id) || [],
+    const equipmentNames = selectedEquipment.map(({ id, components }) => ({
+      id,
+      components: components?.map((comp) => comp.id) || [],
     }));
 
     const finalValues = {
@@ -184,6 +192,7 @@ const CreateRoute = () => {
       setSelectedEquipment([]);
     } catch (error) {
       console.error("Failed to create route:", error);
+      console.error(createError);
     }
   }
 
@@ -196,7 +205,7 @@ const CreateRoute = () => {
         <div className="flex md:flex-row flex-col gap-3 w-full">
           <FormField
             control={form.control}
-            name="clientName"
+            name="clientId"
             render={({ field }) => (
               <FormItem className="w-1/3">
                 <FormLabel className="text-lg font-semibold">Client</FormLabel>

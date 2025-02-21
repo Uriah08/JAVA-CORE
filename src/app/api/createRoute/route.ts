@@ -20,7 +20,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { clientName, routeName, areaId, equipmentNames } = parsedBody.data;
+    const { clientId, routeName, areaId, equipmentNames } = parsedBody.data;
+    console.log("Captured data: ", parsedBody.data);
 
     const userId = session.user.id;
     if (!userId) {
@@ -32,9 +33,9 @@ export async function POST(req: Request) {
 
     const newRoute = await prisma.routeList.create({
       data: {
-        userId,
-        clientName,
+        clientId,
         routeName,
+        isUsed: false,
         machines: {
           create: [
             {
@@ -45,10 +46,13 @@ export async function POST(req: Request) {
                 })),
               },
               routeComponents: {
-                create: equipmentNames.flatMap((equipment) =>
-                  (equipment.components || []).map((componentId) => ({
-                    componentId,
-                  }))
+                create: equipmentNames.flatMap(
+                  (equipment) =>
+                    Array.isArray(equipment.components)
+                      ? equipment.components.map((componentId) => ({
+                          componentId,
+                        }))
+                      : [] // Ensure it always returns an array
                 ),
               },
             },
