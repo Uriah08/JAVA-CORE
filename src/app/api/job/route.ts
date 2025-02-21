@@ -57,6 +57,15 @@ export async function POST(req: Request) {
             },
         })
 
+        await prisma.routeList.update({
+            where: {
+                id: inspectionRoute,
+            },
+            data: {
+                isUsed: true,
+            }
+        })
+
         return NextResponse.json({ message: 'Job created successfully', success: true}, { status: 201 });
     } catch (error) {
         console.error('Error in route handler:', error);

@@ -92,7 +92,8 @@ export async function GET(req: Request) {
 
     const routes = await prisma.routeList.findMany({
       where: {
-        clientId
+        clientId,
+        isUsed: false,
       }
     })
 
