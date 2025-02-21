@@ -9,16 +9,17 @@ import { AlertCircle } from 'lucide-react';
 
 interface Props {
     defaultStatus: string;
+    route: string
     id: string;
     onClose: () => void
   }
-const Status = ({defaultStatus, id, onClose}: Props) => {
+const Status = ({defaultStatus, id, route, onClose}: Props) => {
     const { toast } = useToast();
     const [updateJob, { isLoading }] = useUpdateJobMutation();
     const [status, setStatus] = React.useState("");
     const handleUpdate = async () => {
       try {
-        const response = await updateJob({status,id}).unwrap()
+        const response = await updateJob({status,id,route}).unwrap()
         if(!response.success) {
           throw new Error(response.message)
         }

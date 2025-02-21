@@ -116,6 +116,17 @@ export async function DELETE(req: Request) {
             },
         })
 
+        await prisma.routeList.updateMany({
+            where: {
+                clientId: {
+                    in: ids,
+                },
+            },
+            data: {
+                isUsed: false,
+            }
+        })
+
         return NextResponse.json({ message: 'Job deleted successfully', success: true}, { status: 201 });
     } catch (error) {
         console.error('Error in route handler:', error);

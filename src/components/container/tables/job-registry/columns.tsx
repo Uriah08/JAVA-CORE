@@ -280,7 +280,7 @@ export const columns: ColumnDef<ExtendedJob>[] = [
                 <Reviewer onClose={() => closeDialog("reviewer")} id={job.id} defaultReviewer={job.reviewer || "None"} />
               </Dialog>
               <Dialog open={dialogState.status} onOpenChange={() => closeDialog("status")}>
-                <Status onClose={() => closeDialog("status")} id={job.id} defaultStatus={job.status} />
+                <Status onClose={() => closeDialog("status")} id={job.id} defaultStatus={job.status} route={job.inspectionRoute}/>
               </Dialog>
             </>
           );
