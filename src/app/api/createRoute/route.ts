@@ -92,7 +92,7 @@ export async function GET(req: Request) {
 
     const routes = await prisma.routeList.findMany({
       where: {
-        userId: clientId
+        clientId
       }
     })
 
