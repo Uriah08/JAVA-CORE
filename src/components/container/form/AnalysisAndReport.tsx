@@ -34,7 +34,6 @@ import {
 
 import {
   useSearchJobNumberQuery,
-  useSearchRouteListQuery,
   useGetRouteComponentsQuery,
 } from "@/store/api";
 import { debounce } from "lodash";

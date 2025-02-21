@@ -56,7 +56,8 @@ const Comments: React.FC<CommentsProps> = ({
       setSeverity("");
       refetch();
       onClose();
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as { data?: { message?: string } };
       if (error instanceof z.ZodError) {
         toast({
           title: "Validation Error",
@@ -65,7 +66,7 @@ const Comments: React.FC<CommentsProps> = ({
       } else {
         toast({
           title: "Error",
-          description: error?.data?.message || "An unexpected error occurred.",
+          description: err?.data?.message || "An unexpected error occurred.",
         });
       }
     }
