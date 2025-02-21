@@ -68,7 +68,7 @@ const CreateJobForm = () => {
 
   const selectedClient = form.watch("client");
 
-  const { data: routeData, isLoading: routeLoading } = useGetRouteQuery( selectedClient ? selectedClient : skipToken, {
+  const { data: routeData, isLoading: routeLoading, isFetching: routeFetching } = useGetRouteQuery( selectedClient ? selectedClient : skipToken, {
     refetchOnMountOrArgChange: true,
   });
   const routes = routeData?.routes || []
@@ -155,7 +155,7 @@ const CreateJobForm = () => {
                         <SelectContent>
                         <div className='flex flex-col max-h-[200px] overflow-auto'>
                           {areaLoading ? <div><Loading/></div> : areas.map((area) => (
-                            <SelectItem key={area.id} value={area.id}>
+                            <SelectItem key={area.id} value={area.name}>
                               {area.name}
                             </SelectItem>
                           ))}
@@ -336,13 +336,17 @@ const CreateJobForm = () => {
               <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""} disabled={!form.watch("client")}>
                         <FormControl>
                             <SelectTrigger>
-                                <SelectValue placeholder={routeLoading ? 'Loading...' : 'Select client first'} />
+                                <SelectValue placeholder={routeLoading || routeFetching ? 'Loading...' : 'Select client first'} />
                             </SelectTrigger>
                         </FormControl>
                         <FormMessage />
                         <SelectContent>
                         <div className='flex flex-col max-h-[200px] overflow-auto'>
-                          {routeLoading ? <div><Loading/></div> : routes.map((route) => (
+                          {routeLoading || routeFetching ? <div><Loading/></div> : 
+                          routes.length === 0 ? <div className='w-full py-5'>
+                            <h1 className='font-bold text-3xl text-zinc-300 text-center'>No Routes Found</h1>
+                          </div> : 
+                          routes.map((route) => (
                             <SelectItem key={route.id} value={route.id}>
                               {route.routeName}
                             </SelectItem>
@@ -360,7 +364,7 @@ const CreateJobForm = () => {
             render={({ field }) => (
                 <FormItem className='"w-full md:w-1/2'>
                     <FormLabel>Equipment Use</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""} disabled={!form.watch("inspectionRoute")}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
                         <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder="Select a route first"/>
