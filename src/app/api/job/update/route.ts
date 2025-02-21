@@ -10,7 +10,7 @@ export async function POST(req: Request) {
             throw new Error('Not Authenticated')
         }
         
-        const { status, analyst, reviewer, id } = body;
+        const { status, analyst, reviewer, id, route } = body;
 
         const dateFinished = status === "Report Submitted" ? new Date() : undefined;
 
@@ -25,7 +25,17 @@ export async function POST(req: Request) {
                 dateFinished
             }
         })
-        
+
+        if(dateFinished) {
+            await prisma.routeList.update({
+                where: {
+                    id: route
+                },
+                data: {
+                    isUsed: false
+                }
+            })
+        }
         
         return NextResponse.json({ message: 'Job created successfully', success: true}, { status: 201 });
     } catch (error) {

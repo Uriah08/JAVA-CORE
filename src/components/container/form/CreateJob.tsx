@@ -155,7 +155,7 @@ const CreateJobForm = () => {
                         <SelectContent>
                         <div className='flex flex-col max-h-[200px] overflow-auto'>
                           {areaLoading ? <div><Loading/></div> : areas.map((area) => (
-                            <SelectItem key={area.id} value={area.id}>
+                            <SelectItem key={area.id} value={area.name}>
                               {area.name}
                             </SelectItem>
                           ))}
