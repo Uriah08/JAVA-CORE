@@ -63,7 +63,7 @@ export type ExtendedRouteComponent = RouteComponent & {
     createdAt: Date;
   }[];
   temperatures: {
-    temperature: string;
+    temperature: number;
   }[];
   oilAnalyses: {
     analysis: string;
