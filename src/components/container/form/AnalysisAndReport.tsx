@@ -39,17 +39,22 @@ import {
 } from "@/store/api";
 import { debounce } from "lodash";
 import { Skeleton } from "@/components/ui/skeleton";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
-import Comments from "../dialogs/Comments";
-
 import { symbols } from "@/schema";
-import Recommendations from "../dialogs/Recommendations";
+
 import { EquipmentUpload } from "../analysis/EquipmentUpload";
 import { EquipmentView } from "../analysis/EquipmentView";
 import { FigureUpload } from "../analysis/FigureUpload";
 import { FigureView } from "../analysis/FigureView";
+
+import CommentsSection from "../analysis/CommentsSection";
+import RecommendationSection from "../analysis/RecommendationSection";
+import ClientActionSection from "../analysis/ClientActionSection";
+import AnalystNoteSection from "../analysis/AnalystNoteSection";
+import SeverityHistorySection from "../analysis/SeverityHistorySection";
+import TemperatureSection from "../analysis/Temperature";
+import OilAnalysis from "../analysis/OilAnalysis";
+// import EquipmentList from "../list/analysis-equipment-list/EquipmentList";
 
 const AnalysisAndReportForm = () => {
   const { toast } = useToast();
@@ -147,17 +152,28 @@ const AnalysisAndReportForm = () => {
     { skip: componentIds.length === 0 || !routeMachineId }
   );
 
-  const routeComponents = routeComponentsData?.routeList || [];
+  const routeComponents = React.useMemo(
+    () => routeComponentsData?.routeList || [],
+    [routeComponentsData]
+  );
 
   const [selectedComponent, setSelectedComponent] = React.useState<{
     id: string;
     routeComponentID: string;
     name: string;
+    action: string;
+    note: string;
     comments: { severity: string; comment: string; createdAt: Date }[];
     recommendations: {
       priority: string;
       recommendation: string;
       createdAt: Date;
+    }[];
+    temperatures: {
+      temperature: number;
+    }[];
+    oilAnalyses: {
+      analysis: string;
     }[];
   } | null>(null);
 
@@ -167,17 +183,29 @@ const AnalysisAndReportForm = () => {
         (comp) => comp.component.id === selectedComponent.id
       );
 
-      if (updatedComponent) {
+      if (
+        updatedComponent &&
+        (selectedComponent.routeComponentID !== updatedComponent.id ||
+          selectedComponent.name !== updatedComponent.component.name ||
+          JSON.stringify(selectedComponent.comments) !==
+            JSON.stringify(updatedComponent.comments) ||
+          JSON.stringify(selectedComponent.recommendations) !==
+            JSON.stringify(updatedComponent.recommendations))
+      ) {
         setSelectedComponent({
           id: updatedComponent.component.id,
           routeComponentID: updatedComponent.id,
           name: updatedComponent.component.name,
+          action: updatedComponent.action ?? "",
+          note: updatedComponent.note ?? "",
           comments: updatedComponent.comments || [],
           recommendations: updatedComponent.recommendations || [],
+          temperatures: updatedComponent.temperatures || [],
+          oilAnalyses: updatedComponent.oilAnalyses || [],
         });
       }
     }
-  }, [routeComponents]);
+  }, [routeComponents, selectedComponent]);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
     resolver: zodResolver(analysisAndReportSchema),
@@ -522,8 +550,12 @@ const AnalysisAndReportForm = () => {
                         id: component.component.id,
                         routeComponentID: component.id,
                         name: component.component.name,
+                        action: component.action ?? "",
+                        note: component.note ?? "",
                         comments: component.comments || [],
                         recommendations: component.recommendations || [],
+                        temperatures: component.temperatures || [],
+                        oilAnalyses: component.oilAnalyses || [],
                       });
                     }}
                   >
@@ -606,289 +638,53 @@ const AnalysisAndReportForm = () => {
             </div>
 
             <div className="flex flex-col gap-3 w-full">
-              <div className="border rounded-lg flex overflow-auto">
-                {routeComponentsLoading
-                  ? Array.from({ length: 10 }).map((_, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col border-r w-full"
-                      >
-                        <Skeleton className="w-full h-[30px] animate-pulse bg-zinc-200" />
-                        <Skeleton className="w-full h-[50px] animate-pulse bg-zinc-200 mt-2" />
-                      </div>
-                    ))
-                  : Array.from({ length: 10 }).map((_, index) => {
-                      const comment =
-                        selectedComponent?.comments[index] || null;
-                      return (
-                        <div
-                          key={index}
-                          className="flex flex-col border-r w-full"
-                        >
-                          <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                            {index === 0 ? "Current" : "Previous"}
-                          </h1>
-                          <div className="flex justify-center items-center py-1">
-                            {comment ? (
-                              <Image
-                                src={`/severity/${
-                                  severityMap[String(comment.severity)]
-                                }`}
-                                width={30}
-                                height={30}
-                                alt="Severity Symbol"
-                                className="w-5 object-cover"
-                              />
-                            ) : (
-                              <div className="w-5 h-5" />
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-              </div>
+              <SeverityHistorySection
+                routeComponentsLoading={routeComponentsLoading}
+                selectedComponent={selectedComponent}
+                severityMap={severityMap}
+              />
             </div>
           </div>
 
           <div className="flex flex-col gap-3">
             {/* ####################### COMMENTS ######################### */}
-
-            <div className="flex flex-col md:flex-row gap-3">
-              <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Comments</h1>
-              </div>
-            </div>
-            <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
-              <div className="flex justify-between items-center">
-                <h1 className="font-semibold">Previous Comment</h1>
-                <h1 className="text-sm text-zinc-500">
-                  {selectedComponent ? selectedComponent.comments.length : 0}
-                </h1>
-              </div>
-              <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                {routeComponentsLoading ? (
-                  <Skeleton
-                    className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
-                    style={{ animationDelay: `0s` }}
-                  />
-                ) : selectedComponent &&
-                  selectedComponent.comments.length > 0 ? (
-                  (() => {
-                    const latestComment = [...selectedComponent.comments].sort(
-                      (a, b) =>
-                        new Date(b.createdAt).getTime() -
-                        new Date(a.createdAt).getTime()
-                    )[0];
-
-                    return latestComment ? (
-                      <div className="flex flex-col gap-2 p-3 border rounded-lg">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-2">
-                            <Image
-                              src={`/severity/${
-                                severityMap[String(latestComment.severity)] ||
-                                "N.png"
-                              }`}
-                              width={40}
-                              height={40}
-                              alt="Symbol"
-                              className="w-5 object-cover"
-                            />
-                            <h1 className="text-sm text-zinc-600">
-                              {latestComment.severity}
-                            </h1>
-                          </div>
-                          <div className="flex gap-2 items-center">
-                            <h1 className="text-xs text-zinc-500">
-                              {latestComment.createdAt
-                                ? new Date(
-                                    latestComment.createdAt
-                                  ).toLocaleDateString()
-                                : "N/A"}
-                            </h1>
-                          </div>
-                        </div>
-                        <p className="text-sm text-zinc-700">
-                          {latestComment.comment}
-                        </p>
-                      </div>
-                    ) : null;
-                  })()
-                ) : (
-                  <p className="text-sm text-zinc-400">
-                    No comments available.
-                  </p>
-                )}
-              </div>
-              <Dialog open={openComment} onOpenChange={setOpenComment}>
-                <Button
-                  onClick={() => setOpenComment(!openComment)}
-                  type="button"
-                  className="w-full font-normal text-sm justify-start cursor-text"
-                  variant={"outline"}
-                >
-                  Write a comment...
-                </Button>
-                {openComment && (
-                  <Comments
-                    routeComponentId={selectedComponent?.routeComponentID}
-                    onClose={() => setOpenComment(false)}
-                    refetch={refetch}
-                  />
-                )}
-              </Dialog>
+            <div className="flex flex-col gap-3 mt-3">
+              <CommentsSection
+                routeComponentsLoading={routeComponentsLoading}
+                selectedComponent={selectedComponent}
+                severityMap={severityMap}
+                openComment={openComment}
+                setOpenComment={setOpenComment}
+                refetch={refetch}
+              />
             </div>
 
-            {/* ####################### RECOMMENDATION ######################### */}
+            {/* ####################### RECOMMENDATIONS ######################### */}
+            <div className="flex flex-col gap-3 mt-3">
+              <RecommendationSection
+                routeComponentsLoading={routeComponentsLoading}
+                selectedComponent={selectedComponent}
+                openRecommendation={openRecommendation}
+                setOpenRecommendation={setOpenRecommendation}
+                refetch={refetch}
+              />
+            </div>
+
+            {/* ####################### CLIENT ACTIONS AND ANALYST NOTE ######################### */}
 
             <div className="flex flex-col md:flex-row gap-3 mt-3">
               <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Recommendations</h1>
-              </div>
-            </div>
-
-            <div className="w-full border p-3 rounded-lg flex flex-col gap-5">
-              <div className="flex justify-between items-center">
-                <h1 className="font-semibold">Previous Recommendation</h1>
-                <h1 className="text-sm text-zinc-500">
-                  {selectedComponent
-                    ? selectedComponent?.recommendations.length
-                    : 0}
-                </h1>
-              </div>
-
-              <div className="flex flex-col gap-3 max-h-[250px] overflow-auto">
-                {routeComponentsLoading ? (
-                  <Skeleton
-                    className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
-                    style={{ animationDelay: `0.2s` }}
-                  />
-                ) : selectedComponent &&
-                  selectedComponent.recommendations.length > 0 ? (
-                  (() => {
-                    const latestRecommendation = [
-                      ...selectedComponent.recommendations,
-                    ].sort(
-                      (a, b) =>
-                        new Date(b.createdAt).getTime() -
-                        new Date(a.createdAt).getTime()
-                    )[0];
-
-                    return latestRecommendation ? (
-                      <div className="flex flex-col gap-2 p-3 border rounded-lg">
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-2">
-                            <h1 className="font-bold">
-                              {latestRecommendation.priority}
-                            </h1>
-                          </div>
-                          <div className="flex gap-2 items-center">
-                            <h1 className="text-xs text-zinc-500">
-                              {latestRecommendation.createdAt
-                                ? new Date(
-                                    latestRecommendation.createdAt
-                                  ).toLocaleDateString()
-                                : "N/A"}
-                            </h1>
-                          </div>
-                        </div>
-                        <p className="text-sm text-zinc-700">
-                          {latestRecommendation.recommendation}
-                        </p>
-                      </div>
-                    ) : null;
-                  })()
-                ) : (
-                  <p className="text-sm text-zinc-400">
-                    No recommendation available.
-                  </p>
-                )}
-              </div>
-              <Dialog
-                open={openRecommendation}
-                onOpenChange={setOpenRecommendation}
-              >
-                <Button
-                  onClick={() => setOpenRecommendation(!openRecommendation)}
-                  type="button"
-                  className="w-full font-normal text-sm justify-start cursor-text"
-                  variant={"outline"}
-                >
-                  Write a recommendation...
-                </Button>
-                <Recommendations
-                  routeComponentId={selectedComponent?.routeComponentID}
-                  onClose={() => setOpenRecommendation(false)}
-                  refetch={refetch}
+                <ClientActionSection
+                  routeComponentsLoading={routeComponentsLoading}
+                  selectedComponent={selectedComponent}
                 />
-              </Dialog>
-            </div>
-
-            {/* ####################### CLIENT ACTIONS AND WO NUMBER REQUIRED ######################### */}
-
-            <div className="flex flex-col md:flex-row gap-3 mt-3">
-              <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">
-                  Client&apos;s Action and WO Number
-                </h1>
-                <div className="border rounded-lg p-3">
-                  <h1 className="font-semibold">Client Action</h1>
-                  <div className="border rounded-lg p-3 mt-2 max-h-[130px] overflow-auto">
-                    <p className="text-sm text-zinc-600 indent-10">
-                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                      Asperiores est laboriosam temporibus aliquam tempore
-                      itaque nihil atque, ducimus quibusdam placeat illum,
-                      maiores eveniet pariatur quia, ex aut tenetur dignissimos!
-                      Sequi? Asperiores est laboriosam temporibus aliquam
-                      tempore itaque nihil atque, ducimus quibusdam placeat
-                      illum, maiores eveniet pariatur quia, ex aut tenetur
-                      dignissimos! Sequi? Asperiores est laboriosam temporibus
-                      aliquam tempore itaque nihil atque, ducimus quibusdam
-                      placeat illum, maiores eveniet pariatur quia, ex aut
-                      tenetur dignissimos! Sequi?
-                    </p>
-                    <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-                      Jan 1, 2025
-                    </h1>
-                  </div>
-                  <h1 className="font-semibold mt-3">WO Number</h1>
-                  <Input
-                    readOnly
-                    placeholder="Client WO Number"
-                    className="mt-2 text-sm"
-                  />
-                </div>
               </div>
+
               <div className="flex flex-col gap-3 w-full">
-                <h1 className="text-sm font-medium">Analyst Note</h1>
-                <div className="border rounded-lg p-3 flex flex-col h-full">
-                  <h1 className="font-semibold">Analyst Name</h1>
-                  <Input
-                    readOnly
-                    placeholder="Analyst Name"
-                    className="mt-2 text-sm"
-                  />
-                  <div className="border rounded-lg p-3 mt-2 max-h-[165px] overflow-auto">
-                    <p className="text-sm text-zinc-600 indent-10">
-                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                      Asperiores est laboriosam temporibus aliquam tempore
-                      itaque nihil atque, ducimus quibusdam placeat illum,
-                      maiores eveniet pariatur quia, ex aut tenetur dignissimos!
-                      Sequi? Lorem ipsum dolor sit amet consectetur, adipisicing
-                      elit. Asperiores est laboriosam temporibus aliquam tempore
-                      itaque nihil atque, ducimus quibusdam placeat illum,
-                      maiores eveniet pariatur quia, ex aut tenetur dignissimos!
-                      Sequi Lorem ipsum dolor sit amet consectetur, adipisicing
-                      elit. Asperiores est laboriosam temporibus aliquam tempore
-                      itaque nihil atque, ducimus quibusdam placeat illum,
-                      maiores eveniet pariatur quia, ex aut tenetur dignissimos!
-                      Sequi
-                    </p>
-                    <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-                      Jan 1, 2025
-                    </h1>
-                  </div>
-                </div>
+                <AnalystNoteSection
+                  routeComponentsLoading={routeComponentsLoading}
+                  selectedComponent={selectedComponent}
+                />
               </div>
             </div>
 
@@ -1033,109 +829,17 @@ const AnalysisAndReportForm = () => {
               <div className="flex flex-col gap-3 w-full md:w-1/2">
                 <div className="flex flex-col gap-3 w-full">
                   <h1 className="text-sm font-medium">Temperature Record</h1>
-                  <div className="border rounded-lg flex overflow-auto">
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Current
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40°C
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40°C
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40°C
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40°C
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40°C
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40°C
-                      </h1>
-                    </div>
-                  </div>
+                  <TemperatureSection
+                    routeComponentsLoading={routeComponentsLoading}
+                    selectedComponent={selectedComponent}
+                  />
                 </div>
                 <div className="flex flex-col gap-3 w-full">
                   <h1 className="text-sm font-medium">Oil Analysis</h1>
-                  <div className="border rounded-lg flex overflow-auto">
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Current
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40
-                      </h1>
-                    </div>
-                    <div className="flex flex-col border-r w-full">
-                      <h1 className="text-sm font-semibold text-zinc-800 px-3 py-1 text-center border-b">
-                        Previous
-                      </h1>
-                      <h1 className="text-center text-sm text-zinc-500 px-3 py-1">
-                        40
-                      </h1>
-                    </div>
-                  </div>
+                  <OilAnalysis
+                    routeComponentsLoading={routeComponentsLoading}
+                    selectedComponent={selectedComponent}
+                  />
                 </div>
               </div>
             </div>

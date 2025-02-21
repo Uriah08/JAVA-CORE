@@ -100,6 +100,7 @@ const List = () => {
   const [isSingleDeleteConfirmDialogOpen, setSingleDeleteConfirmDialogOpen] =
     useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+  const [itemToDeleteName, setItemToDeleteName] = useState<string | null>(null);
   const [updateDialogTitle, setUpdateDialogTitle] = useState("");
   const [isUpdatingDialogOpen, setIsUpdatingDialogOpen] = useState(false);
   const [updatingItemId, setUpdatingItemId] = useState("");
@@ -170,7 +171,7 @@ const List = () => {
     }
   };
 
-  const handleDeleteItem = async (id: string) => {
+  const handleDeleteItem = async (id: string, name: string) => {
     try {
       if (currentEquipmentName) {
         await deleteComponent([id]).unwrap();
@@ -182,6 +183,7 @@ const List = () => {
         await deleteMachine([id]).unwrap();
       }
 
+      setItemToDeleteName(name);
       setIsDeleting(false);
       setSingleDeleteConfirmDialogOpen(false);
     } catch (error) {
@@ -373,6 +375,7 @@ const List = () => {
                       <DropdownMenuItem
                         onClick={() => {
                           setItemToDelete(item.id);
+                          setItemToDeleteName(item.name);
                           setSingleDeleteConfirmDialogOpen(true);
                         }}
                       >
@@ -457,12 +460,12 @@ const List = () => {
         isOpen={isSingleDeleteConfirmDialogOpen}
         onClose={() => setSingleDeleteConfirmDialogOpen(false)}
         onConfirm={async () => {
-          if (itemToDelete) {
-            await handleDeleteItem(itemToDelete);
+          if (itemToDelete && itemToDeleteName) {
+            await handleDeleteItem(itemToDelete, itemToDeleteName);
           }
         }}
         title="Confirm Deletion"
-        message={`Are you sure you want to delete this item?`}
+        message={`Are you sure you want to delete ${itemToDeleteName}}?`}
       />
       <UpdatingDialog
         isOpen={isUpdatingDialogOpen}
