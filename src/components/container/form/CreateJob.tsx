@@ -36,14 +36,42 @@ import {
 import { Calendar } from '@/components/ui/calendar'
 
 import { jobSchema } from '@/schema'
-import { useGetClientsQuery, useGetMachineListQuery } from '@/store/api'
+import { useGetClientsQuery, useGetMachineListQuery, useGetRouteQuery } from '@/store/api'
 import Loading from '@/components/ui/loading'
 
 import { useCreateJobMutation } from '@/store/api'
 import { useToast } from '@/hooks/use-toast'
+import { skipToken } from '@reduxjs/toolkit/query'
 
 const CreateJobForm = () => {
   const { toast } = useToast()
+
+  const form = useForm<z.infer<typeof jobSchema>>({
+    resolver: zodResolver(jobSchema),
+    defaultValues: {
+      client: "",
+      area: "",
+      dateSurveyed: new Date(),
+      jobNo: "",
+      poNo: "",
+      woNo: "",
+      reportNo: "",
+      jobDescription: "",
+      method: "",
+      inspector: "",
+      inspectionRoute: "",
+      equipmentUse: "",
+      dateRegistered: new Date(),
+      yearWeekNo: ""
+    },
+  })
+
+  const selectedClient = form.watch("client");
+
+  const { data: routeData, isLoading: routeLoading } = useGetRouteQuery( selectedClient ? selectedClient : skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
+  const routes = routeData?.routes || []
 
   const [createJob, { isLoading: createJobLoading }] = useCreateJobMutation()
 
@@ -52,26 +80,6 @@ const CreateJobForm = () => {
 
   const { data: areaData, isLoading: areaLoading } = useGetMachineListQuery()
   const areas = areaData?.areas || []
-
-    const form = useForm<z.infer<typeof jobSchema>>({
-        resolver: zodResolver(jobSchema),
-        defaultValues: {
-          client: "",
-          area: "",
-          dateSurveyed: new Date(),
-          jobNo: "",
-          poNo: "",
-          woNo: "",
-          reportNo: "",
-          jobDescription: "",
-          method: "",
-          inspector: "",
-          inspectionRoute: "",
-          equipmentUse: "",
-          dateRegistered: new Date(),
-          yearWeekNo: ""
-        },
-      })
     
     async function onSubmit(values: z.infer<typeof jobSchema>) {
      try {
@@ -325,9 +333,23 @@ const CreateJobForm = () => {
           render={({ field }) => (
             <FormItem className='w-full md:w-1/2'>
               <FormLabel>Inspection Route</FormLabel>
-              <FormControl>
-                <Input className='text-sm' placeholder="Enter inspection route..." {...field} />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""} disabled={!form.watch("client")}>
+                        <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder={routeLoading ? 'Loading...' : 'Select client first'} />
+                            </SelectTrigger>
+                        </FormControl>
+                        <FormMessage />
+                        <SelectContent>
+                        <div className='flex flex-col max-h-[200px] overflow-auto'>
+                          {routeLoading ? <div><Loading/></div> : routes.map((route) => (
+                            <SelectItem key={route.id} value={route.id}>
+                              {route.routeName}
+                            </SelectItem>
+                          ))}
+                          </div>
+                        </SelectContent>
+                    </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -338,10 +360,10 @@ const CreateJobForm = () => {
             render={({ field }) => (
                 <FormItem className='"w-full md:w-1/2'>
                     <FormLabel>Equipment Use</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value || ""} disabled={!form.watch("inspectionRoute")}>
                         <FormControl>
                             <SelectTrigger>
-                                <SelectValue placeholder="Select an equipment" />
+                                <SelectValue placeholder="Select a route first"/>
                             </SelectTrigger>
                         </FormControl>
                         <FormMessage />
