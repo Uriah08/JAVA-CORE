@@ -42,7 +42,6 @@ const EquipmentSelector: React.FC<EquipmentSelectorProps> = ({
   };
 
   useEffect(() => {
-    // Convert selectedEquipment to expected format
     const equipmentNames =
       selectedEquipment.length > 0
         ? (selectedEquipment.map((equipment) => ({
@@ -54,7 +53,6 @@ const EquipmentSelector: React.FC<EquipmentSelectorProps> = ({
           ])
         : [];
 
-    // Prevent unnecessary updates to avoid infinite loop
     if (JSON.stringify(field.value) !== JSON.stringify(equipmentNames)) {
       field.onChange(equipmentNames);
     }
