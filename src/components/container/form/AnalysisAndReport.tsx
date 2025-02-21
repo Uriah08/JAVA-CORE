@@ -95,26 +95,27 @@ const AnalysisAndReportForm = () => {
     };
     yearWeekNumber?: string;
     reviewer?: string | null;
+    inspectionRoute: string;
   } | null>(null);
 
-  const [searchTermRouteList, setSearchTermRouteList] = React.useState("");
-  const { data: routeListData, isFetching: routeListLoading } =
-    useSearchRouteListQuery(searchTermRouteList, {
-      skip: searchTermRouteList.length < 3,
-    });
+  // const [searchTermRouteList, setSearchTermRouteList] = React.useState("");
+  // const { data: routeListData, isFetching: routeListLoading } =
+  //   useSearchRouteListQuery(searchTermRouteList, {
+  //     skip: searchTermRouteList.length < 3,
+  //   });
 
-  const routeLists = routeListData?.routeList || [];
+  // const routeLists = routeListData?.routeList || [];
 
-  const handleSearchRouteList = debounce(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchTermRouteList(event.target.value);
-    },
-    500
-  );
+  // const handleSearchRouteList = debounce(
+  //   (event: React.ChangeEvent<HTMLInputElement>) => {
+  //     setSearchTermRouteList(event.target.value);
+  //   },
+  //   500
+  // );
 
-  React.useEffect(() => {
-    return handleSearchRouteList.cancel;
-  }, [handleSearchRouteList.cancel]);
+  // React.useEffect(() => {
+  //   return handleSearchRouteList.cancel;
+  // }, [handleSearchRouteList.cancel]);
 
   const [selectedRouteList, setSelectedRouteList] = React.useState<{
     id?: string;
@@ -339,67 +340,16 @@ const AnalysisAndReportForm = () => {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>Route Name</FormLabel>
-                      <Select
-                        onValueChange={(value) => {
-                          const selectedRoute = routeLists.find(
-                            (route) => route.routeName === value
-                          );
-                          setSelectedRouteList(selectedRoute || null);
-                          field.onChange(value);
-                        }}
-                        defaultValue={field.value}
-                        value={field.value || ""}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Route Name" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <FormMessage />
-                        <SelectContent>
-                          <div className="flex flex-col max-h-[200px] overflow-auto">
-                            <div className="relative">
-                              <Search
-                                className="absolute top-2 left-3 text-zinc-500"
-                                size={20}
-                              />
-                              <Input
-                                onChange={handleSearchRouteList}
-                                placeholder="Search Route Name"
-                                className="focus-visible:ring-0 pl-10"
-                              />
-                            </div>
-                            {routeListLoading ? (
-                              <div className="w-full h-full overflow-hidden flex flex-col gap-1 mt-1">
-                                {[...Array(5)].map((_, index) => (
-                                  <Skeleton
-                                    key={index}
-                                    className="w-full h-[25px] animate-pulse"
-                                    style={{
-                                      animationDelay: `${index * 0.2}s`,
-                                    }}
-                                  />
-                                ))}
-                              </div>
-                            ) : routeLists.length <= 0 ? (
-                              <div className="w-full h-full flex justify-center items-center">
-                                <h1 className="text-xl font-bold text-zinc-300 my-10">
-                                  No Route Found
-                                </h1>
-                              </div>
-                            ) : (
-                              routeLists.map((route) => (
-                                <SelectItem
-                                  key={route.routeName}
-                                  value={route.routeName}
-                                >
-                                  {route.routeName}
-                                </SelectItem>
-                              ))
-                            )}
-                          </div>
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <Input
+                          className="text-sm"
+                          placeholder="Select job number first"
+                          {...field}
+                          readOnly
+                          value={selectedJob?.inspectionRoute || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

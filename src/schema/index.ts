@@ -110,7 +110,7 @@ export const componentSchema = z.object({
 });
 
 export const CreateRouteSchema = z.object({
-  clientName: z.string().min(1, "Client name is required"),
+  clientId: z.string().min(1, "Client name is required"),
   routeName: z.string().min(1, "Route name is required"),
   areaId: z.string().min(1, "Area is required"),
   equipmentNames: z

@@ -140,14 +140,13 @@ model Component {
 }
 
 model RouteList {
-  id         String   @id @default(uuid())
-  userId     String
-  clientName String
-  routeName  String
-  isUsed     Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id        String   @id @default(uuid())
+  clientId  String
+  routeName String
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [clientId], references: [id])
 
   Job      Job[]
   machines RouteMachineList[]

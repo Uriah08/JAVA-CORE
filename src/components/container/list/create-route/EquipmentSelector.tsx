@@ -1,21 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { ControllerRenderProps } from "react-hook-form";
 
 interface Component {
-  id: string | number;
+  id: string;
   name: string;
 }
 
 interface Equipment {
-  id: string | number;
+  id: string;
   name: string;
   components?: Component[];
 }
 
 interface EquipmentSelectorProps {
-  field: any;
+  field: ControllerRenderProps<
+    {
+      clientId: string;
+      routeName: string;
+      areaId: string;
+      equipmentNames: [
+        { id: string; components?: string[] },
+        ...{ id: string; components?: string[] }[]
+      ];
+    },
+    "equipmentNames"
+  >;
   selectedEquipment: Equipment[];
   setSelectedEquipment: React.Dispatch<React.SetStateAction<Equipment[]>>;
 }
@@ -25,25 +37,28 @@ const EquipmentSelector: React.FC<EquipmentSelectorProps> = ({
   selectedEquipment,
   setSelectedEquipment,
 }) => {
-  const handleRemoveEquipment = (id: string | number) => {
+  const handleRemoveEquipment = (id: string) => {
     setSelectedEquipment((prev) => prev.filter((e) => e.id !== id));
   };
 
-  const handleChange = () => {
-    const equipmentNames = selectedEquipment.map((equipment) => ({
-      id: String(equipment.id),
-      components: equipment.components?.map((comp) => String(comp.id)) || [],
-    }));
-    field.onChange(equipmentNames);
-  };
+  useEffect(() => {
+    // Convert selectedEquipment to expected format
+    const equipmentNames =
+      selectedEquipment.length > 0
+        ? (selectedEquipment.map((equipment) => ({
+            id: equipment.id,
+            components: equipment.components?.map((comp) => comp.id) || [],
+          })) as [
+            { id: string; components?: string[] },
+            ...{ id: string; components?: string[] }[]
+          ])
+        : [];
 
-  React.useEffect(() => {
-    if (selectedEquipment.length === 0) {
-      field.onChange([]);
-    } else {
-      handleChange();
+    // Prevent unnecessary updates to avoid infinite loop
+    if (JSON.stringify(field.value) !== JSON.stringify(equipmentNames)) {
+      field.onChange(equipmentNames);
     }
-  }, [selectedEquipment]);
+  }, [selectedEquipment, field]);
 
   return (
     <div className="ml-10">

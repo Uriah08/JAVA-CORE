@@ -16,9 +16,6 @@ export type ExtendedJob = Job & {
   user: {
     name: string;
   };
-  AnalysisReport: {
-    routeId: string;
-  };
 };
 
 type SearchJobsResponse = {
