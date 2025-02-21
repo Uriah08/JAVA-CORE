@@ -6,8 +6,8 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <footer className="bg-black text-white py-8 px-12">
-      <div className="container mx-auto grid grid-cols-3 gap-8 items-start">
-        <div className="flex items-center">
+      <div className="container mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="flex items-center lg:justify-start justify-center">
           <Image
             src="/logo.png"
             alt="Logo"
@@ -17,7 +17,7 @@ const Footer = () => {
           />
         </div>
 
-        <div>
+        <div className="lg:text-start text-center">
           <h3 className="text-lg font-semibold mb-4">Company</h3>
           <ul className="space-y-2">
             <li>
@@ -32,20 +32,20 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-        <div>
+        <div className="lg:text-start text-center">
           <h3 className="text-lg font-semibold mb-4">Contact</h3>
           <ul className="space-y-2">
-            <li className="flex items-center space-x-2">
+            <li className="flex lg:justify-start justify-center items-center space-x-2">
               <MapPinned className="w-5 h-5 text-white" />
               <span className="text-sm">
                 78 Pioneer Rd, Hunterview NSW 2330, Australia
               </span>
             </li>
-            <li className="flex items-center space-x-2">
+            <li className="flex lg:justify-start justify-center items-center space-x-2">
               <PhoneCall className="w-5 h-5 text-white" />
               <span className="text-sm">+61 466 367 629</span>
             </li>
-            <li className="flex items-center space-x-2">
+            <li className="flex lg:justify-start justify-center items-center space-x-2">
               <Mail className="w-5 h-5 text-white" />
               <span className="text-sm">
                 ryan.java@javaconditionmonitoring.com.au
