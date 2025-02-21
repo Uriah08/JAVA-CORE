@@ -21,7 +21,6 @@ export async function POST(req: Request) {
     }
 
     const { clientId, routeName, areaId, equipmentNames } = parsedBody.data;
-    console.log("Captured data: ", parsedBody.data);
 
     const userId = session.user.id;
     if (!userId) {

@@ -33,6 +33,7 @@ import {
   useCreateRouteMutation,
 } from "@/store/api";
 import Loading from "@/components/ui/loading";
+import { useToast } from "@/hooks/use-toast";
 import React from "react";
 import EquipmentSelector from "@/components/container/list/create-route/EquipmentSelector";
 
@@ -68,6 +69,8 @@ const CreateRoute = () => {
       equipmentNames: [],
     },
   });
+
+  const { toast } = useToast();
 
   const { data, isLoading: clientLoading } = useGetClientsQuery();
   const clients = data?.clients || [];
@@ -190,9 +193,22 @@ const CreateRoute = () => {
         form.reset();
       }, 0);
       setSelectedEquipment([]);
+      toast({
+        title: "Successfully Created",
+        description: response.message,
+      });
+      setCurrentArea(null);
+      setCurrentEquipmentGroup(null);
+      setCurrentEquipmentName(null);
+      setBreadcrumb([]);
     } catch (error) {
-      console.error("Failed to create route:", error);
+      const err = error as { data?: { message?: string } };
+      console.error("Failed to create route:", err);
       console.error(createError);
+      toast({
+        title: "Error",
+        description: err.data?.message || "An unexpected error occurred.",
+      });
     }
   }
 
