@@ -79,11 +79,6 @@ export async function GET() {
                         name: true,
                     },
                 },
-                AnalysisReport: {
-                    select: {
-                        routeId: true
-                    }   
-                }
              },
         })
         return NextResponse.json({ message: 'Job created successfully', success: true, jobs}, { status: 201 });
