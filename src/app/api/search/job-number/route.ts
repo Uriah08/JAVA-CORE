@@ -28,6 +28,11 @@ export async function GET(req: Request) {
           },
         },
         inspectionRoute: true,
+        routeList: {
+          select: {
+            routeName: true,
+          },
+        },
       },
     });
     return NextResponse.json(

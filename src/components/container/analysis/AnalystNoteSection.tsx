@@ -5,7 +5,7 @@ interface SelectedComponent {
   id: string;
   routeComponentID: string;
   name: string;
-  note: string;
+  note?: string | null;
 }
 
 interface ClientActionSectionProps {
@@ -18,9 +18,11 @@ const AnalystNoteSection: React.FC<ClientActionSectionProps> = ({
   selectedComponent,
 }) => {
   return (
-    <div className="flex flex-col gap-3 w-full">
-      <h1 className="text-sm font-medium">Analyst Note</h1>
-      <div className="border rounded-lg p-3 flex flex-col h-full">
+    <div className="flex flex-col gap-3 mt-3 border border-main rounded-lg overflow-hidden">
+      <h1 className="text-lg font-semibold bg-main text-white px-4 py-2">
+        Analyst Note
+      </h1>
+      <div className="p-3 flex flex-col h-full">
         <h1 className="font-semibold">Analyst Name</h1>
         {routeComponentsLoading ? (
           <Skeleton
@@ -30,6 +32,7 @@ const AnalystNoteSection: React.FC<ClientActionSectionProps> = ({
         ) : (
           <Input readOnly placeholder="Analys Name" className="mt-2 text-sm" />
         )}
+        <h1 className="font-semibold mt-3">Analyst Note</h1>
         {routeComponentsLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"

@@ -27,6 +27,7 @@ export async function GET(req: Request) {
       },
       select: {
         id: true,
+        routeMachineId: true,
         action: true,
         note: true,
         image: true,

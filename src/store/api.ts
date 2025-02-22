@@ -9,12 +9,16 @@ import {
   EquipmentName,
   Component,
   RouteList,
+  RouteMachineList,
   RouteComponent,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
   user: {
     name: string;
+  };
+  routeList: {
+    routeName: string;
   };
 };
 
@@ -44,6 +48,30 @@ type EquipmentGroupResponse = { equipmentGroups: EquipmentGroup[] };
 type EquipmentNameResponse = { equipmentNames: EquipmentName[] };
 type ComponentResponse = { components: Component[] };
 
+type RouteResponse = {
+  routes: RouteList[];
+  message: string;
+  success: boolean;
+};
+
+export type ExtendedRouteMachineList = RouteMachineList & {
+  routeEquipmentNames: {
+    id: string;
+    routeMachineId: string;
+    equipmentName: {
+      name: string;
+      components: {
+        id: string;
+        name: string;
+      }[];
+    };
+  }[];
+};
+
+type RouteMachineListResponse = {
+  routeMachineList: ExtendedRouteMachineList[];
+};
+
 export type ExtendedRouteComponent = RouteComponent & {
   component: {
     id: string;
@@ -67,44 +95,8 @@ export type ExtendedRouteComponent = RouteComponent & {
   }[];
 };
 
-type RouteResponse = {
-  routes: RouteList[];
-  message: string;
-  success: boolean;
-}
-
 type RouteComponentResponse = {
   routeList: ExtendedRouteComponent[];
-  message: string;
-  success: boolean;
-};
-
-export type ExtendedRouteList = RouteList & {
-  machines: {
-    id: string;
-    area: {
-      id: string;
-      name: string;
-    };
-    equipmentGroup: {
-      id: string;
-      name: string;
-    };
-    routeEquipmentNames: {
-      id: string;
-      equipmentName: {
-        id: string;
-        name: string;
-        components: {
-          id: string;
-        }[];
-      };
-    }[];
-  }[];
-};
-
-type SearchRouteListResponse = {
-  routeList?: ExtendedRouteList[];
   message: string;
   success: boolean;
 };
@@ -122,6 +114,7 @@ export const api = createApi({
     "EquipmentName",
     "Component",
     "RouteList",
+    "RouteMachineList",
     "RouteComponent",
     "RouteComponentComment",
     "RouteComponentRecommendation",
@@ -377,9 +370,10 @@ export const api = createApi({
       query: (clientId) => `/api/createRoute?clientId=${clientId}`,
       providesTags: ["RouteList"],
     }),
-    searchRouteList: build.query<SearchRouteListResponse, string>({
-      query: (routeName) => `/api/search/route-name?routeName=${routeName}`,
-      providesTags: ["RouteList"],
+    getRouteEquipmentList: build.query<RouteMachineListResponse, string>({
+      query: (routeListId) =>
+        `/api/createRoute/routeMachineList?routeListId=${routeListId}`,
+      providesTags: ["RouteMachineList"],
     }),
     getRouteComponents: build.query<
       RouteComponentResponse,
@@ -446,7 +440,7 @@ export const {
   useSearchJobNumberQuery,
   useCreateRouteMutation,
   useGetRouteQuery,
-  useSearchRouteListQuery,
+  useGetRouteEquipmentListQuery,
   useGetRouteComponentsQuery,
   useCreateCommentMutation,
   useCreateRecommendationMutation,

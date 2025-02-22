@@ -33,8 +33,9 @@ import {
 } from "lucide-react";
 
 import {
-  useSearchJobNumberQuery,
   useGetRouteComponentsQuery,
+  useGetRouteEquipmentListQuery,
+  useSearchJobNumberQuery,
 } from "@/store/api";
 import { debounce } from "lodash";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -94,54 +95,38 @@ const AnalysisAndReportForm = () => {
     };
     yearWeekNumber?: string;
     reviewer?: string | null;
-    inspectionRoute: string;
+    inspectionRoute?: string;
+    routeList?: {
+      routeName?: string;
+    };
   } | null>(null);
 
-  // const [searchTermRouteList, setSearchTermRouteList] = React.useState("");
-  // const { data: routeListData, isFetching: routeListLoading } =
-  //   useSearchRouteListQuery(searchTermRouteList, {
-  //     skip: searchTermRouteList.length < 3,
-  //   });
+  const { data: routeData, isFetching: routeLoading } =
+    useGetRouteEquipmentListQuery(selectedJob?.inspectionRoute ?? "", {
+      skip: !selectedJob?.inspectionRoute,
+    });
 
-  // const routeLists = routeListData?.routeList || [];
-
-  // const handleSearchRouteList = debounce(
-  //   (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     setSearchTermRouteList(event.target.value);
-  //   },
-  //   500
-  // );
-
-  // React.useEffect(() => {
-  //   return handleSearchRouteList.cancel;
-  // }, [handleSearchRouteList.cancel]);
-
-  const [selectedRouteList, setSelectedRouteList] = React.useState<{
-    id?: string;
-    routeName?: string;
-    machines: {
-      id: string;
-      area: { id: string; name: string };
-      equipmentGroup: { id: string; name: string };
-      routeEquipmentNames: {
-        id: string;
-        equipmentName: {
-          id: string;
-          name: string;
-          components: { id: string }[];
-        };
-      }[];
-    }[];
-  } | null>(null);
+  const equipmentList =
+    routeData?.routeMachineList.flatMap((machine) =>
+      machine.routeEquipmentNames.map((eq) => ({
+        id: eq.id,
+        name: eq.equipmentName.name,
+        routeMachineId: eq.routeMachineId,
+        components: eq.equipmentName.components,
+      }))
+    ) || [];
 
   const [selectedEquipment, setSelectedEquipment] = React.useState<{
     id: string;
     name: string;
+    routeMachineId: string;
     components: { id: string; name: string }[];
   } | null>(null);
 
+  console.log("captured data: ", selectedEquipment);
+
   const componentIds = selectedEquipment?.components.map((c) => c.id) || [];
-  const routeMachineId = selectedRouteList?.machines[0]?.id || "";
+  const routeMachineId = selectedEquipment?.routeMachineId ?? "";
 
   const {
     data: routeComponentsData,
@@ -149,63 +134,82 @@ const AnalysisAndReportForm = () => {
     refetch,
   } = useGetRouteComponentsQuery(
     { componentIds, routeMachineId },
-    { skip: componentIds.length === 0 || !routeMachineId }
+    { skip: !routeMachineId || componentIds.length === 0 }
   );
 
-  const routeComponents = React.useMemo(
-    () => routeComponentsData?.routeList || [],
-    [routeComponentsData]
-  );
+  const [routeComponents, setRouteComponents] = React.useState<
+    {
+      id: string;
+      routeMachineId: string;
+      action?: string | null;
+      note?: string | null;
+      component: { id: string; name: string };
+      comments: { severity: string; comment: string; createdAt: Date }[];
+      recommendations: {
+        priority: string;
+        recommendation: string;
+        createdAt: Date;
+      }[];
+      temperatures: { temperature: number }[];
+      oilAnalyses: { analysis: string }[];
+    }[]
+  >([]);
+
+  React.useEffect(() => {
+    if (routeComponentsData?.routeList) {
+      setRouteComponents(routeComponentsData.routeList);
+    }
+  }, [routeComponentsData]);
 
   const [selectedComponent, setSelectedComponent] = React.useState<{
     id: string;
-    routeComponentID: string;
     name: string;
-    action: string;
-    note: string;
+    routeComponentID: string;
+    action?: string | null;
+    note?: string | null;
     comments: { severity: string; comment: string; createdAt: Date }[];
     recommendations: {
       priority: string;
       recommendation: string;
       createdAt: Date;
     }[];
-    temperatures: {
-      temperature: number;
-    }[];
-    oilAnalyses: {
-      analysis: string;
-    }[];
+    temperatures: { temperature: number }[];
+    oilAnalyses: { analysis: string }[];
   } | null>(null);
 
   React.useEffect(() => {
-    if (routeComponents.length > 0 && selectedComponent) {
-      const updatedComponent = routeComponents.find(
-        (comp) => comp.component.id === selectedComponent.id
-      );
+    if (routeComponentsData?.routeList) {
+      setRouteComponents(routeComponentsData.routeList);
 
-      if (
-        updatedComponent &&
-        (selectedComponent.routeComponentID !== updatedComponent.id ||
-          selectedComponent.name !== updatedComponent.component.name ||
-          JSON.stringify(selectedComponent.comments) !==
-            JSON.stringify(updatedComponent.comments) ||
-          JSON.stringify(selectedComponent.recommendations) !==
-            JSON.stringify(updatedComponent.recommendations))
-      ) {
-        setSelectedComponent({
+      setSelectedComponent((prevSelected) => {
+        if (!prevSelected) return null;
+
+        const updatedComponent = routeComponentsData.routeList.find(
+          (comp) => comp.component.id === prevSelected.id
+        );
+
+        if (
+          !updatedComponent ||
+          prevSelected.routeComponentID === updatedComponent.id
+        ) {
+          return prevSelected;
+        }
+
+        return {
           id: updatedComponent.component.id,
-          routeComponentID: updatedComponent.id,
           name: updatedComponent.component.name,
-          action: updatedComponent.action ?? "",
-          note: updatedComponent.note ?? "",
+          routeComponentID: updatedComponent.id,
           comments: updatedComponent.comments || [],
           recommendations: updatedComponent.recommendations || [],
+          action: updatedComponent.action ?? null,
           temperatures: updatedComponent.temperatures || [],
           oilAnalyses: updatedComponent.oilAnalyses || [],
-        });
-      }
+        };
+      });
     }
-  }, [routeComponents, selectedComponent]);
+  }, [routeComponentsData, setSelectedComponent]);
+
+  console.log("Captured data: ", selectedComponent);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
     resolver: zodResolver(analysisAndReportSchema),
@@ -254,7 +258,7 @@ const AnalysisAndReportForm = () => {
                   Analysis and Reporting
                 </h1>
                 <Button className="bg-main hover:bg-follow text-white ">
-                  Submit
+                  Export
                 </Button>
               </div>
               <h2 className="text-lg font-semibold mb-3 mt-3 text-zinc-700">
@@ -345,7 +349,7 @@ const AnalysisAndReportForm = () => {
                           placeholder="Select job number first"
                           {...field}
                           readOnly
-                          value={selectedJob?.inspectionRoute || ""}
+                          value={selectedJob?.routeList?.routeName || ""}
                         />
                       </FormControl>
                       <FormMessage />
@@ -447,123 +451,68 @@ const AnalysisAndReportForm = () => {
             hideList && "hidden"
           }`}
         >
-          <h2 className="text-lg font-semibold mb-3 text-black">
+          <h2 className="font-bold text-lg">
             {selectedEquipment ? selectedEquipment.name : "Equipment List"}
           </h2>
 
-          {selectedEquipment ? (
-            <div className="space-y-4">
-              <button
-                onClick={() => setSelectedEquipment(null)}
-                className="text-sm font-medium text-main hover:text-follow"
-              >
-                &larr; Back to Equipment List
-              </button>
+          {selectedEquipment && (
+            <Button
+              onClick={() => setSelectedEquipment(null)}
+              className="mt-3 text-sm font-medium bg-transparent shadow-none text-main hover:text-follow hover:underline hover:bg-transparent justify-start"
+            >
+              &larr; Back to Equipment List
+            </Button>
+          )}
 
-              {routeComponentsLoading ? (
-                <div className="w-full h-full overflow-hidden flex flex-col gap-2 mt-2">
-                  {[...Array(5)].map((_, index) => (
-                    <Skeleton
-                      key={index}
-                      className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
-                      style={{
-                        animationDelay: `${index * 0.2}s`,
-                      }}
-                    />
-                  ))}
-                </div>
-              ) : routeComponents.length > 0 ? (
-                routeComponents.map((component, index) => (
-                  <div
-                    key={index}
-                    className={`border p-2 rounded-md cursor-pointer ${
-                      selectedComponent?.id === component.component.id
-                        ? "bg-red-300"
-                        : "hover:bg-zinc-200"
-                    }`}
-                    onClick={() => {
-                      console.log(
-                        "Component selected:",
-                        component.component.name
-                      );
-                      console.log(
-                        "Comments for this component:",
-                        component.comments || []
-                      );
-                      console.log(
-                        "Recommendations for this component:",
-                        component.recommendations || []
-                      );
-
-                      setSelectedComponent({
-                        id: component.component.id,
-                        routeComponentID: component.id,
-                        name: component.component.name,
-                        action: component.action ?? "",
-                        note: component.note ?? "",
-                        comments: component.comments || [],
-                        recommendations: component.recommendations || [],
-                        temperatures: component.temperatures || [],
-                        oilAnalyses: component.oilAnalyses || [],
-                      });
-                    }}
-                  >
-                    <h4 className="text-sm font-medium text-zinc-600">
-                      {component.component.name}
-                    </h4>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-zinc-400">No components found.</p>
-              )}
-            </div>
-          ) : selectedRouteList ? (
-            <div className="space-y-4">
-              {selectedRouteList.machines?.map((machine) => (
-                <div key={machine.id} className="rounded-lg">
-                  <h3 className="font-bold text-zinc-700">
-                    {machine.equipmentGroup?.name}
-                  </h3>
-                  <div className="ml-4 mt-2 space-y-2">
-                    {machine.routeEquipmentNames?.map((equipment) => (
-                      <div
-                        key={equipment.id}
-                        className="border font-bold p-2 rounded-md cursor-pointer hover:bg-zinc-200"
-                        onClick={() => {
-                          setSelectedEquipment({
-                            id: equipment.id,
-                            name: equipment.equipmentName?.name,
-                            components: Array.from(
-                              new Map(
-                                (equipment.equipmentName?.components || []).map(
-                                  (component) => [
-                                    component.id,
-                                    {
-                                      id: component.id,
-                                      name:
-                                        routeComponents?.find(
-                                          (comp) =>
-                                            comp.componentId === component.id
-                                        )?.component.name || "Unknown",
-                                    },
-                                  ]
-                                )
-                              ).values()
-                            ),
-                          });
-                        }}
-                      >
-                        <h4 className="text-sm font-medium text-zinc-600">
-                          {equipment.equipmentName?.name}
-                        </h4>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+          {routeLoading || routeComponentsLoading ? (
+            <div className="mt-8 space-y-2">
+              {[...Array(5)].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="w-full h-[35px] border-t animate-pulse"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                />
               ))}
             </div>
+          ) : !selectedEquipment ? (
+            <ul className="mt-8 space-y-2">
+              {equipmentList.map((equipment) => (
+                <li
+                  key={equipment.id}
+                  className="cursor-pointer hover:bg-gray-100 p-2 border rounded"
+                  onClick={() => setSelectedEquipment(equipment)}
+                >
+                  {equipment.name}
+                </li>
+              ))}
+            </ul>
           ) : (
-            <p className="text-zinc-400">No route selected.</p>
+            <ul className="mt-2 space-y-2">
+              {routeComponents.map((routeComponent) => (
+                <li
+                  key={routeComponent.component.id}
+                  className={`p-2 border rounded cursor-pointer ${
+                    selectedComponent?.id === routeComponent.component.id
+                      ? "bg-red-400 text-white"
+                      : ""
+                  }`}
+                  onClick={() =>
+                    setSelectedComponent({
+                      id: routeComponent.component.id,
+                      name: routeComponent.component.name,
+                      routeComponentID: routeComponent?.id,
+                      comments: routeComponent.comments || [],
+                      recommendations: routeComponent.recommendations || [],
+                      action: routeComponent.action ?? null,
+                      temperatures: routeComponent.temperatures || [],
+                      oilAnalyses: routeComponent.oilAnalyses || [],
+                    })
+                  }
+                >
+                  {routeComponent.component.name}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 

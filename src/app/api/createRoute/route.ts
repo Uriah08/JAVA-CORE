@@ -45,20 +45,35 @@ export async function POST(req: Request) {
                 })),
               },
               routeComponents: {
-                create: equipmentNames.flatMap(
-                  (equipment) =>
-                    Array.isArray(equipment.components)
-                      ? equipment.components.map((componentId) => ({
-                          componentId,
-                        }))
-                      : [] // Ensure it always returns an array
-                ),
+                create: (
+                  await Promise.all(
+                    equipmentNames.map(async (equipment) => {
+                      if (!Array.isArray(equipment.components)) return [];
+
+                      const fullComponents = await prisma.component.findMany({
+                        where: {
+                          id: { in: equipment.components },
+                          isDelete: false,
+                        },
+                      });
+
+                      return fullComponents.map((component) => ({
+                        componentId: component.id,
+                      }));
+                    })
+                  )
+                ).flat(),
               },
             },
           ],
         },
       },
     });
+
+    console.log(
+      "Route Components to be created:",
+      JSON.stringify(newRoute, null, 2)
+    );
 
     return NextResponse.json(
       { message: "Route created successfully", route: newRoute, success: true },
@@ -87,17 +102,17 @@ export async function GET(req: Request) {
       return NextResponse.json(
         { message: "Missing route list ID", success: false },
         { status: 400 }
-    )}
+      );
+    }
 
     const routes = await prisma.routeList.findMany({
       where: {
         clientId,
         isUsed: false,
-      }
-    })
+      },
+    });
 
     console.log(routes);
-    
 
     return NextResponse.json(
       { message: "Route created successfully", routes, success: true },
