@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Search } from "lucide-react";
+import { ArrowLeft, Eye, Plus, Search } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { symbols } from "@/schema";
@@ -10,6 +10,8 @@ import { Dialog } from "@/components/ui/dialog";
 import ExportClient from "@/components/container/dialogs/ExportClient";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import AddDetails from "@/components/container/form/AddDetails";
+import ViewDetails from "@/components/container/analysis/ViewDetails";
 
 const symbol1 = [
   {symbol: '/severity/C.png'},
@@ -25,6 +27,7 @@ const symbol1 = [
 ]
 
 const ComponentPage = () => {
+  const [detailsActive, setDetailsActive] = useState('add')
   const router = useRouter()
   const machinesPage = () => {
     router.push("/read-machine-list")
@@ -181,13 +184,29 @@ const ComponentPage = () => {
                  Details
                </h1>
                <div className="border rounded-lg p-3">
-                 <div className="relative">
+                 {/* <div className="relative">
                   <Search className="absolute top-2 left-3 text-zinc-400" size={20}/>
                   <Input className="w-full pl-9" placeholder="Search equipment details..."/>
                  </div>
                  <div className="w-full py-10">
                   <h1 className="text-zinc-300 font-bold text-2xl text-center">No details</h1>
+                 </div> */}
+                 <div className="flex gap-5 items-center">
+                  <Button onClick={() => setDetailsActive('add')} variant={'outline'}>
+                    <Plus size={20} className="text-zinc-400"/>
+                    <span className="text-zinc-500">Add Details</span>
+                  </Button>
+                  <Button onClick={() => setDetailsActive('view')} variant={'outline'}>
+                    <Eye size={20} className="text-zinc-400"/>
+                    <span className="text-zinc-500">View Details</span>
+                  </Button>
                  </div>
+                 <div className="bg-zinc-200 h-[1px] w-full my-3"/>
+                 {detailsActive === 'add' ? (
+                  <AddDetails/>
+                 ) : (
+                  <ViewDetails/>
+                 )}
                </div>
              </div>
             </div>
