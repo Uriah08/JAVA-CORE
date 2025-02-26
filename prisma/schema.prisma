@@ -189,15 +189,15 @@ model RouteComponent {
   note           String?
   image          String?
   reportFigures  String?
-  details        String?
 
   routeMachine RouteMachineList @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
   component    Component        @relation(fields: [componentId], references: [id], onDelete: Cascade)
 
-  comments        RouteComponentComment[]
-  recommendations RouteComponentRecommendation[]
-  temperatures    RouteComponentTemperature[]
-  oilAnalyses     RouteComponentOilAnalysis[]
+  comments             RouteComponentComment[]
+  recommendations      RouteComponentRecommendation[]
+  temperatures         RouteComponentTemperature[]
+  oilAnalyses          RouteComponentOilAnalysis[]
+  RouteCompoentDetails RouteCompoentDetails[]
 
   @@map("route_component")
 }
@@ -246,4 +246,15 @@ model RouteComponentOilAnalysis {
   routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
 
   @@map("route_component_oil_analysis")
+}
+
+model RouteCompoentDetails {
+  id               String @id @default(cuid())
+  routeComponentId String
+  header           String
+  value            String
+
+  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
+
+  @@map("route_compoent_details")
 }

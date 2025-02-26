@@ -168,3 +168,18 @@ export const routeComponentRecommendationSchema = z.object({
   priority: z.string().min(1, "Priority is required"),
   recommendation: z.string().min(1, "Recommendation is required"),
 });
+
+export const routeComponentTemperatureSchema = z.object({
+  routeComponentId: z.string(),
+  temperature: z
+    .number()
+    .min(-100, { message: "Temperature cannot be below -100°C" })
+    .max(1000, { message: "Temperature cannot exceed 1000°C" }),
+});
+
+export const routeComponentOilAnalysisSchema = z.object({
+  routeComponentId: z.string(),
+  analysis: z.enum(["Normal", "Contaminated", "Critical"], {
+    errorMap: () => ({ message: "Choose a valid oil state!" }),
+  }),
+});

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
-import { routeComponentRecommendationSchema } from "@/schema";
+import { routeComponentOilAnalysisSchema } from "@/schema";
 
 export async function POST(req: Request) {
   try {
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     console.log("Received body:", body);
 
-    const validationResult = routeComponentRecommendationSchema.safeParse(body);
+    const validationResult = routeComponentOilAnalysisSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
         {
@@ -25,34 +25,31 @@ export async function POST(req: Request) {
       );
     }
 
-    const { routeComponentId, priority, recommendation } =
-      validationResult.data;
+    const { routeComponentId, analysis } = validationResult.data;
 
-    const newRecommendation = await prisma.routeComponentRecommendation.create({
+    const newOilAnalysis = await prisma.routeComponentOilAnalysis.create({
       data: {
         routeComponentId,
-        priority,
-        recommendation,
+        analysis,
       },
     });
 
     return NextResponse.json(
       {
-        message: "Recommendation added successfully",
-        data: newRecommendation,
+        message: "Oil Analysis added successfully",
+        data: newOilAnalysis,
         success: true,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating recommendation:", error);
+    console.error("Error creating oil analysis:", error);
     return NextResponse.json(
       { message: "Internal Server Error", success: false },
       { status: 500 }
     );
   }
 }
-
 
 export async function GET(req: Request) {
   try {
@@ -71,31 +68,29 @@ export async function GET(req: Request) {
       );
     }
 
-    const getRecommendation = await prisma.routeComponentRecommendation.findMany({
+    const getOilAnalysis = await prisma.routeComponentOilAnalysis.findMany({
       where: {
         routeComponentId: routeComponentId,
       },
-      take: 2,
+      take: 5,
       orderBy: {
         createdAt: "desc",
       },
       select: {
-        priority: true,
-        recommendation: true,
-        createdAt: true,
+        analysis: true,
       },
     });
 
     return NextResponse.json(
       {
-        message: "Recommendation successfully fetched",
-        data: getRecommendation,
+        message: "Oil analysis successfully fetched",
+        data: getOilAnalysis,
         success: true,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error fetching Recommendation:", error);
+    console.error("Error creating oil analysis:", error);
     return NextResponse.json(
       { message: "Internal Server Error", success: false },
       { status: 500 }
