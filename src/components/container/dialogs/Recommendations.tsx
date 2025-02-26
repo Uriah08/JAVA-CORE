@@ -18,13 +18,11 @@ import { z } from "zod";
 interface RecommendationProps {
   routeComponentId: string | undefined;
   onClose: () => void;
-  refetch: () => void;
 }
 
 const Recommendation: React.FC<RecommendationProps> = ({
   routeComponentId,
   onClose,
-  refetch,
 }) => {
   const [recommendation, setRecommendation] = useState<string>("");
   const [priority, setPriority] = useState<string>("");
@@ -58,7 +56,6 @@ const Recommendation: React.FC<RecommendationProps> = ({
       });
       setRecommendation("");
       setPriority("");
-      refetch();
       onClose();
     } catch (error) {
       const err = error as { data?: { message?: string } };

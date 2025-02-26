@@ -18,13 +18,11 @@ import { z } from "zod";
 interface CommentsProps {
   routeComponentId: string | undefined;
   onClose: () => void;
-  refetch: () => void;
 }
 
 const Comments: React.FC<CommentsProps> = ({
   routeComponentId,
   onClose,
-  refetch,
 }) => {
   const [comment, setComment] = useState<string>("");
   const [severity, setSeverity] = useState<string>("");
@@ -54,7 +52,6 @@ const Comments: React.FC<CommentsProps> = ({
       toast({ title: "Success", description: "Comment added successfully." });
       setComment("");
       setSeverity("");
-      refetch();
       onClose();
     } catch (error) {
       const err = error as { data?: { message?: string } };

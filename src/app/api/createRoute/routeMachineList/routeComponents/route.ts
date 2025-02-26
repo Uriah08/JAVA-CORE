@@ -32,7 +32,6 @@ export async function GET(req: Request) {
         note: true,
         image: true,
         reportFigures: true,
-        details: true,
         component: {
           select: {
             id: true,

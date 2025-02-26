@@ -40,7 +40,6 @@ import {
 import { debounce } from "lodash";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { symbols } from "@/schema";
 
 import { EquipmentUpload } from "../analysis/EquipmentUpload";
 import { EquipmentView } from "../analysis/EquipmentView";
@@ -52,8 +51,8 @@ import RecommendationSection from "../analysis/RecommendationSection";
 import ClientActionSection from "../analysis/ClientActionSection";
 import AnalystNoteSection from "../analysis/AnalystNoteSection";
 import SeverityHistorySection from "../analysis/SeverityHistorySection";
-import TemperatureSection from "../analysis/Temperature";
-import OilAnalysis from "../analysis/OilAnalysis";
+import TemperatureSection from "../analysis/TemperatureSection";
+import OilAnalysisSection from "../analysis/OilAnalysisSection";
 // import EquipmentList from "../list/analysis-equipment-list/EquipmentList";
 
 const AnalysisAndReportForm = () => {
@@ -61,6 +60,8 @@ const AnalysisAndReportForm = () => {
 
   const [openComment, setOpenComment] = React.useState(false);
   const [openRecommendation, setOpenRecommendation] = React.useState(false);
+  const [openTemperature, setOpenTemperature] = React.useState(false);
+  const [openOilAnalysis, setOpenOilAnalysis] = React.useState(false);
   const [activeDrawing, setActiveDrawing] = React.useState("view");
   const [activeFigure, setActiveFigure] = React.useState("add");
   const [activeDetail, setActiveDetail] = React.useState("add");
@@ -128,38 +129,15 @@ const AnalysisAndReportForm = () => {
   const componentIds = selectedEquipment?.components.map((c) => c.id) || [];
   const routeMachineId = selectedEquipment?.routeMachineId ?? "";
 
-  const {
-    data: routeComponentsData,
-    isFetching: routeComponentsLoading,
-    refetch,
-  } = useGetRouteComponentsQuery(
-    { componentIds, routeMachineId },
-    { skip: !routeMachineId || componentIds.length === 0 }
+  const { data: routeComponentsData, isFetching: routeComponentsLoading } =
+    useGetRouteComponentsQuery(
+      { componentIds, routeMachineId },
+      { skip: !routeMachineId || componentIds.length === 0 }
+    );
+
+  const [routeComponents, setRouteComponents] = React.useState(
+    routeComponentsData?.routeList || [] 
   );
-
-  const [routeComponents, setRouteComponents] = React.useState<
-    {
-      id: string;
-      routeMachineId: string;
-      action?: string | null;
-      note?: string | null;
-      component: { id: string; name: string };
-      comments: { severity: string; comment: string; createdAt: Date }[];
-      recommendations: {
-        priority: string;
-        recommendation: string;
-        createdAt: Date;
-      }[];
-      temperatures: { temperature: number }[];
-      oilAnalyses: { analysis: string }[];
-    }[]
-  >([]);
-
-  React.useEffect(() => {
-    if (routeComponentsData?.routeList) {
-      setRouteComponents(routeComponentsData.routeList);
-    }
-  }, [routeComponentsData]);
 
   const [selectedComponent, setSelectedComponent] = React.useState<{
     id: string;
@@ -167,47 +145,14 @@ const AnalysisAndReportForm = () => {
     routeComponentID: string;
     action?: string | null;
     note?: string | null;
-    comments: { severity: string; comment: string; createdAt: Date }[];
-    recommendations: {
-      priority: string;
-      recommendation: string;
-      createdAt: Date;
-    }[];
-    temperatures: { temperature: number }[];
-    oilAnalyses: { analysis: string }[];
   } | null>(null);
 
   React.useEffect(() => {
     if (routeComponentsData?.routeList) {
       setRouteComponents(routeComponentsData.routeList);
-
-      setSelectedComponent((prevSelected) => {
-        if (!prevSelected) return null;
-
-        const updatedComponent = routeComponentsData.routeList.find(
-          (comp) => comp.component.id === prevSelected.id
-        );
-
-        if (
-          !updatedComponent ||
-          prevSelected.routeComponentID === updatedComponent.id
-        ) {
-          return prevSelected;
-        }
-
-        return {
-          id: updatedComponent.component.id,
-          name: updatedComponent.component.name,
-          routeComponentID: updatedComponent.id,
-          comments: updatedComponent.comments || [],
-          recommendations: updatedComponent.recommendations || [],
-          action: updatedComponent.action ?? null,
-          temperatures: updatedComponent.temperatures || [],
-          oilAnalyses: updatedComponent.oilAnalyses || [],
-        };
-      });
     }
-  }, [routeComponentsData, setSelectedComponent]);
+  }, [routeComponentsData]);
+
 
   console.log("Captured data: ", selectedComponent);
 
@@ -241,9 +186,7 @@ const AnalysisAndReportForm = () => {
     }
   }
 
-  const severityMap: Record<string, string> = Object.fromEntries(
-    symbols.map((s) => [s.label, `${s.image}.png`])
-  );
+
   return (
     <div className="w-full flex flex-col gap-5">
       <Form {...form}>
@@ -501,11 +444,10 @@ const AnalysisAndReportForm = () => {
                       id: routeComponent.component.id,
                       name: routeComponent.component.name,
                       routeComponentID: routeComponent?.id,
-                      comments: routeComponent.comments || [],
-                      recommendations: routeComponent.recommendations || [],
+                      // recommendations: routeComponent.recommendations || [],
                       action: routeComponent.action ?? null,
-                      temperatures: routeComponent.temperatures || [],
-                      oilAnalyses: routeComponent.oilAnalyses || [],
+                      // temperatures: routeComponent.temperatures || [],
+                      // oilAnalyses: routeComponent.oilAnalyses || [],
                     })
                   }
                 >
@@ -539,7 +481,7 @@ const AnalysisAndReportForm = () => {
               <SeverityHistorySection
                 routeComponentsLoading={routeComponentsLoading}
                 selectedComponent={selectedComponent}
-                severityMap={severityMap}
+                // severityMap={severityMap}
               />
             </div>
           </div>
@@ -550,10 +492,9 @@ const AnalysisAndReportForm = () => {
               <CommentsSection
                 routeComponentsLoading={routeComponentsLoading}
                 selectedComponent={selectedComponent}
-                severityMap={severityMap}
+                // severityMap={severityMap}
                 openComment={openComment}
                 setOpenComment={setOpenComment}
-                refetch={refetch}
               />
             </div>
 
@@ -564,7 +505,6 @@ const AnalysisAndReportForm = () => {
                 selectedComponent={selectedComponent}
                 openRecommendation={openRecommendation}
                 setOpenRecommendation={setOpenRecommendation}
-                refetch={refetch}
               />
             </div>
 
@@ -726,17 +666,19 @@ const AnalysisAndReportForm = () => {
 
               <div className="flex flex-col gap-3 w-full md:w-1/2">
                 <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">Temperature Record</h1>
                   <TemperatureSection
                     routeComponentsLoading={routeComponentsLoading}
                     selectedComponent={selectedComponent}
+                    openTemperature={openTemperature}
+                    setOpenTemperature={setOpenTemperature}
                   />
                 </div>
                 <div className="flex flex-col gap-3 w-full">
-                  <h1 className="text-sm font-medium">Oil Analysis</h1>
-                  <OilAnalysis
+                  <OilAnalysisSection
                     routeComponentsLoading={routeComponentsLoading}
                     selectedComponent={selectedComponent}
+                    openOilAnalysis={openOilAnalysis}
+                    setOpenOilAnalysis={setOpenOilAnalysis}
                   />
                 </div>
               </div>

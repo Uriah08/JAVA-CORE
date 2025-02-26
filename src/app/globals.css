@@ -95,6 +95,7 @@ html {
   animation: dash_682 1.4s linear infinite;
 }
 
+
 @keyframes dash_682 {
   72.5% {
     opacity: 0;
