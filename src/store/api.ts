@@ -11,6 +11,10 @@ import {
   RouteList,
   RouteMachineList,
   RouteComponent,
+  RouteComponentComment,
+  RouteComponentRecommendation,
+  RouteComponentTemperature,
+  RouteComponentOilAnalysis,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
@@ -77,11 +81,6 @@ export type ExtendedRouteComponent = RouteComponent & {
     id: string;
     name: string;
   };
-  comments: {
-    severity: string;
-    comment: string;
-    createdAt: Date;
-  }[];
   recommendations: {
     priority: string;
     recommendation: string;
@@ -101,6 +100,30 @@ type RouteComponentResponse = {
   success: boolean;
 };
 
+type RouteComponentCommentResponse = {
+  data: RouteComponentComment[];
+  message: string;
+  success: boolean;
+};
+
+type RouteComponentRecommendationResponse = {
+  data: RouteComponentRecommendation[];
+  message: string;
+  success: boolean;
+};
+
+type RouteComponentTemperatureResponse = {
+  data: RouteComponentTemperature[];
+  message: string;
+  success: boolean;
+}
+
+type RouteComponentOilAnalysisResponse = {
+  data: RouteComponentOilAnalysis[];
+  message: string;
+  success: boolean;
+}
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -118,6 +141,8 @@ export const api = createApi({
     "RouteComponent",
     "RouteComponentComment",
     "RouteComponentRecommendation",
+    "RouteComponentTemperature",
+    "RouteComponentOilAnalysis",
   ],
   endpoints: (build) => ({
     loginUser: build.mutation({
@@ -398,6 +423,16 @@ export const api = createApi({
       }),
       invalidatesTags: ["RouteComponentComment"],
     }),
+    getRouteComponentComment: build.query<
+      RouteComponentCommentResponse,
+      string
+    >({
+      query: (routeComponentId) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/comments?routeComponentId=${routeComponentId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentComment"],
+    }),
     createRecommendation: build.mutation({
       query: (data) => ({
         url: `/api/createRoute/routeMachineList/routeComponents/recommendations`,
@@ -407,7 +442,53 @@ export const api = createApi({
           "Content-Type": "application/json",
         },
       }),
-      invalidatesTags: ["RouteComponentComment"],
+      invalidatesTags: ["RouteComponentRecommendation"],
+    }),
+    getRouteComponentRecommendation: build.query<
+      RouteComponentRecommendationResponse,
+      string
+    >({
+      query: (routeComponentId) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/recommendations?routeComponentId=${routeComponentId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentRecommendation"],
+    }),
+    createTemperature: build.mutation({
+      query: (data) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/temperatures`,
+        method: "POST",
+        body: data,
+        headers: {
+          "content-type": "application/json",
+        },
+      }),
+      invalidatesTags: ["RouteComponentTemperature"],
+    }),
+    getRouteComponentTemperature: build.query<RouteComponentTemperatureResponse, string>({
+      query: (routeComponentId) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/temperatures?routeComponentId=${routeComponentId}`,
+        method: "GET",
+    }),
+    providesTags: ["RouteComponentTemperature"],
+    }),
+    createOilAnalysis: build.mutation({
+      query: (data) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/oilAnalysis`,
+        method: "POST",
+        body: data,
+        headers: {
+          "content-type": "application/json",
+        },
+      }),
+      invalidatesTags: ["RouteComponentOilAnalysis"],
+    }),
+    getRouteComponenetOilAnalysis: build.query<RouteComponentOilAnalysisResponse, string>({
+      query: (routeComponentId) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/oilAnalysis?routeComponentId=${routeComponentId}`,
+        method: "GET",
+    }),
+    providesTags: ["RouteComponentOilAnalysis"],
     }),
   }),
 });
@@ -443,5 +524,11 @@ export const {
   useGetRouteEquipmentListQuery,
   useGetRouteComponentsQuery,
   useCreateCommentMutation,
+  useGetRouteComponentCommentQuery,
   useCreateRecommendationMutation,
+  useGetRouteComponentRecommendationQuery,
+  useCreateTemperatureMutation,
+  useGetRouteComponentTemperatureQuery,
+  useCreateOilAnalysisMutation,
+  useGetRouteComponenetOilAnalysisQuery,
 } = api;

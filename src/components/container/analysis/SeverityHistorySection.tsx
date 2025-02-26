@@ -1,33 +1,56 @@
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { symbols } from "@/schema";
+import { useGetRouteComponentCommentQuery } from "@/store/api";
 
-interface Comment {
-  severity: string;
-  createdAt: Date;
-}
+// interface Comment {
+//   severity: string;
+//   createdAt: Date;
+// }
 
 interface SelectedComponent {
   id: string;
   routeComponentID: string;
-  name: string;
-  comments: Comment[];
+  // name: string;
+  // comments: Comment[];
 }
 
 interface SeverityHistoryProps {
   routeComponentsLoading: boolean;
   selectedComponent: SelectedComponent | null;
-  severityMap: Record<string, string>;
+  // severityMap: Record<string, string>;
 }
 
 const SeverityHistorySection: React.FC<SeverityHistoryProps> = ({
   routeComponentsLoading,
   selectedComponent,
-  severityMap,
+  // severityMap,
 }) => {
+  const routeComponentID = selectedComponent?.routeComponentID as string;
+
+  const {
+    data: routeComponentComment,
+    isLoading: loadingRouteComponentSeverity,
+    error: routeComponentSeverityError,
+  } = useGetRouteComponentCommentQuery(routeComponentID, {
+    skip: !routeComponentID,
+  });
+
+  if (routeComponentSeverityError) {
+    return <div className="text-main">Error loading data.</div>;
+  }
+
+  const severityMap: Record<string, string> = Object.fromEntries(
+    symbols.map((s) => [s.label, `${s.image}.png`])
+  );
+
+  const comments = routeComponentComment?.data || [];
+
+
   return (
     <div className="border rounded-lg flex overflow-auto">
       {Array.from({ length: 10 }).map((_, index) => {
-        const comment = selectedComponent?.comments[index] || null;
+        const comment = comments[index] || null;
 
         return (
           <div key={index} className="flex flex-col border-r w-full">
@@ -35,7 +58,7 @@ const SeverityHistorySection: React.FC<SeverityHistoryProps> = ({
               {index === 0 ? "Current" : "Previous"}
             </h1>
             <div className="flex justify-center items-center py-1">
-              {routeComponentsLoading ? (
+              {routeComponentsLoading || loadingRouteComponentSeverity ? (
                 <Skeleton className="w-5 h-5 animate-pulse bg-zinc-200" />
               ) : comment ? (
                 <Image
