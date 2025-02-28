@@ -47,7 +47,10 @@ const RecommendationSection: React.FC<RecommendationsSectionProps> = ({
     return <div className="text-main">Error loading data.</div>;
   }
 
-  const recommendation = routeComponentRecommendation?.data || [];
+  const recommendation = selectedComponent
+    ? routeComponentRecommendation?.data || []
+    : [];
+
   console.log("extracted data: ", recommendation);
 
   const sortedRecommendation = [...recommendation].sort(

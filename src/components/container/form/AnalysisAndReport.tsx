@@ -46,6 +46,8 @@ import SeverityHistorySection from "../analysis/SeverityHistorySection";
 import TemperatureSection from "../analysis/TemperatureSection";
 import OilAnalysisSection from "../analysis/OilAnalysisSection";
 import EquipmentDetailsSection from "../analysis/EquipmentDetailsSection";
+import { Dialog } from "@/components/ui/dialog";
+import ExportAdmin from "../dialogs/ExportAdmin";
 // import EquipmentList from "../list/analysis-equipment-list/EquipmentList";
 
 const AnalysisAndReportForm = () => {
@@ -57,6 +59,7 @@ const AnalysisAndReportForm = () => {
   const [activeDrawing, setActiveDrawing] = React.useState("view");
   const [activeFigure, setActiveFigure] = React.useState("add");
   const [hideList, setHideList] = React.useState(false);
+  const [openExport, setOpenExport] = React.useState(false);
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(
@@ -195,9 +198,16 @@ const AnalysisAndReportForm = () => {
                 <h1 className="text-2xl font-bold text-black">
                   Analysis and Reporting
                 </h1>
-                <Button className="bg-main hover:bg-follow text-white ">
+                <Button
+                  onClick={() => setOpenExport(!openExport)}
+                  type="button"
+                  className="bg-main hover:bg-follow text-white"
+                >
                   Export
                 </Button>
+                <Dialog open={openExport} onOpenChange={setOpenExport}>
+                  <ExportAdmin onClose={() => setOpenExport(false)} />
+                </Dialog>
               </div>
               <h2 className="text-lg font-semibold mb-3 mt-3 text-zinc-700">
                 Information
@@ -217,6 +227,9 @@ const AnalysisAndReportForm = () => {
                             (job) => job.jobNumber === value
                           );
                           setSelectedJob(job || null);
+                          setSelectedComponent(null);
+                          setSelectedEquipment(null);
+
                           field.onChange(value);
                         }}
                         defaultValue={field.value}
@@ -395,7 +408,10 @@ const AnalysisAndReportForm = () => {
 
           {selectedEquipment && (
             <Button
-              onClick={() => setSelectedEquipment(null)}
+              onClick={() => {
+                setSelectedEquipment(null);
+                setSelectedComponent(null);
+              }}
               className="mt-3 text-sm font-medium bg-transparent shadow-none text-main hover:text-follow hover:underline hover:bg-transparent justify-start"
             >
               &larr; Back to Equipment List

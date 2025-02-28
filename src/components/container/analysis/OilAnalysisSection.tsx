@@ -31,19 +31,21 @@ const OilAnalysisSection: React.FC<OilAnalysisSectionProps> = ({
 }) => {
   const routeComponentID = selectedComponent?.routeComponentID as string;
 
-    const {
-      data: routeComponentOilAnalysis,
-      isLoading: loadingRouteComponentOilAnalysis,
-      error: routeComponentOilAnalysisError,
-    } = useGetRouteComponenetOilAnalysisQuery(routeComponentID, {
-      skip: !routeComponentID,
-    });
+  const {
+    data: routeComponentOilAnalysis,
+    isLoading: loadingRouteComponentOilAnalysis,
+    error: routeComponentOilAnalysisError,
+  } = useGetRouteComponenetOilAnalysisQuery(routeComponentID, {
+    skip: !routeComponentID,
+  });
 
-    if(routeComponentOilAnalysisError) {
-      return <div className="text-main">Error loading data.</div>;
-    }
+  if (routeComponentOilAnalysisError) {
+    return <div className="text-main">Error loading data.</div>;
+  }
 
-    const oilAnalysis = routeComponentOilAnalysis?.data || [];
+  const oilAnalysis = selectedComponent
+    ? routeComponentOilAnalysis?.data || []
+    : [];
 
   return (
     <div className="flex flex-col gap-3 w-full">
@@ -77,7 +79,7 @@ const OilAnalysisSection: React.FC<OilAnalysisSectionProps> = ({
                 {index === 0 ? "Current" : "Previous"}
               </h1>
               <div className="flex justify-center items-center py-1">
-                {routeComponentsLoading || loadingRouteComponentOilAnalysis? (
+                {routeComponentsLoading || loadingRouteComponentOilAnalysis ? (
                   <Skeleton className="w-5 h-5 animate-pulse bg-zinc-200" />
                 ) : oil ? (
                   <p

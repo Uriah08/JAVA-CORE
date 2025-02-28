@@ -44,8 +44,7 @@ const SeverityHistorySection: React.FC<SeverityHistoryProps> = ({
     symbols.map((s) => [s.label, `${s.image}.png`])
   );
 
-  const comments = routeComponentComment?.data || [];
-
+  const comments = selectedComponent ? routeComponentComment?.data || [] : [];
 
   return (
     <div className="border rounded-lg flex overflow-auto">

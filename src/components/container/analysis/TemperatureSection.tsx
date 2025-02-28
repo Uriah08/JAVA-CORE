@@ -37,7 +37,9 @@ const TemperatureSection: React.FC<TemperatureSectionProps> = ({
     return <div className="text-main">Error loading data.</div>;
   }
 
-  const temperatures = routeComponentTemperature?.data || [];
+  const temperatures = selectedComponent
+    ? routeComponentTemperature?.data || []
+    : [];
 
   const formatTemperature = (temp: number, unit: "C" | "F" = "C") => {
     return unit === "C" ? `${temp}°C` : `${(temp * 9) / 5 + 32}°F`;

@@ -54,7 +54,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({
     symbols.map((s) => [s.label, `${s.image}.png`])
   );
 
-  const comments = routeComponentComment?.data || [];
+  const comments = selectedComponent ? routeComponentComment?.data || [] : [];
   console.log("extracted data: ", comments);
 
   const sortedComments = [...comments].sort(
