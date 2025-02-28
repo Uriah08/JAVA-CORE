@@ -169,6 +169,7 @@ export const routeComponentRecommendationSchema = z.object({
   recommendation: z.string().min(1, "Recommendation is required"),
 });
 
+
 export const routeComponentTemperatureSchema = z.object({
   routeComponentId: z.string(),
   temperature: z
@@ -183,3 +184,4 @@ export const routeComponentOilAnalysisSchema = z.object({
     errorMap: () => ({ message: "Choose a valid oil state!" }),
   }),
 });
+

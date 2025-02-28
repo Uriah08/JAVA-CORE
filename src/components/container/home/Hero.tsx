@@ -31,7 +31,7 @@ const Hero = ({
             session?.user.role === "admin" ? (
               <Link href={'/job-registry'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Admin</Link>
             ) : (
-              <Link href={'/read-machine-list'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Client</Link>
+              <Link href={'/client-job-registry'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Client</Link>
             )
             ) : (
               <Link href={'/auth/sign-in'} className="bg-main duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign In</Link>
@@ -60,7 +60,7 @@ const Hero = ({
             session?.user.role === "admin" ? (
               <Link href={'/job-registry'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Admin</Link>
             ) : (
-              <Link href={'/read-machine-list'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Client</Link>
+              <Link href={'/client-job-registry'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Client</Link>
             )
           ) : (
             <Link href={'/auth/sign-in'} className="bg-main hidden lg:block duration-200 transition-all hover:bg-follow px-10 py-3 bg-opacity-85 rounded-full h-fit font-semibold text-base text-white cursor-pointer">Sign In</Link>

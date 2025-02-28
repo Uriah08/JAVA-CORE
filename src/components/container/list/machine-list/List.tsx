@@ -29,16 +29,10 @@ import {
 
 import { useSession } from "next-auth/react";
 
-import { useRouter } from "next/navigation";
 import UpdatingDialog from "../../dialog/updatingList/UpdatingDialog";
 
 const List = () => {
-  const router = useRouter();
-
-  const componentClick = (name: string) => {
-    router.push(`/read-machine-list/${name}`);
-  };
-
+  
   const { data: session } = useSession();
 
   const {
@@ -302,11 +296,6 @@ const List = () => {
                   <div
                     className="flex gap-3 w-full"
                     onClick={() => {
-                      if (session?.user.role === "user") {
-                        if (breadcrumb.length === 3) {
-                          componentClick(item.id);
-                        }
-                      }
                       if (isDeleting) {
                         handleSelectItem(item.id);
                       } else {
