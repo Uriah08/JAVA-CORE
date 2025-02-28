@@ -178,20 +178,24 @@ model RouteEquipmentName {
   routeMachine  RouteMachineList @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
   equipmentName EquipmentName?   @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
 
+  RouteComponent RouteComponent[]
+
   @@map("route_equipment_name")
 }
 
 model RouteComponent {
-  id             String  @id @default(uuid())
-  routeMachineId String
-  componentId    String
-  action         String?
-  note           String?
-  image          String?
-  reportFigures  String?
+  id               String  @id @default(uuid())
+  routeMachineId   String
+  componentId      String
+  routeEquipmentId String
+  action           String?
+  note             String?
+  image            String?
+  reportFigures    String?
 
-  routeMachine RouteMachineList @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
-  component    Component        @relation(fields: [componentId], references: [id], onDelete: Cascade)
+  routeMachine   RouteMachineList   @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
+  component      Component          @relation(fields: [componentId], references: [id], onDelete: Cascade)
+  routeEquipment RouteEquipmentName @relation(fields: [routeEquipmentId], references: [id], onDelete: Cascade)
 
   comments             RouteComponentComment[]
   recommendations      RouteComponentRecommendation[]

@@ -1,49 +1,43 @@
+"use client";
+
+import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import Temperature from "../dialogs/Temperatures";
 import { useGetRouteComponentTemperatureQuery } from "@/store/api";
 
-// interface Temperature {
-//   temperature: number;
-// }
-
 interface SelectedComponent {
   id: string;
   routeComponentID: string;
-  // name: string;
-  // temperatures: Temperature[];
 }
 
 interface TemperatureSectionProps {
   routeComponentsLoading: boolean;
   selectedComponent: SelectedComponent | null;
-  openTemperature: boolean;
-  setOpenTemperature: Dispatch<SetStateAction<boolean>>;
 }
 
 const TemperatureSection: React.FC<TemperatureSectionProps> = ({
   routeComponentsLoading,
   selectedComponent,
-  openTemperature,
-  setOpenTemperature,
 }) => {
+  const [openTemperature, setOpenTemperature] = React.useState(false);
+
   const routeComponentID = selectedComponent?.routeComponentID as string;
 
-    const {
-      data: routeComponentTemperature,
-      isLoading: loadingRouteComponentTemperature,
-      error: routeComponentTemperatureError,
-    } = useGetRouteComponentTemperatureQuery(routeComponentID, {
-      skip: !routeComponentID,
-    });
+  const {
+    data: routeComponentTemperature,
+    isLoading: loadingRouteComponentTemperature,
+    error: routeComponentTemperatureError,
+  } = useGetRouteComponentTemperatureQuery(routeComponentID, {
+    skip: !routeComponentID,
+  });
 
-    if(routeComponentTemperatureError) {
-      return <div className="text-main">Error loading data.</div>;
-    }
+  if (routeComponentTemperatureError) {
+    return <div className="text-main">Error loading data.</div>;
+  }
 
-    const temperatures = routeComponentTemperature?.data || [];
+  const temperatures = routeComponentTemperature?.data || [];
 
   const formatTemperature = (temp: number, unit: "C" | "F" = "C") => {
     return unit === "C" ? `${temp}°C` : `${(temp * 9) / 5 + 32}°F`;

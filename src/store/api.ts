@@ -15,6 +15,7 @@ import {
   RouteComponentRecommendation,
   RouteComponentTemperature,
   RouteComponentOilAnalysis,
+  RouteCompoentDetails,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
@@ -124,6 +125,12 @@ type RouteComponentOilAnalysisResponse = {
   success: boolean;
 }
 
+type RouteCompoentDetailsResponse = {
+  data: RouteCompoentDetails[];
+  message: string;
+  success: boolean;
+}
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -143,6 +150,7 @@ export const api = createApi({
     "RouteComponentRecommendation",
     "RouteComponentTemperature",
     "RouteComponentOilAnalysis",
+    "RouteComponentDetails",
   ],
   endpoints: (build) => ({
     loginUser: build.mutation({
@@ -490,6 +498,13 @@ export const api = createApi({
     }),
     providesTags: ["RouteComponentOilAnalysis"],
     }),
+    getRouteComponentDetails: build.query<RouteCompoentDetailsResponse, string>({
+      query: (routeComponentId) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/details?routeComponentId=${routeComponentId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentDetails"],
+    }),
   }),
 });
 
@@ -531,4 +546,5 @@ export const {
   useGetRouteComponentTemperatureQuery,
   useCreateOilAnalysisMutation,
   useGetRouteComponenetOilAnalysisQuery,
+  useGetRouteComponentDetailsQuery,
 } = api;

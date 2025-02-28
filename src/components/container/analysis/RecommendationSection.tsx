@@ -72,56 +72,55 @@ const RecommendationSection: React.FC<RecommendationsSectionProps> = ({
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
               ) : latestRecommendation ? (
                 <>
-                      <div className="flex justify-between items-center">
-                        <h1 className="font-bold">
-                          {latestRecommendation.priority}
-                        </h1>
-                        <h1 className="text-xs text-zinc-500">
-                          {new Date(
-                            latestRecommendation.createdAt
-                          ).toLocaleDateString()}
-                        </h1>
-                      </div>
-                      <p className="text-sm text-zinc-700 mt-3">
-                        {latestRecommendation.recommendation}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-sm text-zinc-400">
-                      No recommendations available.
-                    </p>
-                  )}
-                
+                  <div className="flex justify-between items-center">
+                    <h1 className="font-bold">
+                      {latestRecommendation.priority}
+                    </h1>
+                    <h1 className="text-xs text-zinc-500">
+                      {new Date(
+                        latestRecommendation.createdAt
+                      ).toLocaleDateString()}
+                    </h1>
+                  </div>
+                  <p className="text-sm text-zinc-700 mt-3">
+                    {latestRecommendation.recommendation}
+                  </p>
+                </>
+              ) : (
+                <p className="text-sm text-zinc-400">
+                  No recommendations available.
+                </p>
+              )}
             </div>
           </div>
-          
+
           {/* Previous Recommendation */}
           <div className="flex-1 flex flex-col gap-2">
             <h1 className="font-medium">Previous Recommendation</h1>
             <div className="p-3 border rounded-lg">
               {routeComponentsLoading || loadingRouteComponentRecommendation ? (
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
-              ) :  previousRecommendation ? (
-                    <>
-                      <div className="flex justify-between items-center">
-                        <h1 className="font-bold">
-                          {previousRecommendation.priority}
-                        </h1>
-                        <h1 className="text-xs text-zinc-500">
-                          {new Date(
-                            previousRecommendation.createdAt
-                          ).toLocaleDateString()}
-                        </h1>
-                      </div>
-                      <p className="text-sm text-zinc-700 mt-3">
-                        {previousRecommendation.recommendation}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="text-sm text-zinc-400">
-                      No previous recommendation.
-                    </p>
-                  )};
+              ) : previousRecommendation ? (
+                <>
+                  <div className="flex justify-between items-center">
+                    <h1 className="font-bold">
+                      {previousRecommendation.priority}
+                    </h1>
+                    <h1 className="text-xs text-zinc-500">
+                      {new Date(
+                        previousRecommendation.createdAt
+                      ).toLocaleDateString()}
+                    </h1>
+                  </div>
+                  <p className="text-sm text-zinc-700 mt-3">
+                    {previousRecommendation.recommendation}
+                  </p>
+                </>
+              ) : (
+                <p className="text-sm text-zinc-400">
+                  No previous recommendation.
+                </p>
+              )}
             </div>
           </div>
         </div>

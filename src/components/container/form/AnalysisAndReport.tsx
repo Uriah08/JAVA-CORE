@@ -22,15 +22,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Edit,
-  ImageIcon,
-  Plus,
-  Search,
-  Trash,
-  View,
-  PanelRight,
-} from "lucide-react";
+import { ImageIcon, Plus, Search, Trash, View, PanelRight } from "lucide-react";
 
 import {
   useGetRouteComponentsQuery,
@@ -53,6 +45,7 @@ import AnalystNoteSection from "../analysis/AnalystNoteSection";
 import SeverityHistorySection from "../analysis/SeverityHistorySection";
 import TemperatureSection from "../analysis/TemperatureSection";
 import OilAnalysisSection from "../analysis/OilAnalysisSection";
+import EquipmentDetailsSection from "../analysis/EquipmentDetailsSection";
 // import EquipmentList from "../list/analysis-equipment-list/EquipmentList";
 
 const AnalysisAndReportForm = () => {
@@ -60,11 +53,9 @@ const AnalysisAndReportForm = () => {
 
   const [openComment, setOpenComment] = React.useState(false);
   const [openRecommendation, setOpenRecommendation] = React.useState(false);
-  const [openTemperature, setOpenTemperature] = React.useState(false);
   const [openOilAnalysis, setOpenOilAnalysis] = React.useState(false);
   const [activeDrawing, setActiveDrawing] = React.useState("view");
   const [activeFigure, setActiveFigure] = React.useState("add");
-  const [activeDetail, setActiveDetail] = React.useState("add");
   const [hideList, setHideList] = React.useState(false);
 
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -136,7 +127,7 @@ const AnalysisAndReportForm = () => {
     );
 
   const [routeComponents, setRouteComponents] = React.useState(
-    routeComponentsData?.routeList || [] 
+    routeComponentsData?.routeList || []
   );
 
   const [selectedComponent, setSelectedComponent] = React.useState<{
@@ -152,7 +143,6 @@ const AnalysisAndReportForm = () => {
       setRouteComponents(routeComponentsData.routeList);
     }
   }, [routeComponentsData]);
-
 
   console.log("Captured data: ", selectedComponent);
 
@@ -185,7 +175,6 @@ const AnalysisAndReportForm = () => {
       });
     }
   }
-
 
   return (
     <div className="w-full flex flex-col gap-5">
@@ -621,7 +610,7 @@ const AnalysisAndReportForm = () => {
             {/* ####################### EQUIPMENT MECHANICAL DETAILS ######################### */}
 
             <div className="flex flex-col md:flex-row gap-3 mt-3">
-              <div className="flex flex-col gap-3 w-full md:w-1/2">
+              {/* <div className="flex flex-col gap-3 w-full md:w-1/2">
                 <h1 className="text-sm font-medium">
                   Equipment Mechanical Details
                 </h1>
@@ -660,7 +649,9 @@ const AnalysisAndReportForm = () => {
                   </div>
                   <div className="w-full h-[1px] bg-zinc-200 mt-3" />
                 </div>
-              </div>
+              </div> */}
+
+              <EquipmentDetailsSection selectedComponent={selectedComponent} />
 
               {/* ####################### TEMPARATURE AND OIL ANALYSIS ######################### */}
 
@@ -669,8 +660,6 @@ const AnalysisAndReportForm = () => {
                   <TemperatureSection
                     routeComponentsLoading={routeComponentsLoading}
                     selectedComponent={selectedComponent}
-                    openTemperature={openTemperature}
-                    setOpenTemperature={setOpenTemperature}
                   />
                 </div>
                 <div className="flex flex-col gap-3 w-full">
