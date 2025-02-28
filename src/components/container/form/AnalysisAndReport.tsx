@@ -102,9 +102,10 @@ const AnalysisAndReportForm = () => {
     routeData?.routeMachineList.flatMap((machine) =>
       machine.routeEquipmentNames.map((eq) => ({
         id: eq.id,
+        routeMachineId: machine?.id,
         name: eq.equipmentName.name,
-        routeMachineId: eq.routeMachineId,
-        components: eq.equipmentName.components,
+        // routeMachineId: eq.routeMachineId,
+        // components: eq.equipmentName.components,
       }))
     ) || [];
 
@@ -112,22 +113,24 @@ const AnalysisAndReportForm = () => {
     id: string;
     name: string;
     routeMachineId: string;
-    components: { id: string; name: string }[];
+    // components: { id: string; name: string }[];
   } | null>(null);
 
   console.log("captured data: ", selectedEquipment);
 
-  const componentIds = selectedEquipment?.components.map((c) => c.id) || [];
-  const routeMachineId = selectedEquipment?.routeMachineId ?? "";
+  // const componentIds = selectedEquipment?.components.map((c) => c.id) || [];
+  // const routeMachineId = selectedEquipment?.routeMachineId ?? "";
 
   const { data: routeComponentsData, isFetching: routeComponentsLoading } =
-    useGetRouteComponentsQuery(
-      { componentIds, routeMachineId },
-      { skip: !routeMachineId || componentIds.length === 0 }
-    );
+    useGetRouteComponentsQuery(selectedEquipment?.id ?? "", {
+      skip: !selectedEquipment,
+    });
+
+  console.log("Component: ", routeComponentsData);
+  console.log("Component2: ", routeComponentsData?.routeComponents);
 
   const [routeComponents, setRouteComponents] = React.useState(
-    routeComponentsData?.routeList || []
+    routeComponentsData?.routeComponents || []
   );
 
   const [selectedComponent, setSelectedComponent] = React.useState<{
@@ -136,11 +139,14 @@ const AnalysisAndReportForm = () => {
     routeComponentID: string;
     action?: string | null;
     note?: string | null;
+    component?: {
+      name: string;
+    };
   } | null>(null);
 
   React.useEffect(() => {
-    if (routeComponentsData?.routeList) {
-      setRouteComponents(routeComponentsData.routeList);
+    if (routeComponentsData?.routeComponents) {
+      setRouteComponents(routeComponentsData.routeComponents);
     }
   }, [routeComponentsData]);
 
@@ -422,15 +428,15 @@ const AnalysisAndReportForm = () => {
             <ul className="mt-2 space-y-2">
               {routeComponents.map((routeComponent) => (
                 <li
-                  key={routeComponent.component.id}
+                  key={routeComponent.id}
                   className={`p-2 border rounded cursor-pointer ${
-                    selectedComponent?.id === routeComponent.component.id
+                    selectedComponent?.id === routeComponent.id
                       ? "bg-red-400 text-white"
                       : ""
                   }`}
                   onClick={() =>
                     setSelectedComponent({
-                      id: routeComponent.component.id,
+                      id: routeComponent.id,
                       name: routeComponent.component.name,
                       routeComponentID: routeComponent?.id,
                       // recommendations: routeComponent.recommendations || [],

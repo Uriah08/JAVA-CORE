@@ -35,45 +35,36 @@ export async function POST(req: Request) {
         clientId,
         routeName,
         isUsed: false,
-        machines: {
-          create: [
-            {
-              areaId,
-              routeEquipmentNames: {
-                create: equipmentNames.map((equipment) => ({
-                  equipmentNameId: equipment.id,
-                })),
-              },
-              routeComponents: {
-                create: (
-                  await Promise.all(
-                    equipmentNames.map(async (equipment) => {
-                      if (!Array.isArray(equipment.components)) return [];
-
-                      const fullComponents = await prisma.component.findMany({
-                        where: {
-                          id: { in: equipment.components },
-                          isDelete: false,
-                        },
-                      });
-
-                      return fullComponents.map((component) => ({
-                        componentId: component.id,
-                      }));
-                    })
-                  )
-                ).flat(),
-              },
-            },
-          ],
-        },
       },
     });
 
-    console.log(
-      "Route Components to be created:",
-      JSON.stringify(newRoute, null, 2)
-    );
+    const newMachine = await prisma.routeMachineList.create({
+      data: {
+        routeId: newRoute.id,
+        areaId,
+      },
+    });
+
+    for (const equipment of equipmentNames) {
+      const newEquipment = await prisma.routeEquipmentName.create({
+        data: {
+          routeMachineId: newMachine.id,
+          equipmentNameId: equipment.id,
+        },
+      });
+
+      for (const componentId of equipment.components || []) {
+        const newComponent = await prisma.routeComponent.create({
+          data: {
+            componentId,
+            routeMachineId: newMachine.id,
+            routeEquipmentId: newEquipment.id,
+          },
+        });
+
+        console.log("Created RouteComponent:", newComponent);
+      }
+    }
 
     return NextResponse.json(
       { message: "Route created successfully", route: newRoute, success: true },

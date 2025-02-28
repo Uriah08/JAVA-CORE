@@ -10,80 +10,37 @@ export async function GET(req: Request) {
     }
 
     const url = new URL(req.url);
-    const componentIds = url.searchParams.getAll("componentId") || [];
-    const routeMachineId = url.searchParams.get("routeMachineId");
+    const routeEquipmentIds = url.searchParams.getAll("routeEquipmentId");
 
-    if (!componentIds?.length || !routeMachineId) {
+    if (!routeEquipmentIds.length) {
       return NextResponse.json(
-        { message: "Missing component IDs or routeMachineId", success: false },
+        { message: "Missing routeEquipmentId(s)", success: false },
         { status: 400 }
       );
     }
 
     const routeComponents = await prisma.routeComponent.findMany({
       where: {
-        componentId: { in: componentIds },
-        routeMachineId: routeMachineId,
+        routeEquipmentId: { in: routeEquipmentIds }, 
       },
       select: {
         id: true,
-        routeMachineId: true,
+        routeEquipmentId: true, 
         action: true,
         note: true,
         image: true,
         reportFigures: true,
         component: {
-          select: {
-            id: true,
+          select:{
             name: true,
-          },
-        },
-        comments: {
-          take: 10,
-          orderBy: {
-            createdAt: "desc",
-          },
-          select: {
-            severity: true,
-            comment: true,
-            createdAt: true,
-          },
-        },
-        recommendations: {
-          take: 10,
-          orderBy: {
-            createdAt: "desc",
-          },
-          select: {
-            priority: true,
-            recommendation: true,
-            createdAt: true,
-          },
-        },
-        temperatures: {
-          take: 5,
-          orderBy: {
-            createdAt: "desc",
-          },
-          select: {
-            temperature: true,
-          },
-        },
-        oilAnalyses: {
-          take: 5,
-          orderBy: {
-            createdAt: "desc",
-          },
-          select: {
-            analysis: true,
-          },
-        },
+          }
+        }
       },
     });
 
-    return NextResponse.json({ routeList: routeComponents });
+    return NextResponse.json({ routeComponents, success: true });
   } catch (error) {
-    console.error("Error fetching route component", error);
+    console.error("Error fetching route components", error);
     return NextResponse.json(
       { message: "Internal Server Error", success: false },
       { status: 500 }

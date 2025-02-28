@@ -62,13 +62,8 @@ type RouteResponse = {
 export type ExtendedRouteMachineList = RouteMachineList & {
   routeEquipmentNames: {
     id: string;
-    routeMachineId: string;
     equipmentName: {
       name: string;
-      components: {
-        id: string;
-        name: string;
-      }[];
     };
   }[];
 };
@@ -78,25 +73,13 @@ type RouteMachineListResponse = {
 };
 
 export type ExtendedRouteComponent = RouteComponent & {
-  component: {
-    id: string;
+  component:{
     name: string;
-  };
-  recommendations: {
-    priority: string;
-    recommendation: string;
-    createdAt: Date;
-  }[];
-  temperatures: {
-    temperature: number;
-  }[];
-  oilAnalyses: {
-    analysis: string;
-  }[];
-};
+  }
+}
 
 type RouteComponentResponse = {
-  routeList: ExtendedRouteComponent[];
+  routeComponents: ExtendedRouteComponent[];
   message: string;
   success: boolean;
 };
@@ -117,19 +100,19 @@ type RouteComponentTemperatureResponse = {
   data: RouteComponentTemperature[];
   message: string;
   success: boolean;
-}
+};
 
 type RouteComponentOilAnalysisResponse = {
   data: RouteComponentOilAnalysis[];
   message: string;
   success: boolean;
-}
+};
 
 type RouteCompoentDetailsResponse = {
   data: RouteCompoentDetails[];
   message: string;
   success: boolean;
-}
+};
 
 export const api = createApi({
   reducerPath: "api",
@@ -412,16 +395,11 @@ export const api = createApi({
         `/api/createRoute/routeMachineList?routeListId=${routeListId}`,
       providesTags: ["RouteMachineList"],
     }),
-    getRouteComponents: build.query<
-      RouteComponentResponse,
-      { componentIds: string[]; routeMachineId: string }
-    >({
-      query: ({ componentIds, routeMachineId }) => {
-        const componentQuery = componentIds
-          .map((id) => `componentId=${id}`)
-          .join("&");
-        return `/api/createRoute/routeMachineList/routeComponents?${componentQuery}&routeMachineId=${routeMachineId}`;
-      },
+    getRouteComponents: build.query<RouteComponentResponse, string>({
+      query: (routeEquipmentId) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents?routeEquipmentId=${routeEquipmentId}`,
+        method: "GET",
+      }),
       providesTags: ["RouteComponent"],
     }),
     createComment: build.mutation({
@@ -477,12 +455,15 @@ export const api = createApi({
       }),
       invalidatesTags: ["RouteComponentTemperature"],
     }),
-    getRouteComponentTemperature: build.query<RouteComponentTemperatureResponse, string>({
+    getRouteComponentTemperature: build.query<
+      RouteComponentTemperatureResponse,
+      string
+    >({
       query: (routeComponentId) => ({
         url: `/api/createRoute/routeMachineList/routeComponents/temperatures?routeComponentId=${routeComponentId}`,
         method: "GET",
-    }),
-    providesTags: ["RouteComponentTemperature"],
+      }),
+      providesTags: ["RouteComponentTemperature"],
     }),
     createOilAnalysis: build.mutation({
       query: (data) => ({
@@ -495,20 +476,25 @@ export const api = createApi({
       }),
       invalidatesTags: ["RouteComponentOilAnalysis"],
     }),
-    getRouteComponenetOilAnalysis: build.query<RouteComponentOilAnalysisResponse, string>({
+    getRouteComponenetOilAnalysis: build.query<
+      RouteComponentOilAnalysisResponse,
+      string
+    >({
       query: (routeComponentId) => ({
         url: `/api/createRoute/routeMachineList/routeComponents/oilAnalysis?routeComponentId=${routeComponentId}`,
         method: "GET",
-    }),
-    providesTags: ["RouteComponentOilAnalysis"],
-    }),
-    getRouteComponentDetails: build.query<RouteCompoentDetailsResponse, string>({
-      query: (routeComponentId) => ({
-        url: `/api/createRoute/routeMachineList/routeComponents/details?routeComponentId=${routeComponentId}`,
-        method: "GET",
       }),
-      providesTags: ["RouteComponentDetails"],
+      providesTags: ["RouteComponentOilAnalysis"],
     }),
+    getRouteComponentDetails: build.query<RouteCompoentDetailsResponse, string>(
+      {
+        query: (routeComponentId) => ({
+          url: `/api/createRoute/routeMachineList/routeComponents/details?routeComponentId=${routeComponentId}`,
+          method: "GET",
+        }),
+        providesTags: ["RouteComponentDetails"],
+      }
+    ),
   }),
 });
 

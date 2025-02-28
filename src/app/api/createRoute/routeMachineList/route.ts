@@ -25,20 +25,12 @@ export async function GET(req: Request) {
       },
       select: {
         id: true,
-        routeId: true,
         routeEquipmentNames: {
           select: {
             id: true,
-            routeMachineId: true,
             equipmentName: {
               select: {
                 name: true,
-                components: {
-                  select: {
-                    id: true,
-                    name: true,
-                  },
-                },
               },
             },
           },
