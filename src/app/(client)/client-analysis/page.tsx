@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Eye, Plus, Search } from "lucide-react";
+import { Eye, ImageIcon, Plus, Search, Trash, View } from "lucide-react";
 import Image from "next/image";
 import { symbols } from "@/schema";
 import { Dialog } from "@/components/ui/dialog";
@@ -11,6 +11,10 @@ import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AddDetails from "@/components/container/form/AddDetails";
 import ViewDetails from "@/components/container/analysis/ViewDetails";
+import { FigureView } from "@/components/container/analysis/FigureView";
+import { FigureUpload } from "@/components/container/analysis/FigureUpload";
+import { EquipmentUpload } from "@/components/container/analysis/EquipmentUpload";
+import { EquipmentView } from "@/components/container/analysis/EquipmentView";
 
 const symbol1 = [
   {symbol: '/severity/C.png'},
@@ -27,6 +31,9 @@ const symbol1 = [
 
 const ClientAnalysis = () => {
   const [detailsActive, setDetailsActive] = useState('add')
+
+  const [activeDrawing, setActiveDrawing] = useState("view");
+  const [activeFigure, setActiveFigure] = useState("add");
   
   const [open, setOpen] = useState(false)
 
@@ -169,18 +176,104 @@ const ClientAnalysis = () => {
                </div>
              </div>
              </div>
+
+              {/* ####################### EQUIPMENT DRAWING REQUIRED ######################### */}
+
+            <div className="flex flex-col md:flex-row gap-5 mt-3">
+              <div className="flex flex-col gap-3 w-full">
+                <h1 className="text-sm font-medium">Equipment Drawing Photo</h1>
+                <div className="border rounded-lg p-3">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setActiveDrawing("upload")}
+                      type="button"
+                      className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                        activeDrawing === "upload" && "bg-zinc-200"
+                      }`}
+                    >
+                      <ImageIcon className="text-zinc-600" size={15} />
+                      <h1 className="text-sm text-zinc-600">Upload</h1>
+                    </button>
+                    <button
+                      onClick={() => setActiveDrawing("delete")}
+                      type="button"
+                      className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                        activeDrawing === "delete" && "bg-zinc-200"
+                      }`}
+                    >
+                      <Trash className="text-zinc-600" size={15} />
+                      <h1 className="text-sm text-zinc-600">Delete</h1>
+                    </button>
+                    <button
+                      onClick={() => setActiveDrawing("view")}
+                      type="button"
+                      className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                        activeDrawing === "view" && "bg-zinc-200"
+                      }`}
+                    >
+                      <View className="text-zinc-600" size={15} />
+                      <h1 className="text-sm text-zinc-600">View</h1>
+                    </button>
+                  </div>
+                  <div className="w-full h-[1px] bg-zinc-200 mt-3" />
+                  {activeDrawing === "upload" && <EquipmentUpload />}
+                  {(activeDrawing === "view" || activeDrawing === "delete") && (
+                    <EquipmentView isDelete={activeDrawing === "delete"} />
+                  )}
+                </div>
+              </div>
+
+              {/* ####################### REPORT FIGURES ######################### */}
+
+              <div className="flex flex-col gap-3 w-full">
+                <h1 className="text-sm font-medium">Report Figures</h1>
+                <div className="border rounded-lg p-3">
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setActiveFigure("add")}
+                      type="button"
+                      className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                        activeFigure === "add" && "bg-zinc-200"
+                      }`}
+                    >
+                      <Plus className="text-zinc-600" size={15} />
+                      <h1 className="text-sm text-zinc-600">Add</h1>
+                    </button>
+                    <button
+                      onClick={() => setActiveFigure("delete")}
+                      type="button"
+                      className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                        activeFigure === "delete" && "bg-zinc-200"
+                      }`}
+                    >
+                      <Trash className="text-zinc-600" size={15} />
+                      <h1 className="text-sm text-zinc-600">Delete</h1>
+                    </button>
+                    <button
+                      onClick={() => setActiveFigure("view")}
+                      type="button"
+                      className={`flex gap-1 items-center px-2 py-1 rounded-md ${
+                        activeFigure === "view" && "bg-zinc-200"
+                      }`}
+                    >
+                      <View className="text-zinc-600" size={15} />
+                      <h1 className="text-sm text-zinc-600">View</h1>
+                    </button>
+                  </div>
+                  <div className="w-full h-[1px] bg-zinc-200 mt-3" />
+                  {activeFigure === "add" && <FigureUpload />}
+                  {(activeFigure === "view" || activeFigure === "delete") && (
+                    <FigureView isDelete={activeFigure === "delete"} />
+                  )}
+                </div>
+              </div>
+            </div>
+
              <div className="flex flex-col gap-3 w-full mt-5">
                <h1 className="text-sm font-medium">
                  Details
                </h1>
                <div className="border rounded-lg p-3">
-                 {/* <div className="relative">
-                  <Search className="absolute top-2 left-3 text-zinc-400" size={20}/>
-                  <Input className="w-full pl-9" placeholder="Search equipment details..."/>
-                 </div>
-                 <div className="w-full py-10">
-                  <h1 className="text-zinc-300 font-bold text-2xl text-center">No details</h1>
-                 </div> */}
                  <div className="flex gap-5 items-center">
                   <Button onClick={() => setDetailsActive('add')} variant={'outline'}>
                     <Plus size={20} className="text-zinc-400"/>

@@ -25,7 +25,7 @@ const HomePage = () => {
     if(session?.user.role === "user") {
       if (localStorage.getItem("redirected") === "false") {
         localStorage.setItem("redirected", "true");
-        router.push('/read-machine-list')
+        router.push('/client-job-registry')
       }
     }
   }, [router, session?.user.role])

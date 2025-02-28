@@ -275,7 +275,7 @@ export const useColumns = () =>{
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => openDialog("analyst")}>Assign Analyst</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => openDialog("reviewer")}>Assign Reviewer</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => openDialog("status")}>Update Status</DropdownMenuItem>
+                  <DropdownMenuItem className={`${session?.user.role === 'user' && 'hidden'}`} onClick={() => openDialog("status")}>Update Status</DropdownMenuItem>
                   <DropdownMenuItem>View Analysis</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
