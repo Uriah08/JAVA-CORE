@@ -55,7 +55,6 @@ export function PieCharts({chartDatas}: {chartDatas: string[]}) {
     return acc;
   }, {} as { [key: string]: number });
 
-  // Create chartData in the required format
   const chartData = Object.entries(statusCount).map(([status, count]) => ({
     browser: status.toLowerCase().replace(/\s+/g, ''), 
     visitors: count,

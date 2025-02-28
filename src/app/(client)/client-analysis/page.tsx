@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Eye, Plus, Search } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { Eye, Plus, Search } from "lucide-react";
 import Image from "next/image";
 import { symbols } from "@/schema";
 import { Dialog } from "@/components/ui/dialog";
@@ -26,24 +25,15 @@ const symbol1 = [
   {symbol: '/severity/X.png'}
 ]
 
-const ComponentPage = () => {
+const ClientAnalysis = () => {
   const [detailsActive, setDetailsActive] = useState('add')
-  const router = useRouter()
-  const machinesPage = () => {
-    router.push("/read-machine-list")
-  }
-  const params = useParams();
-  console.log(params);
   
   const [open, setOpen] = useState(false)
 
   return (
     <div className="w-full h-full p-5 flex xl:flex-row flex-col gap-5">
             <div className="w-full xl:w-1/3 p-5 bg-white rounded-xl shadow-lg">
-            <div className='flex flex-row gap-5 items-center'>
-              <ArrowLeft onClick={machinesPage} className='text-main hover:text-follow cursor-pointer'/>
               <h1 className="text-2xl font-bold">Equipment List</h1>
-            </div>
             <div className="relative w-full mt-5">
             <Input className="rounded-full pl-10" placeholder="Search equipments..."/>
             <Search className="text-zinc-500 absolute top-2 left-3" size={20}/>
@@ -214,4 +204,4 @@ const ComponentPage = () => {
   )
 }
 
-export default ComponentPage;
+export default ClientAnalysis;
