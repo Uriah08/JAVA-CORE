@@ -24,7 +24,14 @@ import React from "react"
 import Reviewer from "../../dialogs/Reviewer"
 import Status from "../../dialogs/Status"
 
-export const columns: ColumnDef<ExtendedJob>[] = [
+import { useSession } from "next-auth/react"
+
+export const useColumns = () =>{
+  const {data: session} = useSession()
+
+  const role = session?.user.role;
+
+  const columns: ColumnDef<ExtendedJob>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -85,6 +92,7 @@ export const columns: ColumnDef<ExtendedJob>[] = [
     }
   },
   {
+    id: 'user',
     accessorKey: "user",
     accessorFn: (row) => row.user.name,
     header: ({ column }) => {
@@ -286,4 +294,8 @@ export const columns: ColumnDef<ExtendedJob>[] = [
           );
         },
       },
-]
+  ]
+  return role === "user"
+    ? columns.filter((col) => col.id !== "select")
+    : columns;
+}

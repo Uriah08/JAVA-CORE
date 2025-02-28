@@ -21,9 +21,6 @@ const JobRegistry = () => {
   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   .slice(0, 3);
 
-  console.log(recentJobs);
-  
-
   const finishedJobs = jobs.filter((job) => job.dateFinished)
 
   const chart1 = jobs
@@ -31,8 +28,6 @@ const JobRegistry = () => {
   .filter(date => date)
 
   const chart2 = jobs.map(job => job.status).filter(status => status)
-
-  console.log(chart2);
   
   return (
     <div className='w-full p-5 flex xl:flex-row flex-col gap-5'>

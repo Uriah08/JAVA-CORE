@@ -201,6 +201,10 @@ export const api = createApi({
       }),
       providesTags: ["Job"],
     }),
+    getClientJobs: build.query<JobsResponse, string>({
+      query: (clientId) => `/api/job/id?clientId=${clientId}`,
+      providesTags: ["Job"],
+    }),
     deleteJobs: build.mutation({
       query: (data) => ({
         url: "/api/job",
@@ -500,6 +504,7 @@ export const {
   useGetClientsQuery,
   useCreateJobMutation,
   useGetJobsQuery,
+  useGetClientJobsQuery,
   useDeleteJobsMutation,
   useUpdateJobMutation,
   useGetMachineListQuery,

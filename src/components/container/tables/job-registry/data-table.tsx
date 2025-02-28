@@ -55,6 +55,8 @@ import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { DialogClose } from "@radix-ui/react-dialog"
 
+import { useSession } from "next-auth/react"
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
@@ -66,6 +68,8 @@ export function DataTable<TData extends { id: string }, TValue>({
   data,
   loading
 }: DataTableProps<TData, TValue>) {
+
+  const { data: session } = useSession()
 
   const { toast } = useToast()
   const [deleteJobs, { isLoading: deleteLoading }] = useDeleteJobsMutation();
@@ -210,7 +214,7 @@ export function DataTable<TData extends { id: string }, TValue>({
         />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger disabled={deleteLoading || Object.keys(rowSelection).length === 0}>
-            <div className={`bg-main rounded-md p-2 text-white ${deleteLoading || Object.keys(rowSelection).length === 0 ? 'bg-opacity-50': 'hover:bg-follow'}`}>
+            <div className={`bg-main rounded-md p-2 text-white ${deleteLoading || Object.keys(rowSelection).length === 0 ? 'bg-opacity-50': 'hover:bg-follow'} ${session?.user.role === 'user' && 'hidden'}`}>
               <Trash size={20}/>
             </div>
           </DialogTrigger>
