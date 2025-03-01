@@ -186,6 +186,7 @@ model RouteEquipmentName {
 model RouteComponent {
   id               String  @id @default(uuid())
   routeMachineId   String
+  clientId         String
   componentId      String
   routeEquipmentId String
   action           String?

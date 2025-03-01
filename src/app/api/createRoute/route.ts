@@ -57,6 +57,7 @@ export async function POST(req: Request) {
         const newComponent = await prisma.routeComponent.create({
           data: {
             componentId,
+            clientId: newRoute.clientId,
             routeMachineId: newMachine.id,
             routeEquipmentId: newEquipment.id,
           },

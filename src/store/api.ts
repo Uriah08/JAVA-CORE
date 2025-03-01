@@ -73,10 +73,10 @@ type RouteMachineListResponse = {
 };
 
 export type ExtendedRouteComponent = RouteComponent & {
-  component:{
+  component: {
     name: string;
-  }
-}
+  };
+};
 
 type RouteComponentResponse = {
   routeComponents: ExtendedRouteComponent[];
@@ -112,6 +112,20 @@ type RouteCompoentDetailsResponse = {
   data: RouteCompoentDetails[];
   message: string;
   success: boolean;
+};
+
+export type ExtendedClientRouteEquipment = EquipmentName & {
+  components: {
+    id: string;
+    name: string;
+    RouteComponent: {
+      id: string;
+    };
+  };
+};
+
+type SearchClientRouteEquipmentResponse = {
+  getEquipmentName?: ExtendedClientRouteEquipment[];
 };
 
 export const api = createApi({
@@ -495,6 +509,14 @@ export const api = createApi({
         providesTags: ["RouteComponentDetails"],
       }
     ),
+    searchClientRouteEquipmentList: build.query<
+      SearchClientRouteEquipmentResponse,
+      string
+    >({
+      query: (equipmentName) =>
+        `/api/search/client-equipment?equipmentName=${equipmentName}`,
+      providesTags: ["EquipmentName"],
+    }),
   }),
 });
 
@@ -538,4 +560,5 @@ export const {
   useCreateOilAnalysisMutation,
   useGetRouteComponenetOilAnalysisQuery,
   useGetRouteComponentDetailsQuery,
+  useSearchClientRouteEquipmentListQuery,
 } = api;
