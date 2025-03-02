@@ -24,6 +24,7 @@ export async function GET(req: Request) {
         reviewer: true,
         user: {
           select: {
+            id: true,
             name: true,
           },
         },

@@ -21,20 +21,19 @@ export async function GET(req: Request) {
 
     const routeComponents = await prisma.routeComponent.findMany({
       where: {
-        routeEquipmentId: { in: routeEquipmentIds }, 
+        routeEquipmentId: { in: routeEquipmentIds },
       },
       select: {
         id: true,
-        routeEquipmentId: true, 
+        routeEquipmentId: true,
         action: true,
         note: true,
-        image: true,
-        reportFigures: true,
         component: {
-          select:{
+          select: {
+            id: true,
             name: true,
-          }
-        }
+          },
+        },
       },
     });
 

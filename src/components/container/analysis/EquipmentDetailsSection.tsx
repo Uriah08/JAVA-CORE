@@ -6,20 +6,28 @@ import { Dialog } from "@/components/ui/dialog";
 import Details from "../dialogs/Details";
 import { toast } from "@/hooks/use-toast";
 
+interface SelectedJob {
+  user?: {
+    id?: string;
+    name?: string;
+  };
+}
+
 interface SelectedComponent {
-  id: string;
-  name: string;
-  routeComponentID: string;
-  action?: string | null;
-  note?: string | null;
+  component?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface EquipmentDetailsSectionProps {
   selectedComponent: SelectedComponent | null;
+  selectedJob: SelectedJob | null;
 }
 
 const EquipmentDetailsSection: React.FC<EquipmentDetailsSectionProps> = ({
   selectedComponent,
+  selectedJob,
 }) => {
   const [openDetails, setOpenDetails] = React.useState(false);
 
@@ -45,7 +53,12 @@ const EquipmentDetailsSection: React.FC<EquipmentDetailsSectionProps> = ({
         >
           View Mechanical Details
         </Button>
-        {openDetails && <Details selectedComponent={selectedComponent} />}
+        {openDetails && (
+          <Details
+            selectedComponent={selectedComponent}
+            selectedJob={selectedJob}
+          />
+        )}
       </Dialog>
     </div>
   );

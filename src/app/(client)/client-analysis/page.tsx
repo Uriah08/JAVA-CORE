@@ -84,16 +84,23 @@ const ClientAnalysis = () => {
     components: {
       id: string;
       name: string;
-      RouteComponent: {
+      routeComponent?: {
         id: string;
       }[];
     }[];
   } | null>(null);
 
+  console.log("fetched data: ", selectedEquipment?.components);
+
   const [selectedComponent, setSelectedComponent] = React.useState<{
     id: string;
     name: string;
+    routeComponent?: {
+      id: string;
+    }[];
   } | null>(null);
+
+  console.log("captured data: ", selectedComponent);
 
   const form = useForm<z.infer<typeof ClientEquipmentSchema>>({
     resolver: zodResolver(ClientEquipmentSchema),
@@ -117,7 +124,6 @@ const ClientAnalysis = () => {
                     const equipment = equipmentList.find(
                       (eq) => eq.id === value
                     );
-
                     setSelectedEquipment(
                       equipment
                         ? {
@@ -128,7 +134,6 @@ const ClientAnalysis = () => {
                           }
                         : null
                     );
-
                     field.onChange(value);
                     setSelectedComponent(null);
                   }}
@@ -203,6 +208,7 @@ const ClientAnalysis = () => {
                       setSelectedComponent({
                         id: component.id,
                         name: component.name,
+                        routeComponent: component.routeComponent || [],
                       })
                     }
                   >

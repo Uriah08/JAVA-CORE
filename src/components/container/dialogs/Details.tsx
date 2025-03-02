@@ -8,28 +8,45 @@ import { Skeleton } from "@/components/ui/skeleton";
 // import React, { useState } from "react";
 import { useGetRouteComponentDetailsQuery } from "@/store/api";
 
+interface SelectedJob {
+  user?: {
+    id?: string;
+    name?: string;
+  };
+}
+
 interface SelectedComponent {
-  id: string;
-  routeComponentID: string;
+  component?: {
+    id: string;
+    name: string;
+  };
 }
 
 interface DetailsDialogProps {
   selectedComponent: SelectedComponent | null;
+  selectedJob: SelectedJob | null;
 }
 
-const Details: React.FC<DetailsDialogProps> = ({ selectedComponent }) => {
+const Details: React.FC<DetailsDialogProps> = ({
+  selectedComponent,
+  selectedJob,
+}) => {
   // const [activeDetail, setActiveDetail] = useState<string | null>(null);
   // const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
 
-  const routeComponentID = selectedComponent?.routeComponentID as string;
+  const componentID = selectedComponent?.component?.id as string;
+  const clientId = selectedJob?.user?.id as string;
 
   const {
     data: routeComponentDetails,
     isLoading: loadingRouteComponentDetails,
     error: routeComponentDetailsError,
-  } = useGetRouteComponentDetailsQuery(routeComponentID, {
-    skip: !routeComponentID,
-  });
+  } = useGetRouteComponentDetailsQuery(
+    { componentId: componentID, clientId },
+    {
+      skip: !componentID || !clientId, // Skip query if either is missing
+    }
+  );
 
   if (routeComponentDetailsError) {
     return <div className="text-main">Error loading data.</div>;

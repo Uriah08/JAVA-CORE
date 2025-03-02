@@ -35,7 +35,10 @@ export async function GET(req: Request) {
           select: {
             id: true,
             name: true,
-            RouteComponent: {
+            routeComponent: {
+              where: {
+                clientId: session.user.id,
+              },
               select: {
                 id: true,
               },

@@ -10,18 +10,20 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
-    const routeComponentId = searchParams.get("routeComponentId");
+    const componentId = searchParams.get("componentId");
+    const clientId = searchParams.get("clientId");
 
-    if (!routeComponentId) {
+    if (!componentId) {
       return NextResponse.json(
         { message: "Missing routeComponentId", success: false },
         { status: 400 }
       );
     }
 
-    const getDetails = await prisma.routeCompoentDetails.findMany({
+    const getDetails = await prisma.routeComponentDetails.findMany({
       where: {
-        routeComponentId: routeComponentId,
+        componentId: componentId,
+        clientId: clientId as string,
       },
       select: {
         header: true,

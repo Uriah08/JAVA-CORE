@@ -15,11 +15,12 @@ import {
   RouteComponentRecommendation,
   RouteComponentTemperature,
   RouteComponentOilAnalysis,
-  RouteCompoentDetails,
+  RouteComponentDetails,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
   user: {
+    id: string;
     name: string;
   };
   routeList: {
@@ -74,6 +75,7 @@ type RouteMachineListResponse = {
 
 export type ExtendedRouteComponent = RouteComponent & {
   component: {
+    id: string;
     name: string;
   };
 };
@@ -108,8 +110,8 @@ type RouteComponentOilAnalysisResponse = {
   success: boolean;
 };
 
-type RouteCompoentDetailsResponse = {
-  data: RouteCompoentDetails[];
+type RouteComponentDetailsResponse = {
+  data: RouteComponentDetails[];
   message: string;
   success: boolean;
 };
@@ -118,7 +120,7 @@ export type ExtendedClientRouteEquipment = EquipmentName & {
   components: {
     id: string;
     name: string;
-    RouteComponent: {
+    routeComponent: {
       id: string;
     };
   };
@@ -127,6 +129,8 @@ export type ExtendedClientRouteEquipment = EquipmentName & {
 type SearchClientRouteEquipmentResponse = {
   getEquipmentName?: ExtendedClientRouteEquipment[];
 };
+
+export type ExtendedClientRouteComponent = RouteComponent & {};
 
 export const api = createApi({
   reducerPath: "api",
@@ -500,12 +504,11 @@ export const api = createApi({
       }),
       providesTags: ["RouteComponentOilAnalysis"],
     }),
-    getRouteComponentDetails: build.query<RouteCompoentDetailsResponse, string>(
-      {
-        query: (routeComponentId) => ({
-          url: `/api/createRoute/routeMachineList/routeComponents/details?routeComponentId=${routeComponentId}`,
-          method: "GET",
-        }),
+    getRouteComponentDetails: build.query<RouteComponentDetailsResponse, { componentId: string; clientId: string }>({
+      query: ({ componentId, clientId }) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/details?componentId=${componentId}&clientId=${clientId}`,
+        method: "GET",
+      }),
         providesTags: ["RouteComponentDetails"],
       }
     ),
@@ -517,6 +520,17 @@ export const api = createApi({
         `/api/search/client-equipment?equipmentName=${equipmentName}`,
       providesTags: ["EquipmentName"],
     }),
+    // softDeleteMachineList: build.mutation({
+    //   query: (ids) => ({
+    //     url: "/api/machineList/delete",
+    //     method: "POST",
+    //     body: ids,
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   }),
+    //   invalidatesTags: ["Area"],
+    // }),
   }),
 });
 

@@ -86,6 +86,7 @@ const AnalysisAndReportForm = () => {
     jobNumber: string;
     area?: string;
     user?: {
+      id?: string;
       name?: string;
     };
     yearWeekNumber?: string;
@@ -143,6 +144,7 @@ const AnalysisAndReportForm = () => {
     action?: string | null;
     note?: string | null;
     component?: {
+      id: string;
       name: string;
     };
   } | null>(null);
@@ -673,7 +675,7 @@ const AnalysisAndReportForm = () => {
                 </div>
               </div> */}
 
-              <EquipmentDetailsSection selectedComponent={selectedComponent} />
+              <EquipmentDetailsSection selectedComponent={selectedComponent} selectedJob={selectedJob} />
 
               {/* ####################### TEMPARATURE AND OIL ANALYSIS ######################### */}
 
