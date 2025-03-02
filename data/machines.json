@@ -562,6 +562,382 @@
           ]
         }
       ]
-    }
+    },
+    {
+      "name": "Raw Coal Plant No. 1",
+      "equipmentGroups": [
+        {
+          "name": "RCR101 Primary Crusher",
+          "equipmentNames": [
+            {
+              "name": "RCR101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings"}
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCR102 Secondary Crusher",
+          "equipmentNames": [
+            {
+              "name": "RCR102",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings"}
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCR103 Tertiary Crusher",
+          "equipmentNames": [
+            {
+              "name": "RCR103",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings"}
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PCV101 Stockpile Stacking Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "PCV101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PCV101 Stockpile Stacking Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "1 PCV101",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 PCV101",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 PCV101",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 PCV101",
+              "components": [
+                { "name": "Bottom Head Bend Pulley LHS" },
+                { "name": "Bottom Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 PCV101",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 PCV101",
+              "components": [
+                { "name": "Bottom Tail Bend Pulley LHS" },
+                { "name": "Bottom Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 PCV101",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 PCV101",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "9 PCV101",
+              "components": [
+                { "name": "Tripper Head Pulley LHS" },
+                { "name": "Tripper Head Pulley RHS" }
+              ]
+            },
+            {
+              "name": "10 PCV101",
+              "components": [
+                { "name": "Tripper Head Pressure Pulley LHS" },
+                { "name": "Tripper Head Pressure Pulley RHS" }
+              ]
+            },
+            {
+              "name": "11 PCV101",
+              "components": [
+                { "name": "Tripper Top Head Bend Pulley LHS" },
+                { "name": "Tripper Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "12 PCV101",
+              "components": [
+                { "name": "Tripper Bottom Head Bend Pulley LHS" },
+                { "name": "Tripper Bottom Head Bend Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV101 Second Crusher Feed Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "RCV101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV101 Second Crusher Feed Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 RCV101",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RCV101",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV101",
+              "components": [
+                { "name": "Bottom Tail Bend Pulley LHS" },
+                { "name": "Bottom Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 RCV101",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 RCV101",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 RCV101",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 RCV101",
+              "components": [
+                { "name": "Head Snub Pulley LHS" },
+                { "name": "Head Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 RCV101",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "9 RCV101",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV102 Crushed Coal Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "RCV102",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV102 Crushed Coal Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "1 RCV102",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RCV102",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV102",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 RCV102",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 RCV102",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 RCV102",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PSR101 Stacker Boom Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "PSR101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PSR101 Stacker Boom Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 PSR101",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 PSR101",
+              "components": [
+                { "name": "Tail Return Roller LHS" },
+                { "name": "Tail Return Roller RHS" }
+              ]
+            },
+            {
+              "name": "3 PSR101",
+              "components": [
+                { "name": "Rear Return Roller LHS" },
+                { "name": "Rear Return Roller RHS" }
+              ]
+            },
+            {
+              "name": "4 PSR101",
+              "components": [
+                { "name": "Forward Return Roller LHS" },
+                { "name": "Forward Return Roller RHS" }
+              ]
+            },
+            {
+              "name": "5 PSR101",
+              "components": [
+                { "name": "Head Return Roller LHS" },
+                { "name": "Head Return Roller RHS" }
+              ]
+            },
+            {
+              "name": "6 PSR101",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RSC101 Roller Screens",
+          "equipmentNames": [
+            {
+              "name": "RSC101",
+              "components": [
+                { "name": "Drive 1 Motor" },
+                { "name": "DRive 1 Gearbox" },
+                { "name": "Drive 2 Motor" },
+                { "name": "DRive 2 Gearbox" },
+                { "name": "Drive 3 Motor" },
+                { "name": "DRive 3 Gearbox" },
+                { "name": "Drive 4 Motor" },
+                { "name": "DRive 4 Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RFE101 Dump Hopper Vibrating Feeder Line 1",
+          "equipmentNames": [
+            {
+              "name": "RFE101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "LHS Exciter" },
+                { "name": "RHS Exciter" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {}
   ]
 }
