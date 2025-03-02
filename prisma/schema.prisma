@@ -81,11 +81,14 @@ model User {
   role          String    @default("user")
   emailVerified DateTime? @map("email_verified")
   image         String?
-  accounts      Account[]
-  sessions      Session[]
 
-  jobs      Job[]
-  RouteList RouteList[]
+  accounts              Account[]
+  sessions              Session[]
+  RouteComponentDetails RouteComponentDetails[]
+  jobs                  Job[]
+  RouteList             RouteList[]
+  RouteComponentImage   RouteComponentImage[]
+  RouteComponentFigures RouteComponentFigures[]
 
   @@map("users")
 }
@@ -133,8 +136,11 @@ model Component {
   equipmentNameId String?
   isDelete        Boolean @default(false)
 
-  equipmentName  EquipmentName?   @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
-  RouteComponent RouteComponent[]
+  equipmentName         EquipmentName?          @relation(fields: [equipmentNameId], references: [id], onDelete: Cascade)
+  routeComponent        RouteComponent[]
+  RouteComponentDetails RouteComponentDetails[]
+  RouteComponentImage   RouteComponentImage[]
+  RouteComponentFigures RouteComponentFigures[]
 
   @@map("component")
 }
@@ -191,18 +197,15 @@ model RouteComponent {
   routeEquipmentId String
   action           String?
   note             String?
-  image            String?
-  reportFigures    String?
 
   routeMachine   RouteMachineList   @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
   component      Component          @relation(fields: [componentId], references: [id], onDelete: Cascade)
   routeEquipment RouteEquipmentName @relation(fields: [routeEquipmentId], references: [id], onDelete: Cascade)
 
-  comments             RouteComponentComment[]
-  recommendations      RouteComponentRecommendation[]
-  temperatures         RouteComponentTemperature[]
-  oilAnalyses          RouteComponentOilAnalysis[]
-  RouteCompoentDetails RouteCompoentDetails[]
+  comments        RouteComponentComment[]
+  recommendations RouteComponentRecommendation[]
+  temperatures    RouteComponentTemperature[]
+  oilAnalyses     RouteComponentOilAnalysis[]
 
   @@map("route_component")
 }
@@ -253,13 +256,37 @@ model RouteComponentOilAnalysis {
   @@map("route_component_oil_analysis")
 }
 
-model RouteCompoentDetails {
-  id               String @id @default(cuid())
-  routeComponentId String
-  header           String
-  value            String
+model RouteComponentDetails {
+  id          String @id @default(cuid())
+  clientId    String
+  componentId String
+  header      String
+  value       String
 
-  routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
+  client    User      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
 
-  @@map("route_compoent_details")
+  @@map("route_component_details")
+}
+
+model RouteComponentImage {
+  id          String @id @default(cuid())
+  clientId    String
+  componentId String
+  image       String
+
+  client    User      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_Details")
+}
+
+model RouteComponentFigures {
+  id          String @id @default(cuid())
+  clientId    String
+  componentId String
+  figures     String
+
+  client    User      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
 }
