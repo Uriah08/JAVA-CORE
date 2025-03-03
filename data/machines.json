@@ -919,6 +919,33 @@
                 { "name": "Drive 4 Motor" },
                 { "name": "DRive 4 Gearbox" }
               ]
+            },
+            {
+              "name": "Roller",
+              "components": [
+                { "name": "No. 1 Bearings" },
+                { "name": "No. 2 Bearings" },
+                { "name": "No. 3 Bearings" },
+                { "name": "No. 4 Bearings" },
+                { "name": "No. 5 Bearings" },
+                { "name": "No. 6 Bearings" },
+                { "name": "No. 7 Bearings" },
+                { "name": "No. 8 Bearings" },
+                { "name": "No. 9 Bearings" },
+                { "name": "No. 10 Bearings" },
+                { "name": "No. 11 Bearings" },
+                { "name": "No. 12 Bearings" },
+                { "name": "No. 13 Bearings" },
+                { "name": "No. 14 Bearings" },
+                { "name": "No. 15 Bearings" },
+                { "name": "No. 16 Bearings" },
+                { "name": "No. 17 Bearings" },
+                { "name": "No. 18 Bearings" },
+                { "name": "No. 19 Bearings" },
+                { "name": "No. 20 Bearings" },
+                { "name": "No. 21 Bearings" },
+                { "name": "No. 22 Bearings" }
+              ]
             }
           ]
         },
@@ -932,6 +959,2545 @@
                 { "name": "Drive Shaft Bearings" },
                 { "name": "LHS Exciter" },
                 { "name": "RHS Exciter" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Raw Coal Plant No. 2",
+      "equipmentGroups": [
+        {
+          "name": "RCR201 Primary Crusher",
+          "equipmentNames": [
+            {
+              "name": "RCR201",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCR204 Secondary Crusher",
+          "equipmentNames": [
+            {
+              "name": "RCR204A",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings" }
+              ]
+            },
+            {
+              "name": "RCR204B",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCR205 Tertiary Crusher",
+          "equipmentNames": [
+            {
+              "name": "RCR205A",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings" }
+              ]
+            },
+            {
+              "name": "RCR204B",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Drum Shaft Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV202 Crushed Coal Conveyor 2 Drive",
+          "equipmentNames": [
+            {
+              "name": "RCV202",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV202 Crushed Coal Conveyor 2 Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 RCV202",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RCV202",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV202",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 RCV202",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 RCV202",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 RCV202",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV203 Crushed Coal Transfer Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "RCV203",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV203 Crushed Coal Transfer Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 RCV203",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RCV203",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV203",
+              "components": [
+                { "name": "Bottom Tail Bend Pulley LHS" },
+                { "name": "Bottom Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 RCV203",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 RCV203",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 RCV203",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 RCV203",
+              "components": [
+                { "name": "Head Snub Pulley LHS" },
+                { "name": "Head Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 RCV203",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "9 RCV203",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV204 Stacker / Reclaimer Feed Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "1 RCV204",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley LHS" }
+              ]
+            },
+            {
+              "name": "2 RCV204",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV204",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 RCV204",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 RCV204",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 RCV204",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV207 Raw Coal Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "RCV207",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV207 Raw Coal Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 RCV207",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RCV207",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV207",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 RCV207",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 RCV207",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 RCV207",
+              "components": [
+                { "name": "Tripper Bottom Low Tension Pulley LHS" },
+                { "name": "Tripper Bottom Low Tension Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 RCV207",
+              "components": [
+                { "name": "Tripper Top Low Tension Pulley LHS" },
+                { "name": "Tripper Top Low Tension Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 RCV207",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "9 RCV207",
+              "components": [
+                { "name": "Tripper Launch Pulley LHS" },
+                { "name": "Tripper Launch Pulley RHS" }
+              ]
+            },
+            {
+              "name": "10 RCV207",
+              "components": [
+                { "name": "Tripper Head Pulley LHS" },
+                { "name": "Tripper Head Pulley RHS" }
+              ]
+            },
+            {
+              "name": "11 RCV207",
+              "components": [
+                { "name": "Tripper Head Snub Pulley LHS" },
+                { "name": "Tripper Head Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "12 RCV207",
+              "components": [
+                { "name": "Tripper High Tension Bend Pulley LHS" },
+                { "name": "Tripper High Tension Bend Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV208 Secondary Crushed Coal Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "RCV208",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV208 Secondary Crushed Coal Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 RCV208",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RCV208",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV208",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV209 Secondary Crushed Coal Transfer Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "RCV209",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RCV209 Secondary Crushed Coal Transfer Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 RCV209",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RCV209",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 RCV209",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 RCV209",
+              "components": [
+                { "name": "Take Up Pulley LHS" },
+                { "name": "Take Up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 RCV209",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 RCV209",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RSR201STB Circular Stacker Boom Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "RSR201STB",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RSR201STB Circular Stacker Boom Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 RSR201STB",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 RSR201STB",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RSC202 Roller Screens",
+          "equipmentNames": [
+            {
+              "name": "RSC202",
+              "components": [
+                { "name": "Motor 1 (K)" },
+                { "name": "Gearbox 1 (K)" },
+                { "name": "Roller Bearings 1 (K)" },
+                { "name": "Motor 2 (K)" },
+                { "name": "Gearbox 2 (K)" },
+                { "name": "Roller Bearings 2 (K)" },
+                { "name": "Motor 3 (K)" },
+                { "name": "Gearbox 3 (K)" },
+                { "name": "Roller Bearings 3 (K)" },
+                { "name": "Motor 4 (K)" },
+                { "name": "Gearbox 4 (K)" },
+                { "name": "Roller Bearings 4 (K)" },
+                { "name": "Motor 5 (K)" },
+                { "name": "Gearbox 5 (K)" },
+                { "name": "Roller Bearings 5 (K)" },
+                { "name": "Motor 6 (K)" },
+                { "name": "Gearbox 6 (K)" },
+                { "name": "Roller Bearings 6 (K)" },
+                { "name": "Motor 7 (K)" },
+                { "name": "Gearbox 7 (K)" },
+                { "name": "Roller Bearings 7 (K)" },
+                { "name": "Motor 8 (K)" },
+                { "name": "Gearbox 8 (K)" },
+                { "name": "Roller Bearings 8 (K)" },
+                { "name": "Motor 9 (K)" },
+                { "name": "Gearbox 9 (K)" },
+                { "name": "Roller Bearings 9 (K)" },
+                { "name": "Motor 10 (K)" },
+                { "name": "Gearbox 10 (K)" },
+                { "name": "Roller Bearings 10 (K)" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RFE201 Dump Hopper Vibrating Fedder",
+          "equipmentNames": [
+            {
+              "name": "RFE201",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RHY201 Dump Hopper Slide Gate Hyadraulic Power Pack",
+          "equipmentNames": [
+            {
+              "name": "RHY201",
+              "components": [
+                { "name": "Electric Motor" }
+              ]
+            }
+          ]
+        }
+      ]  
+    },
+    {
+      "name": "Export Plant",
+      "equipmentGroups": [
+        {
+          "name": "LCV101 Export Coal Stacking Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "LCV101",
+              "components": [
+                { "name": "North A Motor" },
+                { "name": "North A Gearbox" },
+                { "name": "South C Motor" },
+                { "name": "South C Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LCV101 Export Coal Stacking Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 LCV101",
+              "components": [
+                { "name": "Drive Pulley A LHS" },
+                { "name": "Drive Pulley A LHS" }
+              ]
+            },
+            {
+              "name": "2 LCV101",
+              "components": [
+                { "name": "Drive Pulley C LHS" },
+                { "name": "Drive Pulley C RHS" }
+              ]
+            },
+            {
+              "name": "3 LCV101",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 LCV101",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 Tripper",
+              "components": [
+                { "name": "Launch Pulley LHS" },
+                { "name": "Launch Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 Tripper",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 Tripper",
+              "components": [
+                { "name": "Upper Pressure Pulley LHS" },
+                { "name": "Upper Pressure Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 Tripper",
+              "components": [
+                { "name": "Tripper Lower Pressure Pulley LHS" },
+                { "name": "Tripper Lower Pressure Pulley RHS" }
+              ]
+            },
+            {
+              "name": "9 Tripper",
+              "components": [
+                { "name": "Top Bend Pulley LHS" },
+                { "name": "Top Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "10 Tripper",
+              "components": [
+                { "name": "Bottom Bend Pulley LHS" },
+                { "name": "Bottom Bend Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LCV102 Export Coal Reclaim Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "LCV102-1",
+              "components": [
+                { "name": "NE Motor" },
+                { "name": "NE Gearbox" }
+              ]
+            },
+            {
+              "name": "LCV102-2",
+              "components": [
+                { "name": "SE Motor" },
+                { "name": "SE Gearbox" }
+              ]
+            },
+            {
+              "name": "LCV102-3",
+              "components": [
+                { "name": "W Motor" },
+                { "name": "W Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LCV102 Export Coal Reclaim Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 LCV102",
+              "components": [
+                { "name": "Drive 1 & 3 Pulley LHS" },
+                { "name": "Drive 1 & 3 Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 LCV102",
+              "components": [
+                { "name": "Drive 2 Pulley LHS" },
+                { "name": "Drive 2 Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 LCV102",
+              "components": [
+                { "name": "Take up Pulley LHS" },
+                { "name": "Take up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 LCV102",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 LCV102",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 LCV102",
+              "components": [
+                { "name": "Head Pressure Pulley LHS" },
+                { "name": "Head Pressure Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 LCV102",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 LCV102",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PCV102 Domestic Stockpile Reclaim Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "PCV102",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PCV102 Domestic Stockpile Reclaim Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 PCV102",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" },
+                { "name": "Drive Anti-rollback" }
+              ]
+            },
+            {
+              "name": "2 PCV102",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 PCV102",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 PCV102",
+              "components": [
+                { "name": "Bottom Head Bend Pulley LHS" },
+                { "name": "Bottom Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 PCV102",
+              "components": [
+                { "name": "Take up Pulley LHS" },
+                { "name": "Take up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 PCV102",
+              "components": [
+                { "name": "Bottom Tail Bend Pulley LHS" },
+                { "name": "Bottom Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 PCV102",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 PCV102",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "9 PCV102",
+              "components": [
+                { "name": "Head Launch Pulley LHS" },
+                { "name": "Head Launch Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PCV105 Overland Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "PCV105",
+              "components": [
+                { "name": "Motor A" },
+                { "name": "Gearbox A" },
+                { "name": "Motor B" },
+                { "name": "Gearbox B" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PCV105 Overland Conveyor Pulley",
+          "equipmentNames": [
+            {
+              "name": "1 PCV105",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 PCV105",
+              "components": [
+                { "name": "Take up Pulley LHS" },
+                { "name": "Take up Pulley RHS" }
+              ]
+            },
+            {
+              "name": "3 PCV105",
+              "components": [
+                { "name": "Bottom Tail Bend Pulley LHS" },
+                { "name": "Bottom Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "4 PCV105",
+              "components": [
+                { "name": "Top Tail Bend Pulley LHS" },
+                { "name": "Top Tail Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "5 PCV105",
+              "components": [
+                { "name": "Tail Pulley LHS" },
+                { "name": "Tail Pulley RHS" }
+              ]
+            },
+            {
+              "name": "6 PCV105",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            },
+            {
+              "name": "7 PCV105",
+              "components": [
+                { "name": "Top Head Bend Pulley LHS" },
+                { "name": "Top Head Bend Pulley RHS" }
+              ]
+            },
+            {
+              "name": "8 PCV105",
+              "components": [
+                { "name": "Drive Snub Pulley LHS" },
+                { "name": "Drive Snub Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LSR101 Stacker Boom Conveyor Drive",
+          "equipmentNames": [
+            {
+              "name": "1 LSR101",
+              "components": [
+                { "name": "Drive Pulley LHS" },
+                { "name": "Drive Pulley RHS" }
+              ]
+            },
+            {
+              "name": "2 LSR101",
+              "components": [
+                { "name": "Head Flat Return Roller LHS" },
+                { "name": "Head Flat Return Roller RHS" }
+              ]
+            },
+            {
+              "name": "3 LSR101",
+              "components": [
+                { "name": "Head Pulley LHS" },
+                { "name": "Head Pulley RHS" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "L-HY-102 Train Load Hydraulic Pumps",
+          "equipmentNames": [
+            {
+              "name": "L-HY-102",
+              "components": [
+                { "name": "Motor & Pump #1" },
+                { "name": "Motor & Pump #2" },
+                { "name": "Cooling Motor & Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "L-HY-103 Train Load Hydraulic Pumps",
+          "equipmentNames": [
+            {
+              "name": "L-HY-103",
+              "components": [
+                { "name": "Motor & Pump #1" },
+                { "name": "Motor & Pump #2" },
+                { "name": "Cooling Motor & Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PFA101 Domestic Coal Tunnel Ventilation Fan",
+          "equipmentNames": [
+            {
+              "name": "PFA101",
+              "components": [
+                { "name": "Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LFA101 Export Stockpile Reclaim Tunnel Ventilation Fan",
+          "equipmentNames": [
+            {
+              "name": "LFA101",
+              "components": [
+                { "name": "Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LFA102 Export Stockpile Reclaim Tunnel 2nd Egress Ventilation Fan",
+          "equipmentNames": [
+            {
+              "name": "LFA102",
+              "components": [
+                { "name": "Motor" }
+              ]
+            }
+          ]
+        }
+      ]  
+    },
+    {
+      "name": "CPP Process Equipment",
+      "equipmentGroups": [
+        {
+          "name": "CAG002 – Flocculant Tank Agitator",
+          "equipmentNames": [
+            {
+              "name": "CAG002",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CAG003 – Lime Solution Tank Agitator",
+          "equipmentNames": [
+            {
+              "name": "CAG003",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF101 – Coarse Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF102 – Coarse Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF102",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF103 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF103",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF104 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF104",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF105 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF105",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF106 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF106",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF201 – Coarse Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF201",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF202 – Coarse Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF202",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF203 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF203",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF204 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF204",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF205 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF205",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF206 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF206",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF301 – Product Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF301",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF302 – Product Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF302",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF303 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF303",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF304 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF304",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF305 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF305",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CCF306 – Fine Coal Centrifuge",
+          "equipmentNames": [
+            {
+              "name": "CCF306",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Centrifuge" },
+                { "name": "Oil Pump Motor" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CMS001 – Magnetic Separator",
+          "equipmentNames": [
+            {
+              "name": "CMS001",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Cyclo Drive" },
+                { "name": "Drum Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CMS101 – Magnetic Separator",
+          "equipmentNames": [
+            {
+              "name": "CMS101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Cyclo Drive" },
+                { "name": "Drum Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CMS102 – Magnetic Separator",
+          "equipmentNames": [
+            {
+              "name": "CMS102",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Cyclo Drive" },
+                { "name": "Drum Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CMS201 – Magnetic Separator",
+          "equipmentNames": [
+            {
+              "name": "CMS201",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Cyclo Drive" },
+                { "name": "Drum Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CMS202 – Magnetic Separator",
+          "equipmentNames": [
+            {
+              "name": "CMS202",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Cyclo Drive" },
+                { "name": "Drum Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CMS301 – Magnetic Separator",
+          "equipmentNames": [
+            {
+              "name": "CMS301",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Cyclo Drive" },
+                { "name": "Drum Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CMS302 – Magnetic Separator",
+          "equipmentNames": [
+            {
+              "name": "CMS302",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Cyclo Drive" },
+                { "name": "Drum Bearings" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CDB001 – Raw Coal Distributor",
+          "equipmentNames": [
+            {
+              "name": "CDB001",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" },
+                { "name": "Shaft Upper Bearing" },
+                { "name": "Shaft Lower Bearing" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CTH001 – Thickener Drive No. 1",
+          "equipmentNames": [
+            {
+              "name": "CTH001",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox Stage 1" },
+                { "name": "Gearbox Stage 2" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CTH002 – Thickener Drive No. 2",
+          "equipmentNames": [
+            {
+              "name": "CTH002",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox Stage 1" },
+                { "name": "Gearbox Stage 2" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CTH003 – Thickener Drive No. 3",
+          "equipmentNames": [
+            {
+              "name": "CTH003",
+              "components": [
+                { "name": "Electric Motor" },
+                { "name": "Hydraulic Pump" },
+                { "name": "Hydraulic Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        }
+      ]  
+    },
+    {
+      "name": "CPP Process Screens",
+      "equipmentGroups": [
+        {
+          "name": "CPP CSC101 – Module 1 Desliming Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "LHS Exciter" },
+                { "name": "RHS Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC102 – Module 1 Product Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC102",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "LHS Exciter" },
+                { "name": "RHS Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC103 – Module 1 Reject Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC103",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC110 – Module 1 Spiral Reject Dewatering Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC 110",
+              "components": [
+                { "name": "Upper Exciter" },
+                { "name": "Lower Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC201 – Module 2 Desliming Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC201",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "LHS Exciter" },
+                { "name": "RHS Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC202 – Module 2 Product Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC202",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "LHS Exciter" },
+                { "name": "RHS Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC203 – Module 2 Reject Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC203",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC210 – Module 2 Spiral Reject Dewatering Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC210",
+              "components": [
+                { "name": "Upper Exciter" },
+                { "name": "Lower Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC302 – Module 3 Product Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC302",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "LHS Exciter" },
+                { "name": "RHS Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC303 – Module 3 Reject Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC303",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Drive Shaft Bearings" },
+                { "name": "Exciter" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPP CSC310 – Module 3 Spiral Reject Dewatering Screen",
+          "equipmentNames": [
+            {
+              "name": "CSC310",
+              "components": [
+                { "name": "Upper Exciter" },
+                { "name": "Lower Exciter" }
+              ]
+            }
+          ]
+        }
+      ]  
+    },
+    {
+      "name": "CPP Pumps",
+      "equipmentGroups": [
+        {
+          "name": "CPU001 – Thickener 1 Underflow Pump 1",
+          "equipmentNames": [
+            {
+              "name": "CPU001",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU002 – Thickener 1 Underflow Pump 2",
+          "equipmentNames": [
+            {
+              "name": "CPU002",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU003 – Thickener 2 Underflow Pump 1",
+          "equipmentNames": [
+            {
+              "name": "CPU003",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU004 – Thickener 2 Underflow Pump 2",
+          "equipmentNames": [
+            {
+              "name": "CPU004",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU005 – Tailings Disposal 1 Pump 1",
+          "equipmentNames": [
+            {
+              "name": "CPU005",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU006 – Tailings Disposal 1 Pump 2",
+          "equipmentNames": [
+            {
+              "name": "CPU006",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU007 – Tailings Disposal 1 Pump 3",
+          "equipmentNames": [
+            {
+              "name": "CPU007",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU008 – Tailings Disposal 2 Pump 4",
+          "equipmentNames": [
+            {
+              "name": "CPU008",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU009 – Tailings Disposal 2 Pump 5",
+          "equipmentNames": [
+            {
+              "name": "CPU009",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU010 – Tailings Disposal 2 Pump 6",
+          "equipmentNames": [
+            {
+              "name": "CPU010",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU013 – Tailings Disposal Pump 7",
+          "equipmentNames": [
+            {
+              "name": "CPU013",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU014 – Tailings Disposal Pump 8",
+          "equipmentNames": [
+            {
+              "name": "CPU014",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU015 – Tailings Disposal Pump 9",
+          "equipmentNames": [
+            {
+              "name": "CPU015",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU018 – Magnetite Introduction Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU018",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU019 – Overdose Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU019",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU020 – Flocculant Dosing Pump 1",
+          "equipmentNames": [
+            {
+              "name": "CPU020",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU021 – Flocculant Dosing Pump 2",
+          "equipmentNames": [
+            {
+              "name": "CPU021",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU025 – Thickener Area Floor Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU025",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU027 – Water Services Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU027",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU028 – Hose Down Water Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU018",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU030 – Flocculant Standby Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU030",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU031 – Anionic Flocculant Pump 1",
+          "equipmentNames": [
+            {
+              "name": "CPU031",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Gearbox" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU033 – Gland Water Pump #1 (Stage 1)",
+          "equipmentNames": [
+            {
+              "name": "CPU033",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump - Southern Cross" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU034 – Gland Water Pump #2 (Stage 1)",
+          "equipmentNames": [
+            {
+              "name": "CPU034",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump - Southern Cross" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU035 – Gland Water Pump #1 (Stage 2/3)",
+          "equipmentNames": [
+            {
+              "name": "CPU035",
+              "components": [
+                { "name": "Pump - WInmax" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU036 – Gland Water Pump #2 (Stage 2/3)",
+          "equipmentNames": [
+            {
+              "name": "CPU036",
+              "components": [
+                { "name": "Pump - WInmax" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU038 – Thickener Floor Sump Pump 2",
+          "equipmentNames": [
+            {
+              "name": "CPU038",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU040 – Gland Water Pump 3 Stage 1",
+          "equipmentNames": [
+            {
+              "name": "CPU040",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU041 – Gland Water Pump 3 Stage 2",
+          "equipmentNames": [
+            {
+              "name": "CPU041",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU042 – Gland Water Pump 4 Stage 1",
+          "equipmentNames": [
+            {
+              "name": "CPU042",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU043 – Gland Water Pump 4 Stage 2",
+          "equipmentNames": [
+            {
+              "name": "CPU043",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU101 – Dense Medium Cyclone Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU102 – Correct Medium Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU102",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU103 – Dilute Medium Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU103",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU104 – Classifying Cyclone Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU104",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU105 – Fines Product Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU105",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU106 – Spirals Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU0106",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU101 – Dense Medium Cyclone Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU043",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU107 – Clarified Water Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU107",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU108 – Fines Area Floor Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU108",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU109 – Medium Area Floor Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU109",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU110 – Module 1 Spray Water Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU110",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU111 – Module 1 Fines Transfer Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU111",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU201 – Dense Medium Cyclone Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU201",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU202 – Correct Medium Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU202",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU203 – Dilute Medium Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU203",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU204 – Classifying Cyclone Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU204",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU205 – Fines Product Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU205",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU206 – Spirals Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU206",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU207 – Clarified Water Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU207",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU208 – Fines Area Floor Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU208",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU209 – Medium Area Floor Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU209",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU210 – Spray Water Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU210",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU211 – Fines Reject Transfer Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU211",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU301 – Dense Medium Cyclone Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU301",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU302 – Correct Medium Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU302",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU303 – Dilute Medium Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU303",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU304 – Classifying Cyclone Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU304",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU305 – Fines Product Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU305",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU306 – Spirals Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU306",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU307 – Clarified Water Feed Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU307",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU308 – Fines Area Floor Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU308",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU309 – Medium Area Floor Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "CPU309",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU312 – Thickener Underflow Pump #5",
+          "equipmentNames": [
+            {
+              "name": "CPU312",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "CPU313 – Thickener Underflow Pump #6",
+          "equipmentNames": [
+            {
+              "name": "CPU313",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        }
+      ]  
+    },
+    {
+      "name": "Services Pumps",
+      "equipmentGroups": [
+        {
+          "name": "Services Pumps SPU104 – Raw Water Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU104",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU108 – Stockpile Spray Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU108",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU116 – Domestic Fire Water Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU116",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU117 – Domestic Fire Water Jacking Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU117",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU118 – Diesel Sprinkler Pump Set (Raw Water Tank)",
+          "equipmentNames": [
+            {
+              "name": "SPU118",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU120 – Potable Water Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU120",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU128 -Dump Station No. 1 Booster Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU128",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU129 -Dump Station No. 2 Booster Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU129",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU130 – Export Stockpile Spray Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU130",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU131 – Export Raw Water Supply Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU131",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU133 – Export Stockpile Jacking Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU133",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU139 – Export Electric Sprinkler Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU139",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU140 – Export Fire Water Jacking Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU140",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU141 – Export Diesel Sprinkler Pump Set",
+          "equipmentNames": [
+            {
+              "name": "SPU141",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU146 – Reclaim Tunnel Sump Pump",
+          "equipmentNames": [
+            {
+              "name": "SPU146",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps LPU101 – Export Dirty Water Dam Pump",
+          "equipmentNames": [
+            {
+              "name": "LPU101",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Compressor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU301 – CHPP Dirty Water Dam Pump No. 1",
+          "equipmentNames": [
+            {
+              "name": "SPU301",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Compressor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU302 – CHPP Dirty Water Dam Pump No. 2",
+          "equipmentNames": [
+            {
+              "name": "SPU302",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Compressor" },
+                { "name": "Pump" }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Services Pumps SPU303 – CHPP Dirty Water Dam Pump No. 3",
+          "equipmentNames": [
+            {
+              "name": "SPU303",
+              "components": [
+                { "name": "Motor" },
+                { "name": "Compressor" },
+                { "name": "Pump" }
               ]
             }
           ]
