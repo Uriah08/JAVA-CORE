@@ -12,8 +12,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Eye, ImageIcon, Plus, Search, Trash, View } from "lucide-react";
-import Image from "next/image";
-import { symbols } from "@/schema";
+// import Image from "next/image";
+// import { symbols } from "@/schema";
 import { Dialog } from "@/components/ui/dialog";
 import ExportClient from "@/components/container/dialogs/ExportClient";
 import { useState } from "react";
@@ -39,20 +39,12 @@ import { ClientEquipmentSchema } from "@/schema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const symbol1 = [
-  { symbol: "/severity/C.png" },
-  { symbol: "/severity/M.png" },
-  { symbol: "/severity/C.png" },
-  { symbol: "/severity/N.png" },
-  { symbol: "/severity/X.png" },
-  { symbol: "/severity/S.png" },
-  { symbol: "/severity/S.png" },
-  { symbol: "/severity/C.png" },
-  { symbol: "/severity/N.png" },
-  { symbol: "/severity/X.png" },
-];
+import SeverityHistory from "@/components/container/analysis/client/SeverityHistory";
+import Recommendation from "@/components/container/analysis/client/Recommendation";
+import { useSession } from "next-auth/react";
 
 const ClientAnalysis = () => {
+  const { data: session } = useSession();
   const [detailsActive, setDetailsActive] = useState("add");
 
   const [activeDrawing, setActiveDrawing] = useState("view");
@@ -100,7 +92,12 @@ const ClientAnalysis = () => {
     }[];
   } | null>(null);
 
+  console.log("USER: ", session?.user?.id);
+
   console.log("captured data: ", selectedComponent);
+
+  const routeComponentIds =
+    selectedComponent?.routeComponent?.map((rc) => rc.id) ?? [];
 
   const form = useForm<z.infer<typeof ClientEquipmentSchema>>({
     resolver: zodResolver(ClientEquipmentSchema),
@@ -235,58 +232,13 @@ const ClientAnalysis = () => {
             <ExportClient onClose={() => setOpen(false)} />
           </Dialog>
         </div>
-        <div className="flex gap-3 flex-wrap mt-3">
-          {symbols.map((symbol) => (
-            <div key={symbol.image} className="flex gap-1">
-              <Image
-                src={`/severity/${symbol.image}.png`}
-                width={40}
-                height={40}
-                alt="Symbol"
-                className="w-5 object-cover"
-              />
-              <h1 className="text-sm text-zinc-600">{symbol.label}</h1>
-            </div>
-          ))}
+
+        <div className="w-full mt-3">
+          <SeverityHistory routeComponentIds={routeComponentIds} />
         </div>
-        <div className="border rounded-lg mt-5 flex overflow-auto">
-          {symbol1.map((symbol, i) => (
-            <div
-              key={i}
-              className="p-3 min-w-[100px] w-full flex justify-center border-r"
-            >
-              <Image
-                src={symbol.symbol}
-                width={40}
-                height={40}
-                alt="symbol"
-                className="w-8 object-cover"
-              />
-            </div>
-          ))}
-        </div>
+
         <div className="flex flex-col gap-3 w-full mt-5">
-          <h1 className="text-sm font-medium">Recommendations</h1>
-          <div className="border rounded-lg p-3">
-            <h1 className="font-semibold">Previous Recommendations</h1>
-            <div className="border rounded-lg p-3 mt-2 max-h-[130px] overflow-auto">
-              <p className="text-sm text-zinc-600 indent-10">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Asperiores est laboriosam temporibus aliquam tempore itaque
-                nihil atque, ducimus quibusdam placeat illum, maiores eveniet
-                pariatur quia, ex aut tenetur dignissimos! Sequi? Asperiores est
-                laboriosam temporibus aliquam tempore itaque nihil atque,
-                ducimus quibusdam placeat illum, maiores eveniet pariatur quia,
-                ex aut tenetur dignissimos! Sequi? Asperiores est laboriosam
-                temporibus aliquam tempore itaque nihil atque, ducimus quibusdam
-                placeat illum, maiores eveniet pariatur quia, ex aut tenetur
-                dignissimos! Sequi?
-              </p>
-              <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-                Jan 1, 2025
-              </h1>
-            </div>
-          </div>
+          <Recommendation routeComponentIds={routeComponentIds} />
         </div>
         <div className="flex w-full gap-5 xl:flex-row flex-col">
           <div className="flex flex-col gap-3 w-full mt-5">

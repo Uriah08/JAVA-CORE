@@ -130,7 +130,35 @@ type SearchClientRouteEquipmentResponse = {
   getEquipmentName?: ExtendedClientRouteEquipment[];
 };
 
-export type ExtendedClientRouteComponent = RouteComponent & {};
+export type ExtendedClientRouteComponent = RouteComponent & {
+  comments: {
+    id: string;
+    severity: string;
+    comment: string;
+    createdAt: Date;
+  };
+};
+
+type ClientRouteComponentResponse = {
+  routeComponentComments: ExtendedClientRouteComponent[];
+  message: string;
+  success: boolean;
+};
+
+export type ExtendedClientRouteConponentRecommendation = RouteComponent & {
+  recommendations: {
+    id: string;
+    priority: string;
+    recommendation: string;
+    createdAt: Date;
+  }[];
+};
+
+type ClientRouteComponentRecommendationResponse = {
+  routeComponentRecommendation: ExtendedClientRouteConponentRecommendation[];
+  message: string;
+  success: boolean;
+};
 
 export const api = createApi({
   reducerPath: "api",
@@ -504,14 +532,16 @@ export const api = createApi({
       }),
       providesTags: ["RouteComponentOilAnalysis"],
     }),
-    getRouteComponentDetails: build.query<RouteComponentDetailsResponse, { componentId: string; clientId: string }>({
+    getRouteComponentDetails: build.query<
+      RouteComponentDetailsResponse,
+      { componentId: string; clientId: string }
+    >({
       query: ({ componentId, clientId }) => ({
         url: `/api/createRoute/routeMachineList/routeComponents/details?componentId=${componentId}&clientId=${clientId}`,
         method: "GET",
       }),
-        providesTags: ["RouteComponentDetails"],
-      }
-    ),
+      providesTags: ["RouteComponentDetails"],
+    }),
     searchClientRouteEquipmentList: build.query<
       SearchClientRouteEquipmentResponse,
       string
@@ -520,17 +550,30 @@ export const api = createApi({
         `/api/search/client-equipment?equipmentName=${equipmentName}`,
       providesTags: ["EquipmentName"],
     }),
-    // softDeleteMachineList: build.mutation({
-    //   query: (ids) => ({
-    //     url: "/api/machineList/delete",
-    //     method: "POST",
-    //     body: ids,
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   }),
-    //   invalidatesTags: ["Area"],
-    // }),
+    getClienttRouteComponentComment: build.query<
+      ClientRouteComponentResponse,
+      string[]
+    >({
+      query: (routeComponentIds) => ({
+        url: `/api/client/componentComment?${routeComponentIds
+          .map((id) => `routeComponentId=${id}`)
+          .join("&")}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentComment"],
+    }),
+    getClienttRouteComponentRecommendation: build.query<
+      ClientRouteComponentRecommendationResponse,
+      string[]
+    >({
+      query: (routeComponentIds) => ({
+        url: `/api/client/componentRecommendation?${routeComponentIds
+          .map((id) => `routeComponentId=${id}`)
+          .join("&")}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentRecommendation"],
+    }),
   }),
 });
 
@@ -575,4 +618,6 @@ export const {
   useGetRouteComponenetOilAnalysisQuery,
   useGetRouteComponentDetailsQuery,
   useSearchClientRouteEquipmentListQuery,
+  useGetClienttRouteComponentCommentQuery,
+  useGetClienttRouteComponentRecommendationQuery,
 } = api;

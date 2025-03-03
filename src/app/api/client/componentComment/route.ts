@@ -10,7 +10,7 @@ export async function GET(req: Request) {
     }
 
     const url = new URL(req.url);
-    const routeComponentIds = url.searchParams.getAll("routeComponentId"); 
+    const routeComponentIds = url.searchParams.getAll("routeComponentId");
 
     if (!routeComponentIds.length) {
       return NextResponse.json(
@@ -19,36 +19,29 @@ export async function GET(req: Request) {
       );
     }
 
-
-    const routeComponents = await prisma.routeComponent.findMany({
+    const routeComponentComments = await prisma.routeComponent.findMany({
       where: {
-        id: { in: routeComponentIds }, 
+        id: { in: routeComponentIds },
+        clientId: session.user.id,
       },
       select: {
         id: true,
         action: true,
         note: true,
-        image: true,
-        reportFigures: true,
         comments: {
+          take: 10,
+          orderBy: { createdAt: "desc" },
           select: {
             id: true,
             severity: true,
             comment: true,
             createdAt: true,
           },
-          orderBy: { createdAt: "desc" }, 
         },
       },
     });
 
-    const mergedComments = routeComponents.flatMap(rc => rc.comments);
-
-    const top10Comments = mergedComments.sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    ).slice(0, 10);
-
-    return NextResponse.json({ top10Comments, success: true });
+    return NextResponse.json({ routeComponentComments, success: true });
   } catch (error) {
     console.error("Error fetching route component comments", error);
     return NextResponse.json(
