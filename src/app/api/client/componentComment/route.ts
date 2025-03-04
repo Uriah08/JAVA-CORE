@@ -26,8 +26,6 @@ export async function GET(req: Request) {
       },
       select: {
         id: true,
-        action: true,
-        note: true,
         comments: {
           take: 10,
           orderBy: { createdAt: "desc" },
@@ -41,7 +39,7 @@ export async function GET(req: Request) {
       },
     });
 
-    return NextResponse.json({ routeComponentComments, success: true });
+    return NextResponse.json({message: "Fetched Success", routeComponentComments, success: true });
   } catch (error) {
     console.error("Error fetching route component comments", error);
     return NextResponse.json(

@@ -187,3 +187,11 @@ export const routeComponentOilAnalysisSchema = z.object({
 export const ClientEquipmentSchema = z.object({
   equiment: z.string().min(1, "Equipment is Required"),
 });
+
+export const RouteComponentActionSchema = z.object({
+  componentId: z.string().min(1, "Component ID is required"),
+  action: z.string().min(1, "Action is required"),
+  woNumber: z.string().min(1, "WO Number is required"),
+});
+
+

@@ -141,8 +141,8 @@ const AnalysisAndReportForm = () => {
     id: string;
     name: string;
     routeComponentID: string;
-    action?: string | null;
-    note?: string | null;
+    // action?: string | null;
+    // note?: string | null;
     component?: {
       id: string;
       name: string;
@@ -457,8 +457,9 @@ const AnalysisAndReportForm = () => {
                       id: routeComponent.id,
                       name: routeComponent.component.name,
                       routeComponentID: routeComponent?.id,
+                      component: routeComponent?.component,
                       // recommendations: routeComponent.recommendations || [],
-                      action: routeComponent.action ?? null,
+                      // action: routeComponent.action ?? null,
                       // temperatures: routeComponent.temperatures || [],
                       // oilAnalyses: routeComponent.oilAnalyses || [],
                     })
@@ -522,12 +523,12 @@ const AnalysisAndReportForm = () => {
             </div>
 
             {/* ####################### CLIENT ACTIONS AND ANALYST NOTE ######################### */}
-
             <div className="flex flex-col md:flex-row gap-3 mt-3">
               <div className="flex flex-col gap-3 w-full">
                 <ClientActionSection
                   routeComponentsLoading={routeComponentsLoading}
-                  selectedComponent={selectedComponent}
+                  clientId={selectedJob?.user?.id}
+                  componentId={selectedComponent?.component?.id}
                 />
               </div>
 
@@ -675,7 +676,10 @@ const AnalysisAndReportForm = () => {
                 </div>
               </div> */}
 
-              <EquipmentDetailsSection selectedComponent={selectedComponent} selectedJob={selectedJob} />
+              <EquipmentDetailsSection
+                selectedComponent={selectedComponent}
+                selectedJob={selectedJob}
+              />
 
               {/* ####################### TEMPARATURE AND OIL ANALYSIS ######################### */}
 

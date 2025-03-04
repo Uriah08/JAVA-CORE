@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetClienttRouteComponentRecommendationQuery } from "@/store/api";
 
@@ -10,12 +11,23 @@ interface SeverityHistoryProps {
 const Recommendation: React.FC<SeverityHistoryProps> = ({
   routeComponentIds,
 }) => {
+  const shouldRefetch = React.useRef(true);
+
+  React.useEffect(() => {
+    shouldRefetch.current = true;
+  }, [routeComponentIds]);
+
   const {
     data: routeComponentRecommendation,
     isFetching: routeComponentsLoading,
   } = useGetClienttRouteComponentRecommendationQuery(routeComponentIds, {
     skip: !routeComponentIds || routeComponentIds.length === 0,
+    refetchOnMountOrArgChange: shouldRefetch.current,
   });
+
+  React.useEffect(() => {
+    shouldRefetch.current = false;
+  }, [routeComponentRecommendation]);
 
   const recommendations =
     routeComponentRecommendation?.routeComponentRecommendation.flatMap(

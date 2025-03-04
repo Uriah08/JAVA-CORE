@@ -89,6 +89,8 @@ model User {
   RouteList             RouteList[]
   RouteComponentImage   RouteComponentImage[]
   RouteComponentFigures RouteComponentFigures[]
+  RouteComponentAction  RouteComponentAction[]
+  RouteComponentNote    RouteComponentNote[]
 
   @@map("users")
 }
@@ -141,6 +143,8 @@ model Component {
   RouteComponentDetails RouteComponentDetails[]
   RouteComponentImage   RouteComponentImage[]
   RouteComponentFigures RouteComponentFigures[]
+  RouteComponentAction  RouteComponentAction[]
+  RouteComponentNote    RouteComponentNote[]
 
   @@map("component")
 }
@@ -190,13 +194,11 @@ model RouteEquipmentName {
 }
 
 model RouteComponent {
-  id               String  @id @default(uuid())
+  id               String @id @default(uuid())
   routeMachineId   String
   clientId         String
   componentId      String
   routeEquipmentId String
-  action           String?
-  note             String?
 
   routeMachine   RouteMachineList   @relation(fields: [routeMachineId], references: [id], onDelete: Cascade)
   component      Component          @relation(fields: [componentId], references: [id], onDelete: Cascade)
@@ -254,6 +256,34 @@ model RouteComponentOilAnalysis {
   routeComponent RouteComponent @relation(fields: [routeComponentId], references: [id], onDelete: Cascade)
 
   @@map("route_component_oil_analysis")
+}
+
+model RouteComponentAction {
+  id          String   @id @default(cuid())
+  clientId    String
+  componentId String
+  action      String
+  woNumber    String?
+  createdAt   DateTime @default(now())
+
+  client    User      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_action")
+}
+
+model RouteComponentNote {
+  id          String   @id @default(cuid())
+  clientId    String
+  componentId String
+  note        String
+  analyst     String?
+  createdAt   DateTime @default(now())
+
+  client    User      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  component Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
+
+  @@map("route_component_note")
 }
 
 model RouteComponentDetails {

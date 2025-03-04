@@ -42,9 +42,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import SeverityHistory from "@/components/container/analysis/client/SeverityHistory";
 import Recommendation from "@/components/container/analysis/client/Recommendation";
 import { useSession } from "next-auth/react";
+import ClientActionSection from "@/components/container/analysis/client/ClientAction";
+import AnalystNoteSection from "@/components/container/analysis/client/AnalystNote";
 
 const ClientAnalysis = () => {
   const { data: session } = useSession();
+
+  const [openAnalystNote, setOpenAnalystNote] = React.useState(false);
+  const [openClientAction, setOpenClientAction] = React.useState(false);
   const [detailsActive, setDetailsActive] = useState("add");
 
   const [activeDrawing, setActiveDrawing] = useState("view");
@@ -92,12 +97,16 @@ const ClientAnalysis = () => {
     }[];
   } | null>(null);
 
+  const lastSelectedEquipment = React.useRef<string | null>(null);
+
   console.log("USER: ", session?.user?.id);
 
   console.log("captured data: ", selectedComponent);
 
   const routeComponentIds =
     selectedComponent?.routeComponent?.map((rc) => rc.id) ?? [];
+
+  console.log("old data: ", routeComponentIds);
 
   const form = useForm<z.infer<typeof ClientEquipmentSchema>>({
     resolver: zodResolver(ClientEquipmentSchema),
@@ -121,16 +130,20 @@ const ClientAnalysis = () => {
                     const equipment = equipmentList.find(
                       (eq) => eq.id === value
                     );
-                    setSelectedEquipment(
-                      equipment
-                        ? {
-                            ...equipment,
-                            components: Array.isArray(equipment.components)
-                              ? equipment.components
-                              : [],
-                          }
-                        : null
-                    );
+                    if (lastSelectedEquipment.current !== value) {
+                      setSelectedEquipment(
+                        equipment
+                          ? {
+                              ...equipment,
+                              components: Array.isArray(equipment.components)
+                                ? equipment.components
+                                : [],
+                            }
+                          : null
+                      );
+                      lastSelectedEquipment.current = value;
+                    }
+
                     field.onChange(value);
                     setSelectedComponent(null);
                   }}
@@ -242,9 +255,19 @@ const ClientAnalysis = () => {
         </div>
         <div className="flex w-full gap-5 xl:flex-row flex-col">
           <div className="flex flex-col gap-3 w-full mt-5">
-            <h1 className="text-sm font-medium">Action</h1>
-            <div className="border rounded-lg p-3">
+            {/* <h1 className="text-sm font-medium">Action</h1>
+       <div className="border rounded-lg p-3">
               <h1 className="font-semibold">Previous Action</h1>
+              <Select>
+                <SelectTrigger className="mt-3">
+                  <SelectValue placeholder="Select WO Number" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="analyst 1">Wo No 1</SelectItem>
+                  <SelectItem value="analyst 2">Wo No 2</SelectItem>
+                  <SelectItem value="analyst 3">Wo No 3</SelectItem>
+                </SelectContent>
+              </Select>
               <div className="border rounded-lg p-3 mt-2 max-h-[160px] overflow-auto">
                 <p className="text-sm text-zinc-600 indent-10">
                   Lorem ipsum dolor sit amet consectetur, adipisicing elit.
@@ -266,13 +289,29 @@ const ClientAnalysis = () => {
                 <Input placeholder="Comment here..." />
                 <Button className="bg-main hover:bg-follow">Send</Button>
               </div>
-            </div>
+            </div>  */}
+
+            <ClientActionSection
+              selectedComponent={selectedComponent}
+              openClientAction={openClientAction}
+              setOpenClientAction={setOpenClientAction}
+            />
           </div>
           <div className="flex flex-col gap-3 w-full mt-5">
-            <h1 className="text-sm font-medium">Notes</h1>
+            {/* <h1 className="text-sm font-medium">Notes</h1>
             <div className="border rounded-lg p-3">
               <h1 className="font-semibold">Analyst Note</h1>
-              <div className="border rounded-lg p-3 mt-2 max-h-[112px] overflow-auto">
+              <Select>
+                <SelectTrigger className="mt-3">
+                  <SelectValue placeholder="Select Analyst" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="analyst 1">Analyst 1</SelectItem>
+                  <SelectItem value="analyst 2">Analyst 2</SelectItem>
+                  <SelectItem value="analyst 3">Analyst 3</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="border rounded-lg p-3 mt-2 max-h-[160px] overflow-auto">
                 <p className="text-sm text-zinc-600 indent-10">
                   Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                   Asperiores est laboriosam temporibus aliquam tempore itaque
@@ -289,21 +328,18 @@ const ClientAnalysis = () => {
                   Jan 1, 2025
                 </h1>
               </div>
-              <Select>
-                <SelectTrigger className="mt-3">
-                  <SelectValue placeholder="Select Analyst" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="analyst 1">Analyst 1</SelectItem>
-                  <SelectItem value="analyst 2">Analyst 2</SelectItem>
-                  <SelectItem value="analyst 3">Analyst 3</SelectItem>
-                </SelectContent>
-              </Select>
+
               <div className="flex gap-3 mt-3 items-center">
                 <Input placeholder="Input analyst note here..." />
                 <Button className="bg-main hover:bg-follow">Send</Button>
               </div>
-            </div>
+            </div> */}
+            <AnalystNoteSection
+              routeComponentsLoading={equipmentsLoading}
+              selectedComponent={selectedComponent}
+              openAnalystNote={openAnalystNote}
+              setOpenAnalystNote={setOpenAnalystNote}
+            />
           </div>
         </div>
 

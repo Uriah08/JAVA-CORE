@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { symbols } from "@/schema";
 import { useGetClienttRouteComponentCommentQuery } from "@/store/api";
+// import { useRouter } from "next/router";
 
 interface SeverityHistoryProps {
   routeComponentIds: string[];
@@ -11,11 +12,23 @@ interface SeverityHistoryProps {
 const SeverityHistory: React.FC<SeverityHistoryProps> = ({
   routeComponentIds,
 }) => {
-  
+  console.log("selected for History: ", routeComponentIds);
+  const shouldRefetch = React.useRef(true);
+
+  React.useEffect(() => {
+    shouldRefetch.current = true;
+  }, [routeComponentIds]);
+
+  // const router = useRouter();
   const { data: routeComponents, isFetching: routeComponentsLoading } =
     useGetClienttRouteComponentCommentQuery(routeComponentIds, {
-      skip: !routeComponentIds || routeComponentIds.length === 0,
+      skip: !routeComponentIds,
+      refetchOnMountOrArgChange: shouldRefetch.current,
     });
+
+  React.useEffect(() => {
+    shouldRefetch.current = false;
+  }, [routeComponents]);
 
   const severityMap: Record<string, string> = Object.fromEntries(
     symbols.map((s) => [s.label, `${s.image}.png`])

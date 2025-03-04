@@ -16,6 +16,7 @@ import {
   RouteComponentTemperature,
   RouteComponentOilAnalysis,
   RouteComponentDetails,
+  RouteComponentAction,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
@@ -160,6 +161,19 @@ type ClientRouteComponentRecommendationResponse = {
   success: boolean;
 };
 
+type ClientComponentActionResponse = {
+  routeComponentAction: RouteComponentAction[];
+  woNumbers: string[];
+  message: string;
+  success: boolean;
+};
+
+type AdminComponentActionResponse = {
+  routeComponentAction: RouteComponentAction[];
+  message: string;
+  success: boolean;
+};
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -180,6 +194,7 @@ export const api = createApi({
     "RouteComponentTemperature",
     "RouteComponentOilAnalysis",
     "RouteComponentDetails",
+    "RouteComponentAction",
   ],
   endpoints: (build) => ({
     loginUser: build.mutation({
@@ -574,6 +589,36 @@ export const api = createApi({
       }),
       providesTags: ["RouteComponentRecommendation"],
     }),
+    getRouteComponentAction: build.query<ClientComponentActionResponse, string>(
+      {
+        query: (componentId) => ({
+          url: `/api/client/componentClientAction?componentId=${componentId}`,
+          method: "GET",
+        }),
+        providesTags: ["RouteComponentAction"],
+      }
+    ),
+    getRouteComponentActionAdmin: build.query<
+      AdminComponentActionResponse,
+      { componentId: string; clientId: string }
+    >({
+      query: ({ componentId, clientId }) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/clientAction?componentId=${componentId}&clientId=${clientId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentAction"],
+    }),
+    createRouteComponentAction: build.mutation({
+      query: (data) => ({
+        url: `/api/client/componentClientAction`,
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["RouteComponentAction"],
+    }),
   }),
 });
 
@@ -620,4 +665,7 @@ export const {
   useSearchClientRouteEquipmentListQuery,
   useGetClienttRouteComponentCommentQuery,
   useGetClienttRouteComponentRecommendationQuery,
+  useGetRouteComponentActionQuery,
+  useCreateRouteComponentActionMutation,
+  useGetRouteComponentActionAdminQuery,
 } = api;

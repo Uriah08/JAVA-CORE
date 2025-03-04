@@ -43,7 +43,11 @@ export async function GET(req: Request) {
 
     console.log("data: ", routeComponentRecommendation);
 
-    return NextResponse.json({ routeComponentRecommendation, success: true });
+    return NextResponse.json({
+      message: "Fetched Success",
+      routeComponentRecommendation,
+      success: true,
+    });
   } catch (error) {
     console.error("Error fetching route component comments", error);
     return NextResponse.json(
