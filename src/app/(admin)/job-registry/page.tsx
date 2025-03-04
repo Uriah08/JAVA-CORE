@@ -32,10 +32,10 @@ const JobRegistry = () => {
   const chart2 = jobs.map((job) => job.status).filter((status) => status);
 
   return (
-    <div className="w-full p-5 flex xl:flex-row flex-col gap-5">
-      <div className="w-full xl:w-2/3 h-full gap-5 flex flex-col">
+    <div className="w-full p-3 sm:p-5 flex xl:flex-row flex-col gap-3 sm:gap-5">
+      <div className="w-full xl:w-2/3 h-full gap-3 sm:gap-5 flex flex-col">
         <div className="w-full h-full p-5 bg-white rounded-xl flex flex-col shadow-lg">
-          <h1 className="text-2xl font-bold">Job Registry</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">Job Registry</h1>
           <DataTable columns={columns} data={jobs} loading={jobsLoading} />
         </div>
         {jobsLoading ? (
@@ -43,7 +43,7 @@ const JobRegistry = () => {
         ) : (
           <WaveChart chartDatas={chart1} />
         )}
-        <div className="flex md:flex-row flex-col gap-5">
+        <div className="flex md:flex-row flex-col gap-3 sm:gap-5">
           {jobsLoading ? (
             <>
               <Skeleton className="md:w-1/2 w-full h-[400px] shadow-lg" />
@@ -57,11 +57,11 @@ const JobRegistry = () => {
           )}
         </div>
       </div>
-      <div className="w-full xl:w-1/3 xl:sticky xl:top-5 h-full flex flex-col gap-5">
+      <div className="w-full xl:w-1/3 xl:sticky xl:top-5 h-full flex flex-col gap-3 sm:gap-5">
         <div className="bg-main h-[200px] w-full rounded-xl shadow-lg"></div>
         <div className="w-full rounded-xl bg-white flex flex-col justify-end p-5 gap-3 shadow-lg">
-          <h1 className="text-xl font-semibold text-black">Job Counts</h1>
-          <div className="flex gap-5">
+          <h1 className="text-base sm:text-xl font-semibold text-black">Job Counts</h1>
+          <div className="flex  gap-3 sm:gap-5">
             <div className="bg-main rounded-lg w-1/2 h-[100px] p-3">
               <div className="flex flex-col gap-5">
                 <div className="flex gap-3 items-center">
@@ -87,7 +87,7 @@ const JobRegistry = () => {
           </div>
         </div>
         <div className="w-full rounded-xl bg-white flex flex-col justify-end p-5 gap-5 shadow-lg max-h-[500px]">
-          <h1 className="text-xl font-semibold text-black mb-3">
+          <h1 className="text-base sm:text-xl font-semibold text-black mb-3">
             Recently Added
           </h1>
           {jobsLoading ? (

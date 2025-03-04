@@ -3,7 +3,7 @@ import React from "react";
 
 const AnalysisReport = () => {
   return (
-    <div className="w-full h-full p-5 flex">
+    <div className="w-full h-full p-3 sm:p-5 flex">
       <AnalysisAndReportForm />
     </div>
   );

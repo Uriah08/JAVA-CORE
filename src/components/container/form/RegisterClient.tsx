@@ -71,6 +71,7 @@ const RegisterClient = () => {
                 type='text'
                   placeholder="Enter the username"
                   {...field}
+                  className='text-sm'
                 />
             </FormControl>
             <FormMessage />
@@ -88,6 +89,7 @@ const RegisterClient = () => {
                 type='email'
                   placeholder="Enter the email"
                   {...field}
+                  className='text-sm'
                 />
             </FormControl>
             <FormMessage />
@@ -106,6 +108,7 @@ const RegisterClient = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter the password"
                   {...field}
+                  className='text-sm'
                 />
                 <button
                   type="button"
@@ -132,6 +135,7 @@ const RegisterClient = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter the password"
                   {...field}
+                  className='text-sm'
                 />
                 <button
                   type="button"

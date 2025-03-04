@@ -146,7 +146,7 @@ export function DataTable<TData extends { id: string }, TValue>({
   return (
     <div className="mt-5">
       <div className="flex xl:flex-row flex-col gap-3 justify-between">
-        <h1 className="text-xl font-semibold whitespace-nowrap">Date Range:</h1>
+        <h1 className="text-base sm:text-xl font-semibold whitespace-nowrap">Date Range:</h1>
         <div className="flex sm:flex-row flex-col gap-5 w-full">
         <div className="flex flex-1 gap-2 items-center">
           <h1 className="text-sm text-zinc-600">From:</h1>
@@ -161,7 +161,7 @@ export function DataTable<TData extends { id: string }, TValue>({
               )}
             >
               <CalendarIcon />
-              {fromDate ? format(fromDate, "PPP") : <span>Pick a date</span>}
+              {fromDate ? format(fromDate, "PPP") : <span className='text-sm sm:text-base'>Pick a date</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -187,7 +187,7 @@ export function DataTable<TData extends { id: string }, TValue>({
               )}
             >
               <CalendarIcon />
-              {toDate ? format(toDate, "PPP") : <span>Pick a date</span>}
+              {toDate ? format(toDate, "PPP") : <span className='text-sm sm:text-base'>Pick a date</span>}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -210,7 +210,7 @@ export function DataTable<TData extends { id: string }, TValue>({
           onChange={(event) =>
             table.getColumn("user")?.setFilterValue(event.target.value)
           }
-          className="w-full"
+          className="w-full text-sm"
         />
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger disabled={deleteLoading || Object.keys(rowSelection).length === 0}>
@@ -307,7 +307,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 
       <div className="flex xl:flex-row flex-col items-start xl:gap-0 gap-2 xl:items-center justify-between xl:space-x-2 py-4 w-full ">
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <div className="flex gap-2">
             <div className="bg-red-500 p-2 rounded-full w-fit h-fit"></div>
             <h1 className="text-xs text-zinc-500">Waiting for Analysis</h1>
