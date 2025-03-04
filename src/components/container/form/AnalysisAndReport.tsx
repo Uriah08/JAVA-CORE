@@ -188,7 +188,7 @@ const AnalysisAndReportForm = () => {
   }
 
   return (
-    <div className="w-full flex flex-col gap-5">
+    <div className="w-full flex flex-col gap-3 sm:gap-5">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -197,7 +197,7 @@ const AnalysisAndReportForm = () => {
           <div className="w-full h-full bg-white rounded-xl p-5 shadow-lg">
             <div className="flex flex-col ">
               <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-black">
+                <h1 className="text-xl sm:text-2xl font-bold text-black">
                   Analysis and Reporting
                 </h1>
                 <Button
@@ -211,7 +211,7 @@ const AnalysisAndReportForm = () => {
                   <ExportAdmin onClose={() => setOpenExport(false)} />
                 </Dialog>
               </div>
-              <h2 className="text-lg font-semibold mb-3 mt-3 text-zinc-700">
+              <h2 className="text-base sm:text-lg font-semibold mb-3 mt-3 text-zinc-700">
                 Information
               </h2>
             </div>
@@ -398,7 +398,7 @@ const AnalysisAndReportForm = () => {
           </div>
         </form>
       </Form>
-      <div className="flex flex-col lg:flex-row gap-5 w-full">
+      <div className="flex flex-col lg:flex-row gap-3 sm:gap-5 w-full">
         <div
           className={`w-full lg:w-1/3 rounded-xl bg-white flex flex-col p-5 shadow-lg ${
             hideList && "hidden"

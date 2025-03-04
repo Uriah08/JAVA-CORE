@@ -223,7 +223,7 @@ const CreateRoute = () => {
             control={form.control}
             name="clientId"
             render={({ field }) => (
-              <FormItem className="w-1/3">
+              <FormItem className="w-full md:w-1/3">
                 <FormLabel className="text-lg font-semibold">Client</FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -262,7 +262,7 @@ const CreateRoute = () => {
           <div className="flex-grow flex justify-end">
             <Button
               type="submit"
-              className="w-20 bg-red-700 hover:bg-red-300 text-white mt-8 py-2 rounded-md"
+              className=" bg-red-700 hover:bg-red-300 text-white mt-8 py-2 rounded-md"
               disabled={isCreating}
             >
               {isCreating ? "Creating..." : "Create"}
@@ -270,8 +270,8 @@ const CreateRoute = () => {
           </div>
         </div>
         <hr className="my-0 border-t border-gray-300 w-full" />{" "}
-        <div className="flex gap-5 w-full">
-          <div className="w-2/6">
+        <div className="flex md:flex-row flex-col gap-5 w-full">
+          <div className="w-full md:w-2/6">
             <h2 className="text-lg font-semibold mb-3">Machine List</h2>
             <div className="font-base flex flex-col">
               <Breadcrumb
@@ -306,9 +306,9 @@ const CreateRoute = () => {
           </div>
 
           <hr className="h-auto border-l border-gray-300 mx-4 -mt-3" />
-          <div className="w-4/6">
-            <div className="flex gap-5 w-full">
-              <div className="w-1/2">
+          <div className="w-full md:w-4/6">
+            <div className="flex md:flex-row flex-col gap-5 w-full">
+              <div className="w-full md:w-1/2">
                 <FormField
                   control={form.control}
                   name="areaId"
@@ -353,7 +353,7 @@ const CreateRoute = () => {
                 />
               </div>
 
-              <div className="w-1/2">
+              <div className="w-full md:w-1/2">
                 <FormField
                   control={form.control}
                   name="routeName"
@@ -363,7 +363,7 @@ const CreateRoute = () => {
                         Create Route
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter route name..." {...field} />
+                        <Input placeholder="Enter route name..." {...field} className='text-sm'/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -93,7 +93,7 @@ const EquipmentSelector: React.FC<EquipmentSelectorProps> = ({
           ))}
         </>
       ) : (
-        <div className="flex items-center justify-center h-72 text-gray-500 text-xl">
+        <div className="flex items-center justify-center h-72 text-zinc-300 font-bold text-3xl">
           Select Equipment
         </div>
       )}

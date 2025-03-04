@@ -74,6 +74,7 @@ const ChangePassword = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your current password"
                   {...field}
+                  className='text-sm'
                 />
                 <button
                   type="button"
@@ -100,6 +101,7 @@ const ChangePassword = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Set new password"
                   {...field}
+                  className='text-sm'
                 />
                 <button
                   type="button"
@@ -126,6 +128,7 @@ const ChangePassword = () => {
                   type={showPassword ? "text" : "password"}
                   placeholder="Set your confirm password"
                   {...field}
+                  className='text-sm'
                 />
                 <button
                   type="button"
