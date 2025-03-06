@@ -194,6 +194,13 @@ type ClientComponentDetailsResponse = {
   success: boolean;
 };
 
+type MachinesCountResponse = {
+  areas: number;
+  equipmentGroup: number;
+  equipmentName: number;
+  components: number;
+}
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -693,6 +700,18 @@ export const api = createApi({
       }),
       invalidatesTags: ["RouteComponentDetails"],
     }),
+    getMachinesCount: build.query<MachinesCountResponse, void>({
+      query: () => ({
+        url: "/api/machineList/dashboard",
+        method: "GET",
+      })
+    }),
+    getRecentRoutes: build.query<RouteResponse, void>({
+      query: () => ({
+        url: "/api/createRoute/dashboard",
+        method: "GET",
+      })
+    })
   }),
 });
 
@@ -747,4 +766,6 @@ export const {
   useCreateClientComponentDetailsMutation,
   useGetRouteComponentDetailsQuery,
   useGetAdminRouteComponentDetailsQuery,
+  useGetMachinesCountQuery,
+  useGetRecentRoutesQuery,
 } = api;

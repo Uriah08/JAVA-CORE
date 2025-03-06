@@ -29,14 +29,14 @@ const JobRegistry = () => {
   
 
   return (
-    <div className='w-full p-5 flex xl:flex-row flex-col gap-5'>
-        <div className='w-full h-full gap-5 flex flex-col'>
+    <div className='w-full p-3 sm:p-5 flex xl:flex-row flex-col gap-3 sm:gap-5'>
+        <div className='w-full h-full gap-3 sm:gap-5 flex flex-col'>
             <div className='w-full h-full p-5 bg-white rounded-xl flex flex-col shadow-lg'>
-            <h1 className='text-2xl font-bold'>Job Registry</h1>
+            <h1 className='text-xl sm:text-2xl font-bold'>Job Registry</h1>
             <DataTable columns={columns} data={jobs} loading={jobsLoading}/>
             </div>
             {jobsLoading ? <Skeleton className='w-full h-[320px] shadow-lg'/> : <WaveChart chartDatas={chart1}/>}
-        <div className='flex md:flex-row flex-col gap-5'>
+        <div className='flex md:flex-row flex-col gap-3 sm:gap-5'>
           {jobsLoading ? (<>
             <Skeleton className='md:w-1/2 w-full h-[400px] shadow-lg' />
             <Skeleton className='md:w-1/2 w-full h-[400px] shadow-lg' />
