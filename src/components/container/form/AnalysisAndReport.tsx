@@ -155,6 +155,8 @@ const AnalysisAndReportForm = () => {
     }
   }, [routeComponentsData]);
 
+  const isLoading = jobsLoading || routeLoading || routeComponentsLoading;
+
   console.log("Captured data: ", selectedComponent);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
@@ -256,7 +258,7 @@ const AnalysisAndReportForm = () => {
                                 className="focus-visible:ring-0 pl-10"
                               />
                             </div>
-                            {jobsLoading ? (
+                            {isLoading ? (
                               <div className="w-full h-full overflow-hidden flex flex-col gap-1 mt-1">
                                 {[...Array(5)].map((_, index) => (
                                   <Skeleton
@@ -420,7 +422,7 @@ const AnalysisAndReportForm = () => {
             </Button>
           )}
 
-          {routeLoading || routeComponentsLoading ? (
+          {isLoading ? (
             <div className="mt-8 space-y-2">
               {[...Array(5)].map((_, index) => (
                 <Skeleton
@@ -493,7 +495,7 @@ const AnalysisAndReportForm = () => {
 
             <div className="flex flex-col gap-3 w-full">
               <SeverityHistorySection
-                routeComponentsLoading={routeComponentsLoading}
+                isLoading={isLoading}
                 selectedComponent={selectedComponent}
                 // severityMap={severityMap}
               />
@@ -504,7 +506,7 @@ const AnalysisAndReportForm = () => {
             {/* ####################### COMMENTS ######################### */}
             <div className="flex flex-col gap-3 mt-3">
               <CommentsSection
-                routeComponentsLoading={routeComponentsLoading}
+                isLoading={isLoading}
                 selectedComponent={selectedComponent}
                 // severityMap={severityMap}
                 openComment={openComment}
@@ -515,7 +517,7 @@ const AnalysisAndReportForm = () => {
             {/* ####################### RECOMMENDATIONS ######################### */}
             <div className="flex flex-col gap-3 mt-3">
               <RecommendationSection
-                routeComponentsLoading={routeComponentsLoading}
+                isLoading={isLoading}
                 selectedComponent={selectedComponent}
                 openRecommendation={openRecommendation}
                 setOpenRecommendation={setOpenRecommendation}
@@ -526,7 +528,7 @@ const AnalysisAndReportForm = () => {
             <div className="flex flex-col md:flex-row gap-3 mt-3">
               <div className="flex flex-col gap-3 w-full">
                 <ClientActionSection
-                  routeComponentsLoading={routeComponentsLoading}
+                  isLoading={isLoading}
                   clientId={selectedJob?.user?.id}
                   componentId={selectedComponent?.component?.id}
                 />
@@ -534,7 +536,7 @@ const AnalysisAndReportForm = () => {
 
               <div className="flex flex-col gap-3 w-full">
                 <AnalystNoteSection
-                  routeComponentsLoading={routeComponentsLoading}
+                  isLoading={isLoading}
                   clientId={selectedJob?.user?.id}
                   componentId={selectedComponent?.component?.id}
                 />
@@ -678,6 +680,7 @@ const AnalysisAndReportForm = () => {
               </div> */}
 
               <EquipmentDetailsSection
+                isLoading={isLoading}
                 selectedComponent={selectedComponent}
                 selectedJob={selectedJob}
               />
@@ -687,13 +690,13 @@ const AnalysisAndReportForm = () => {
               <div className="flex flex-col gap-3 w-full md:w-1/2">
                 <div className="flex flex-col gap-3 w-full">
                   <TemperatureSection
-                    routeComponentsLoading={routeComponentsLoading}
+                    isLoading={isLoading}
                     selectedComponent={selectedComponent}
                   />
                 </div>
                 <div className="flex flex-col gap-3 w-full">
                   <OilAnalysisSection
-                    routeComponentsLoading={routeComponentsLoading}
+                    isLoading={isLoading}
                     selectedComponent={selectedComponent}
                     openOilAnalysis={openOilAnalysis}
                     setOpenOilAnalysis={setOpenOilAnalysis}

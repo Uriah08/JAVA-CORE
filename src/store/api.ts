@@ -132,6 +132,18 @@ type SearchClientRouteEquipmentResponse = {
   getEquipmentName?: ExtendedClientRouteEquipment[];
 };
 
+export type ExtendedSelectedComponent = Component & {
+  routeComponent?: {
+    id: string;
+  };
+};
+
+type SelectedComponentResponse = {
+  selectedComponentData: ExtendedSelectedComponent[];
+  message: string;
+  success: boolean;
+}
+
 export type ExtendedClientRouteComponent = RouteComponent & {
   comments: {
     id: string;
@@ -584,12 +596,19 @@ export const api = createApi({
         `/api/search/client-equipment?equipmentName=${equipmentName}`,
       providesTags: ["EquipmentName"],
     }),
+    getSelectedComponent: build.query<SelectedComponentResponse, string[]>({
+      query: (componentIds) => ({
+        url: `/api/client/selectedComponent?componentIds=${componentIds.map(id => `componentId=${id}`).join("&")}`,
+        method: "GET",
+      }),
+      providesTags: ["Component"],
+    }),
     getClienttRouteComponentComment: build.query<
       ClientRouteComponentResponse,
       string[]
     >({
       query: (routeComponentIds) => ({
-        url: `/api/client/componentComment?${routeComponentIds
+        url: `/api/client/selectedComponent/componentComment?${routeComponentIds
           .map((id) => `routeComponentId=${id}`)
           .join("&")}`,
         method: "GET",
@@ -601,7 +620,7 @@ export const api = createApi({
       string[]
     >({
       query: (routeComponentIds) => ({
-        url: `/api/client/componentRecommendation?${routeComponentIds
+        url: `/api/client/selectedComponent/componentRecommendation?${routeComponentIds
           .map((id) => `routeComponentId=${id}`)
           .join("&")}`,
         method: "GET",
@@ -611,7 +630,7 @@ export const api = createApi({
     getRouteComponentAction: build.query<ClientComponentActionResponse, string>(
       {
         query: (componentId) => ({
-          url: `/api/client/componentClientAction?componentId=${componentId}`,
+          url: `/api/client/selectedComponent/componentClientAction?componentId=${componentId}`,
           method: "GET",
         }),
         providesTags: ["RouteComponentAction"],
@@ -629,7 +648,7 @@ export const api = createApi({
     }),
     createRouteComponentAction: build.mutation({
       query: (data) => ({
-        url: `/api/client/componentClientAction`,
+        url: `/api/client/selectedComponent/componentClientAction`,
         method: "POST",
         body: data,
         headers: {
@@ -643,14 +662,14 @@ export const api = createApi({
       string
     >({
       query: (componentId) => ({
-        url: `/api/client/componentAnalystNote?componentId=${componentId}`,
+        url: `/api/client/selectedComponent/componentAnalystNote?componentId=${componentId}`,
         method: "GET",
       }),
       providesTags: ["RouteComponentNote"],
     }),
     createRouteComponentAnalystNote: build.mutation({
       query: (data) => ({
-        url: `/api/client/componentAnalystNote`,
+        url: `/api/client/selectedComponent/componentAnalystNote`,
         method: "POSt",
         body: data,
         headers: {
@@ -674,7 +693,7 @@ export const api = createApi({
       string
     >({
       query: (componentId) => ({
-        url: `/api/client/componentDetails?componentId=${componentId}`,
+        url: `/api/client/selectedComponent/componentDetails?componentId=${componentId}`,
         method: "GET",
       }),
       providesTags: ["RouteComponentDetails"],
@@ -691,7 +710,7 @@ export const api = createApi({
     }),
     createClientComponentDetails: build.mutation({
       query: (data) => ({
-        url: `/api/client/componentDetails`,
+        url: `/api/client/selectedComponent/componentDetails`,
         method: "POST",
         body: data,
         headers: {
@@ -755,6 +774,7 @@ export const {
   useCreateOilAnalysisMutation,
   useGetRouteComponenetOilAnalysisQuery,
   useSearchClientRouteEquipmentListQuery,
+  useGetSelectedComponentQuery,
   useGetClienttRouteComponentCommentQuery,
   useGetClienttRouteComponentRecommendationQuery,
   useGetRouteComponentActionQuery,

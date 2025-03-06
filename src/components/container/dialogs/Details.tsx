@@ -23,11 +23,13 @@ interface SelectedComponent {
 }
 
 interface DetailsDialogProps {
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   selectedJob: SelectedJob | null;
 }
 
 const Details: React.FC<DetailsDialogProps> = ({
+  isLoading,
   selectedComponent,
   selectedJob,
 }) => {
@@ -39,7 +41,7 @@ const Details: React.FC<DetailsDialogProps> = ({
 
   const {
     data,
-    isLoading: loadingRouteComponentDetails,
+    isLoading: queryLoading,
     error: routeComponentDetailsError,
   } = useGetAdminRouteComponentDetailsQuery(
     { componentId: componentId, clientId: clientId },
@@ -47,6 +49,8 @@ const Details: React.FC<DetailsDialogProps> = ({
       skip: !componentId || !clientId, // Skip query if either is missing
     }
   );
+
+  const showLoading = isLoading || queryLoading;
 
   if (routeComponentDetailsError) {
     return <div className="text-main">Error loading data.</div>;
@@ -110,7 +114,7 @@ const Details: React.FC<DetailsDialogProps> = ({
 
         <table className="w-full table-auto m-0">
           <tbody>
-            {loadingRouteComponentDetails ? (
+            {showLoading ? (
               Array.from({ length: 3 }).map((_, index) => (
                 <tr key={index} className="border-red-400 border-b">
                   <th className="p-3 text-left bg-red-300 font-normal w-auto">

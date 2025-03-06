@@ -21,11 +21,13 @@ interface SelectedComponent {
 }
 
 interface EquipmentDetailsSectionProps {
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   selectedJob: SelectedJob | null;
 }
 
 const EquipmentDetailsSection: React.FC<EquipmentDetailsSectionProps> = ({
+  isLoading,
   selectedComponent,
   selectedJob,
 }) => {
@@ -55,6 +57,7 @@ const EquipmentDetailsSection: React.FC<EquipmentDetailsSectionProps> = ({
         </Button>
         {openDetails && (
           <Details
+            isLoading={isLoading}
             selectedComponent={selectedComponent}
             selectedJob={selectedJob}
           />

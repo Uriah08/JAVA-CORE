@@ -13,12 +13,12 @@ interface SelectedComponent {
 }
 
 interface TemperatureSectionProps {
-  routeComponentsLoading: boolean;
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
 }
 
 const TemperatureSection: React.FC<TemperatureSectionProps> = ({
-  routeComponentsLoading,
+  isLoading,
   selectedComponent,
 }) => {
   const [openTemperature, setOpenTemperature] = React.useState(false);
@@ -27,11 +27,13 @@ const TemperatureSection: React.FC<TemperatureSectionProps> = ({
 
   const {
     data: routeComponentTemperature,
-    isLoading: loadingRouteComponentTemperature,
+    isLoading: queryLoading,
     error: routeComponentTemperatureError,
   } = useGetRouteComponentTemperatureQuery(routeComponentID, {
     skip: !routeComponentID,
   });
+
+  const showLoading = isLoading || queryLoading;
 
   if (routeComponentTemperatureError) {
     return <div className="text-main">Error loading data.</div>;
@@ -76,7 +78,7 @@ const TemperatureSection: React.FC<TemperatureSectionProps> = ({
                 {index === 0 ? "Current" : "Previous"}
               </h1>
               <div className="flex justify-center items-center py-1">
-                {routeComponentsLoading || loadingRouteComponentTemperature ? (
+                {showLoading ? (
                   <Skeleton className="w-5 h-5 animate-pulse bg-zinc-200" />
                 ) : temp ? (
                   <div className="flex justify-center items-center w-full">

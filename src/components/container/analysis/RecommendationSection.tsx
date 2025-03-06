@@ -21,14 +21,14 @@ interface SelectedComponent {
 }
 
 interface RecommendationsSectionProps {
-  routeComponentsLoading: boolean;
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openRecommendation: boolean;
   setOpenRecommendation: Dispatch<SetStateAction<boolean>>;
 }
 
 const RecommendationSection: React.FC<RecommendationsSectionProps> = ({
-  routeComponentsLoading,
+  isLoading,
   selectedComponent,
   openRecommendation,
   setOpenRecommendation,
@@ -37,11 +37,13 @@ const RecommendationSection: React.FC<RecommendationsSectionProps> = ({
 
   const {
     data: routeComponentRecommendation,
-    isLoading: loadingRouteComponentRecommendation,
+    isLoading: queryLoading,
     error: routeComponentRecommendationError,
   } = useGetRouteComponentRecommendationQuery(routeComponentID, {
     skip: !routeComponentID,
   });
+
+  const showLoading = isLoading || queryLoading;
 
   if (routeComponentRecommendationError) {
     return <div className="text-main">Error loading data.</div>;
@@ -71,7 +73,7 @@ const RecommendationSection: React.FC<RecommendationsSectionProps> = ({
           <div className="flex-1 flex flex-col gap-2">
             <h1 className="font-medium">Current Recommendation</h1>
             <div className="p-3 border rounded-lg">
-              {routeComponentsLoading || loadingRouteComponentRecommendation ? (
+              {showLoading ? (
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
               ) : latestRecommendation ? (
                 <>
@@ -101,7 +103,7 @@ const RecommendationSection: React.FC<RecommendationsSectionProps> = ({
           <div className="flex-1 flex flex-col gap-2">
             <h1 className="font-medium">Previous Recommendation</h1>
             <div className="p-3 border rounded-lg">
-              {routeComponentsLoading || loadingRouteComponentRecommendation ? (
+              {showLoading ? (
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
               ) : previousRecommendation ? (
                 <>

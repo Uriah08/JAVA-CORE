@@ -3,25 +3,29 @@ import { Input } from "@/components/ui/input";
 import { useGetAdminRouteComponentActionQuery } from "@/store/api";
 
 interface ClientActionSectionProps {
-  routeComponentsLoading: boolean;
+  isLoading: boolean;
   clientId?: string;
   componentId?: string;
 }
 
 const ClientActionSection: React.FC<ClientActionSectionProps> = ({
-  routeComponentsLoading,
+  isLoading,
   clientId,
   componentId,
 }) => {
-  const { data, isLoading } = useGetAdminRouteComponentActionQuery(
-    { componentId: componentId ?? "", clientId: clientId ?? "" },
-    { skip: !componentId || !clientId }
-  );
+  const { data, isLoading: queryLoading } =
+    useGetAdminRouteComponentActionQuery(
+      { componentId: componentId ?? "", clientId: clientId ?? "" },
+      { skip: !componentId || !clientId }
+    );
 
   const latestAction = data?.routeComponentAction?.[0] || null;
   const latestDate = latestAction
     ? new Date(latestAction.createdAt).toLocaleDateString()
     : "No date available";
+
+  const showLoading = isLoading || queryLoading;
+  
   return (
     <div className="flex flex-col gap-3 mt-3 border border-main rounded-lg overflow-hidden">
       <h1 className="text-lg font-semibold bg-main text-white px-4 py-2">
@@ -29,7 +33,7 @@ const ClientActionSection: React.FC<ClientActionSectionProps> = ({
       </h1>
       <div className=" p-3 flex flex-col h-full">
         <h1 className="font-semibold">WO Number</h1>
-        {routeComponentsLoading || isLoading ? (
+        {showLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
@@ -48,7 +52,7 @@ const ClientActionSection: React.FC<ClientActionSectionProps> = ({
             {latestDate || "No Available date"}
           </h1>
         </div>
-        {routeComponentsLoading || isLoading ? (
+        {showLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}

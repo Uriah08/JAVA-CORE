@@ -23,7 +23,7 @@ interface SelectedComponent {
 }
 
 interface CommentsSectionProps {
-  routeComponentsLoading: boolean;
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   // severityMap: Record<string, string>;
   openComment: boolean;
@@ -31,7 +31,7 @@ interface CommentsSectionProps {
 }
 
 const CommentsSection: React.FC<CommentsSectionProps> = ({
-  routeComponentsLoading,
+  isLoading,
   selectedComponent,
   // severityMap,
   openComment,
@@ -41,11 +41,13 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({
 
   const {
     data: routeComponentComment,
-    isLoading: loadingRouteComponentComment,
+    isLoading: queryLoading,
     error: routeComponentCommentError,
   } = useGetRouteComponentCommentQuery(routeComponentID, {
     skip: !routeComponentID,
   });
+
+  const showLoading = isLoading || queryLoading;
 
   if (routeComponentCommentError) {
     return <div className="text-main">Error loading data.</div>;
@@ -75,7 +77,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({
           <div className="flex-1 flex flex-col gap-2">
             <h1 className="font-medium">Current Comment</h1>
             <div className="p-3 border rounded-lg">
-              {loadingRouteComponentComment || routeComponentsLoading ? (
+              {showLoading ? (
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
               ) : latestComment ? (
                 <>
@@ -112,7 +114,7 @@ const CommentsSection: React.FC<CommentsSectionProps> = ({
           <div className="flex-1 flex flex-col gap-2">
             <h1 className="font-medium">Previous Comment</h1>
             <div className="p-3 border rounded-lg">
-              {loadingRouteComponentComment || routeComponentsLoading ? (
+              {showLoading ? (
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
               ) : previousComment ? (
                 <>

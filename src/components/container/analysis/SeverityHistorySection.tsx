@@ -16,13 +16,13 @@ interface SelectedComponent {
 }
 
 interface SeverityHistoryProps {
-  routeComponentsLoading: boolean;
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   // severityMap: Record<string, string>;
 }
 
 const SeverityHistorySection: React.FC<SeverityHistoryProps> = ({
-  routeComponentsLoading,
+  isLoading,
   selectedComponent,
   // severityMap,
 }) => {
@@ -30,11 +30,13 @@ const SeverityHistorySection: React.FC<SeverityHistoryProps> = ({
 
   const {
     data: routeComponentComment,
-    isLoading: loadingRouteComponentSeverity,
+    isLoading: queryLoading,
     error: routeComponentSeverityError,
   } = useGetRouteComponentCommentQuery(routeComponentID, {
     skip: !routeComponentID,
   });
+
+  const showLoading = isLoading || queryLoading;
 
   if (routeComponentSeverityError) {
     return <div className="text-main">Error loading data.</div>;
@@ -57,7 +59,7 @@ const SeverityHistorySection: React.FC<SeverityHistoryProps> = ({
               {index === 0 ? "Current" : "Previous"}
             </h1>
             <div className="flex justify-center items-center py-1">
-              {routeComponentsLoading || loadingRouteComponentSeverity ? (
+              {showLoading ? (
                 <Skeleton className="w-5 h-5 animate-pulse bg-zinc-200" />
               ) : comment ? (
                 <Image

@@ -17,14 +17,14 @@ interface SelectedComponent {
 }
 
 interface OilAnalysisSectionProps {
-  routeComponentsLoading: boolean;
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openOilAnalysis: boolean;
   setOpenOilAnalysis: Dispatch<SetStateAction<boolean>>;
 }
 
 const OilAnalysisSection: React.FC<OilAnalysisSectionProps> = ({
-  routeComponentsLoading,
+  isLoading,
   selectedComponent,
   openOilAnalysis,
   setOpenOilAnalysis,
@@ -33,11 +33,13 @@ const OilAnalysisSection: React.FC<OilAnalysisSectionProps> = ({
 
   const {
     data: routeComponentOilAnalysis,
-    isLoading: loadingRouteComponentOilAnalysis,
+    isLoading: queryLoading,
     error: routeComponentOilAnalysisError,
   } = useGetRouteComponenetOilAnalysisQuery(routeComponentID, {
     skip: !routeComponentID,
   });
+
+  const showLoading = isLoading || queryLoading;
 
   if (routeComponentOilAnalysisError) {
     return <div className="text-main">Error loading data.</div>;
@@ -79,7 +81,7 @@ const OilAnalysisSection: React.FC<OilAnalysisSectionProps> = ({
                 {index === 0 ? "Current" : "Previous"}
               </h1>
               <div className="flex justify-center items-center py-1">
-                {routeComponentsLoading || loadingRouteComponentOilAnalysis ? (
+                {showLoading ? (
                   <Skeleton className="w-5 h-5 animate-pulse bg-zinc-200" />
                 ) : oil ? (
                   <p
