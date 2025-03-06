@@ -20,7 +20,7 @@ export async function GET(req: Request) {
       );
     }
 
-    const getDetails = await prisma.routeComponentDetails.findMany({
+    const componentDetails = await prisma.routeComponentDetails.findMany({
       where: {
         componentId: componentId,
         clientId: clientId as string,
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
     return NextResponse.json(
       {
         message: "Details successfully fetched",
-        data: getDetails,
+        componentDetails,
         success: true,
       },
       { status: 201 }

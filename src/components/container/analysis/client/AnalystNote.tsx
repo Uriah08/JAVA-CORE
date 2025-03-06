@@ -8,6 +8,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import AnalystNoteDialog from "../../dialogs/client/AnalystNoteDialog";
 import { toast } from "@/hooks/use-toast";
+import { useGetRouteComponentAnalystNoteQuery } from "@/store/api";
 
 interface SelectedComponent {
   id: string;
@@ -25,7 +26,27 @@ const AnalystNoteSection: React.FC<AnalystNoteProps> = ({
   openAnalystNote,
   setOpenAnalystNote,
 }) => {
-  console.log("selected: ", selectedComponent);
+  const shouldRefetch = React.useRef(true);
+
+  React.useEffect(() => {
+    shouldRefetch.current = true;
+  }, [selectedComponent]);
+
+  const { data, isFetching: routeComponentAnalystNoteIsLoading } =
+    useGetRouteComponentAnalystNoteQuery(selectedComponent?.id ?? "", {
+      skip: !selectedComponent,
+      refetchOnMountOrArgChange: shouldRefetch.current,
+    });
+
+  React.useEffect(() => {
+    shouldRefetch.current = false;
+  }, [data]);
+
+  const latestNote = data?.routeComponentNote?.[0] || null;
+  // const analyst = data?.analyst || [];
+  const latestDate = latestNote
+    ? new Date(latestNote.createdAt).toLocaleDateString()
+    : "No date available";
 
   const handleOpen = () => {
     if (!selectedComponent) {
@@ -44,22 +65,27 @@ const AnalystNoteSection: React.FC<AnalystNoteProps> = ({
       </h1>
       <div className="p-3 flex flex-col h-full">
         <h1 className="font-semibold">Analyst Name</h1>
-        {routeComponentsLoading ? (
+        {routeComponentsLoading || routeComponentAnalystNoteIsLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
           />
         ) : (
-          <Input readOnly placeholder="Analys Name" className="mt-2 text-sm" />
+          <Input
+            readOnly
+            placeholder="Analyst Name"
+            className="mt-2 text-sm"
+            value={latestNote?.analyst || "No available analyst"}
+          />
         )}
         <div className="flex justify-between items-center mt-5">
           <h1 className="font-semibold">Analyst Previous Note</h1>
           <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
-            Jan 1, 2025
+            {latestDate || "No selected component"}
           </h1>
         </div>
 
-        {routeComponentsLoading ? (
+        {routeComponentsLoading || routeComponentAnalystNoteIsLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
@@ -67,15 +93,7 @@ const AnalystNoteSection: React.FC<AnalystNoteProps> = ({
         ) : (
           <div className="border rounded-lg p-3 mt-2 max-h-[130px] overflow-auto">
             <p className="text-sm text-zinc-600 indent-10">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Asperiores est laboriosam temporibus aliquam tempore itaque nihil
-              atque, ducimus quibusdam placeat illum, maiores eveniet pariatur
-              quia, ex aut tenetur dignissimos! Sequi? Asperiores est laboriosam
-              temporibus aliquam tempore itaque nihil atque, ducimus quibusdam
-              placeat illum, maiores eveniet pariatur quia, ex aut tenetur
-              dignissimos! Sequi? Asperiores est laboriosam temporibus aliquam
-              tempore itaque nihil atque, ducimus quibusdam placeat illum,
-              maiores eveniet pariatur quia, ex aut tenetur dignissimos! Sequi?
+              {latestNote?.note || "No Note yet"}
             </p>
           </div>
         )}
@@ -90,7 +108,7 @@ const AnalystNoteSection: React.FC<AnalystNoteProps> = ({
             >
               Write a Note...
             </Button>
-            {openAnalystNote && (   
+            {openAnalystNote && (
               <AnalystNoteDialog
                 selectedComponentId={selectedComponent}
                 onClose={() => setOpenAnalystNote(false)}

@@ -22,7 +22,7 @@ const SeverityHistory: React.FC<SeverityHistoryProps> = ({
   // const router = useRouter();
   const { data: routeComponents, isFetching: routeComponentsLoading } =
     useGetClienttRouteComponentCommentQuery(routeComponentIds, {
-      skip: !routeComponentIds,
+      skip: !routeComponentIds || routeComponentIds.length === 0,
       refetchOnMountOrArgChange: shouldRefetch.current,
     });
 

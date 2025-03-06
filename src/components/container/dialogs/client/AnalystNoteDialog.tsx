@@ -11,9 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateCommentMutation } from "@/store/api";
+import { useCreateRouteComponentAnalystNoteMutation } from "@/store/api";
 import { toast } from "@/hooks/use-toast";
-import { routeComponentCommentSchema } from "@/schema";
+import { RouteComponentNoteSchema } from "@/schema";
 import { z } from "zod";
 
 interface SelectedComponent {
@@ -31,7 +31,8 @@ const AnalystNoteDialog: React.FC<AnalystNoteProps> = ({
 }) => {
   const [note, setNote] = React.useState<string>("");
   const [analyst, setAnalyst] = React.useState<string>("");
-  const [createComment, { isLoading }] = useCreateCommentMutation();
+  const [createNote, { isLoading }] =
+    useCreateRouteComponentAnalystNoteMutation();
 
   const handleSubmit = async () => {
     if (!selectedComponentId) {
@@ -43,7 +44,7 @@ const AnalystNoteDialog: React.FC<AnalystNoteProps> = ({
     }
 
     const payload = {
-      selectedComponentId,
+      componentId: selectedComponentId.id,
       analyst,
       note,
     };
@@ -51,10 +52,10 @@ const AnalystNoteDialog: React.FC<AnalystNoteProps> = ({
     console.log("Payload:", payload);
 
     try {
-      routeComponentCommentSchema.parse(payload);
+      RouteComponentNoteSchema.parse(payload);
 
-      await createComment(payload).unwrap();
-      toast({ title: "Success", description: "Comment added successfully." });
+      await createNote(payload).unwrap();
+      toast({ title: "Success", description: "Note added successfully." });
       setNote("");
       setAnalyst("");
       onClose();
@@ -82,7 +83,7 @@ const AnalystNoteDialog: React.FC<AnalystNoteProps> = ({
         value={note}
         onChange={(e) => setNote(e.target.value)}
       />
-      <Select>
+      <Select onValueChange={(value) => setAnalyst(value)}>
         <SelectTrigger className="mt-3">
           <SelectValue placeholder="Assign Analyst" />
         </SelectTrigger>

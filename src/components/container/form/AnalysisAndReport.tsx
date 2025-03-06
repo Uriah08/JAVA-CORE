@@ -535,7 +535,8 @@ const AnalysisAndReportForm = () => {
               <div className="flex flex-col gap-3 w-full">
                 <AnalystNoteSection
                   routeComponentsLoading={routeComponentsLoading}
-                  selectedComponent={selectedComponent}
+                  clientId={selectedJob?.user?.id}
+                  componentId={selectedComponent?.component?.id}
                 />
               </div>
             </div>

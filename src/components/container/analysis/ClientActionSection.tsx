@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
-import { useGetRouteComponentActionAdminQuery } from "@/store/api";
+import { useGetAdminRouteComponentActionQuery } from "@/store/api";
 
 interface ClientActionSectionProps {
   routeComponentsLoading: boolean;
@@ -13,7 +13,7 @@ const ClientActionSection: React.FC<ClientActionSectionProps> = ({
   clientId,
   componentId,
 }) => {
-  const { data, isLoading } = useGetRouteComponentActionAdminQuery(
+  const { data, isLoading } = useGetAdminRouteComponentActionQuery(
     { componentId: componentId ?? "", clientId: clientId ?? "" },
     { skip: !componentId || !clientId }
   );
@@ -43,7 +43,7 @@ const ClientActionSection: React.FC<ClientActionSectionProps> = ({
           />
         )}
         <div className="flex justify-between items-center mt-5">
-          <h1 className="font-semibold">Previous Action</h1>
+          <h1 className="font-semibold">latest Action</h1>
           <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
             {latestDate || "No Available date"}
           </h1>

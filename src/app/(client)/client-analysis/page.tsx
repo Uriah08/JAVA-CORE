@@ -11,7 +11,7 @@ import {
   // FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Eye, ImageIcon, Plus, Search, Trash, View } from "lucide-react";
+import { ImageIcon, Plus, Search, Trash, View } from "lucide-react";
 // import Image from "next/image";
 // import { symbols } from "@/schema";
 import { Dialog } from "@/components/ui/dialog";
@@ -24,8 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import AddDetails from "@/components/container/form/AddDetails";
-import ViewDetails from "@/components/container/analysis/ViewDetails";
+// import AddDetails from "@/components/container/form/AddDetails";
+// import ViewDetails from "@/components/container/analysis/ViewDetails";
 import { FigureView } from "@/components/container/analysis/FigureView";
 import { FigureUpload } from "@/components/container/analysis/FigureUpload";
 import { EquipmentUpload } from "@/components/container/analysis/EquipmentUpload";
@@ -44,13 +44,14 @@ import Recommendation from "@/components/container/analysis/client/Recommendatio
 import { useSession } from "next-auth/react";
 import ClientActionSection from "@/components/container/analysis/client/ClientAction";
 import AnalystNoteSection from "@/components/container/analysis/client/AnalystNote";
+import ComponentDetailsSection from "@/components/container/analysis/client/ComponentDetailsSection";
 
 const ClientAnalysis = () => {
   const { data: session } = useSession();
 
   const [openAnalystNote, setOpenAnalystNote] = React.useState(false);
   const [openClientAction, setOpenClientAction] = React.useState(false);
-  const [detailsActive, setDetailsActive] = useState("add");
+  const [openAddDetails, setOpenAddDetails] = useState(false);
 
   const [activeDrawing, setActiveDrawing] = useState("view");
   const [activeFigure, setActiveFigure] = useState("add");
@@ -255,85 +256,14 @@ const ClientAnalysis = () => {
         </div>
         <div className="flex w-full gap-5 xl:flex-row flex-col">
           <div className="flex flex-col gap-3 w-full mt-5">
-            {/* <h1 className="text-sm font-medium">Action</h1>
-       <div className="border rounded-lg p-3">
-              <h1 className="font-semibold">Previous Action</h1>
-              <Select>
-                <SelectTrigger className="mt-3">
-                  <SelectValue placeholder="Select WO Number" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="analyst 1">Wo No 1</SelectItem>
-                  <SelectItem value="analyst 2">Wo No 2</SelectItem>
-                  <SelectItem value="analyst 3">Wo No 3</SelectItem>
-                </SelectContent>
-              </Select>
-              <div className="border rounded-lg p-3 mt-2 max-h-[160px] overflow-auto">
-                <p className="text-sm text-zinc-600 indent-10">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Asperiores est laboriosam temporibus aliquam tempore itaque
-                  nihil atque, ducimus quibusdam placeat illum, maiores eveniet
-                  pariatur quia, ex aut tenetur dignissimos! Sequi? Asperiores
-                  est laboriosam temporibus aliquam tempore itaque nihil atque,
-                  ducimus quibusdam placeat illum, maiores eveniet pariatur
-                  quia, ex aut tenetur dignissimos! Sequi? Asperiores est
-                  laboriosam temporibus aliquam tempore itaque nihil atque,
-                  ducimus quibusdam placeat illum, maiores eveniet pariatur
-                  quia, ex aut tenetur dignissimos! Sequi?
-                </p>
-                <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-                  Jan 1, 2025
-                </h1>
-              </div>
-              <div className="flex gap-3 mt-3 items-center">
-                <Input placeholder="Comment here..." />
-                <Button className="bg-main hover:bg-follow">Send</Button>
-              </div>
-            </div>  */}
-
             <ClientActionSection
+              routeComponentsLoading={equipmentsLoading}
               selectedComponent={selectedComponent}
               openClientAction={openClientAction}
               setOpenClientAction={setOpenClientAction}
             />
           </div>
           <div className="flex flex-col gap-3 w-full mt-5">
-            {/* <h1 className="text-sm font-medium">Notes</h1>
-            <div className="border rounded-lg p-3">
-              <h1 className="font-semibold">Analyst Note</h1>
-              <Select>
-                <SelectTrigger className="mt-3">
-                  <SelectValue placeholder="Select Analyst" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="analyst 1">Analyst 1</SelectItem>
-                  <SelectItem value="analyst 2">Analyst 2</SelectItem>
-                  <SelectItem value="analyst 3">Analyst 3</SelectItem>
-                </SelectContent>
-              </Select>
-              <div className="border rounded-lg p-3 mt-2 max-h-[160px] overflow-auto">
-                <p className="text-sm text-zinc-600 indent-10">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Asperiores est laboriosam temporibus aliquam tempore itaque
-                  nihil atque, ducimus quibusdam placeat illum, maiores eveniet
-                  pariatur quia, ex aut tenetur dignissimos! Sequi? Asperiores
-                  est laboriosam temporibus aliquam tempore itaque nihil atque,
-                  ducimus quibusdam placeat illum, maiores eveniet pariatur
-                  quia, ex aut tenetur dignissimos! Sequi? Asperiores est
-                  laboriosam temporibus aliquam tempore itaque nihil atque,
-                  ducimus quibusdam placeat illum, maiores eveniet pariatur
-                  quia, ex aut tenetur dignissimos! Sequi?
-                </p>
-                <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-                  Jan 1, 2025
-                </h1>
-              </div>
-
-              <div className="flex gap-3 mt-3 items-center">
-                <Input placeholder="Input analyst note here..." />
-                <Button className="bg-main hover:bg-follow">Send</Button>
-              </div>
-            </div> */}
             <AnalystNoteSection
               routeComponentsLoading={equipmentsLoading}
               selectedComponent={selectedComponent}
@@ -436,7 +366,7 @@ const ClientAnalysis = () => {
         </div>
 
         <div className="flex flex-col gap-3 w-full mt-5">
-          <h1 className="text-sm font-medium">Details</h1>
+          {/* <h1 className="text-sm font-medium">Details</h1>
           <div className="border rounded-lg p-3">
             <div className="flex gap-5 items-center">
               <Button
@@ -456,7 +386,13 @@ const ClientAnalysis = () => {
             </div>
             <div className="bg-zinc-200 h-[1px] w-full my-3" />
             {detailsActive === "add" ? <AddDetails /> : <ViewDetails />}
-          </div>
+          </div> */}
+          <ComponentDetailsSection
+            // routeComponentsLoading={equipmentsLoading}
+            selectedComponent={selectedComponent}
+            openAddDetails={openAddDetails}
+            setOpenAddDetails={setOpenAddDetails}
+          />
         </div>
       </div>
     </div>

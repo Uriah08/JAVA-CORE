@@ -1,22 +1,29 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
+import { useGetAdminRouteComponentAnalystNoteQuery } from "@/store/api";
 
-interface SelectedComponent {
-  id: string;
-  routeComponentID: string;
-  name: string;
-  note?: string | null;
-}
-
-interface ClientActionSectionProps {
+interface AnalystNoteSectionProps {
   routeComponentsLoading: boolean;
-  selectedComponent: SelectedComponent | null;
+  clientId?: string;
+  componentId?: string;
 }
 
-const AnalystNoteSection: React.FC<ClientActionSectionProps> = ({
+const AnalystNoteSection: React.FC<AnalystNoteSectionProps> = ({
   routeComponentsLoading,
-  selectedComponent,
+  clientId,
+  componentId,
 }) => {
+  const { data, isLoading } = useGetAdminRouteComponentAnalystNoteQuery(
+    { componentId: componentId ?? "", clientId: clientId ?? "" },
+    { skip: !componentId || !clientId }
+  );
+
+  console.log("data: ", data);
+
+  const latestNote = data?.routeComponentNote?.[0] || null;
+  const latestDate = latestNote
+    ? new Date(latestNote.createdAt).toLocaleDateString()
+    : "No date available";
   return (
     <div className="flex flex-col gap-3 mt-3 border border-main rounded-lg overflow-hidden">
       <h1 className="text-lg font-semibold bg-main text-white px-4 py-2">
@@ -24,16 +31,26 @@ const AnalystNoteSection: React.FC<ClientActionSectionProps> = ({
       </h1>
       <div className="p-3 flex flex-col h-full">
         <h1 className="font-semibold">Analyst Name</h1>
-        {routeComponentsLoading ? (
+        {routeComponentsLoading || isLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
           />
         ) : (
-          <Input readOnly placeholder="Analys Name" className="mt-2 text-sm" />
+          <Input
+            readOnly
+            placeholder="Analyst Name"
+            className="mt-2 text-sm"
+            value={latestNote?.analyst || "No available analyst"}
+          />
         )}
-        <h1 className="font-semibold mt-3">Analyst Note</h1>
-        {routeComponentsLoading ? (
+        <div className="flex justify-between items-center mt-5">
+          <h1 className="font-semibold">Latest Note</h1>
+          <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
+            {latestDate || "No Available date"}
+          </h1>
+        </div>
+        {routeComponentsLoading || isLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
@@ -41,11 +58,8 @@ const AnalystNoteSection: React.FC<ClientActionSectionProps> = ({
         ) : (
           <div className="border rounded-lg p-3 mt-2 max-h-[165px] overflow-auto">
             <p className="text-sm text-zinc-600 indent-10">
-              {selectedComponent?.note || "No note recorded."}
+              {latestNote?.note || "No note recorded."}
             </p>
-            <h1 className="w-full text-end text-xs text-zinc-500 mt-2">
-              Jan 1, 2025
-            </h1>
           </div>
         )}
       </div>

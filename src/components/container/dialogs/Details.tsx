@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 // import { Checkbox } from "@/components/ui/checkbox";
 // import { Plus, Edit, Trash } from "lucide-react";
 // import React, { useState } from "react";
-import { useGetRouteComponentDetailsQuery } from "@/store/api";
+import { useGetAdminRouteComponentDetailsQuery } from "@/store/api";
 
 interface SelectedJob {
   user?: {
@@ -34,17 +34,17 @@ const Details: React.FC<DetailsDialogProps> = ({
   // const [activeDetail, setActiveDetail] = useState<string | null>(null);
   // const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
 
-  const componentID = selectedComponent?.component?.id as string;
+  const componentId = selectedComponent?.component?.id as string;
   const clientId = selectedJob?.user?.id as string;
 
   const {
-    data: routeComponentDetails,
+    data,
     isLoading: loadingRouteComponentDetails,
     error: routeComponentDetailsError,
-  } = useGetRouteComponentDetailsQuery(
-    { componentId: componentID, clientId },
+  } = useGetAdminRouteComponentDetailsQuery(
+    { componentId: componentId, clientId: clientId },
     {
-      skip: !componentID || !clientId, // Skip query if either is missing
+      skip: !componentId || !clientId, // Skip query if either is missing
     }
   );
 
@@ -52,7 +52,7 @@ const Details: React.FC<DetailsDialogProps> = ({
     return <div className="text-main">Error loading data.</div>;
   }
 
-  const tableData = routeComponentDetails?.data || [];
+  const tableData = data?.componentDetails || [];
 
   // const handleDeleteClick = () => {
   //   if (activeDetail === "delete") {

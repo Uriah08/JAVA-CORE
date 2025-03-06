@@ -17,6 +17,7 @@ import {
   RouteComponentOilAnalysis,
   RouteComponentDetails,
   RouteComponentAction,
+  RouteComponentNote,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
@@ -111,8 +112,8 @@ type RouteComponentOilAnalysisResponse = {
   success: boolean;
 };
 
-type RouteComponentDetailsResponse = {
-  data: RouteComponentDetails[];
+type AdminRouteComponentDetailsResponse = {
+  componentDetails: RouteComponentDetails[];
   message: string;
   success: boolean;
 };
@@ -174,6 +175,25 @@ type AdminComponentActionResponse = {
   success: boolean;
 };
 
+type AnalystComponentNoteResponse = {
+  routeComponentNote: RouteComponentNote[];
+  analyst: string[];
+  message: string;
+  success: boolean;
+};
+
+type AdminComponentAnalystNoteResponse = {
+  routeComponentNote: RouteComponentNote[];
+  message: string;
+  success: boolean;
+};
+
+type ClientComponentDetailsResponse = {
+  routeComponentDetails: RouteComponentDetails[];
+  message: string;
+  success: boolean;
+};
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -195,6 +215,7 @@ export const api = createApi({
     "RouteComponentOilAnalysis",
     "RouteComponentDetails",
     "RouteComponentAction",
+    "RouteComponentNote",
   ],
   endpoints: (build) => ({
     loginUser: build.mutation({
@@ -547,16 +568,7 @@ export const api = createApi({
       }),
       providesTags: ["RouteComponentOilAnalysis"],
     }),
-    getRouteComponentDetails: build.query<
-      RouteComponentDetailsResponse,
-      { componentId: string; clientId: string }
-    >({
-      query: ({ componentId, clientId }) => ({
-        url: `/api/createRoute/routeMachineList/routeComponents/details?componentId=${componentId}&clientId=${clientId}`,
-        method: "GET",
-      }),
-      providesTags: ["RouteComponentDetails"],
-    }),
+
     searchClientRouteEquipmentList: build.query<
       SearchClientRouteEquipmentResponse,
       string
@@ -598,7 +610,7 @@ export const api = createApi({
         providesTags: ["RouteComponentAction"],
       }
     ),
-    getRouteComponentActionAdmin: build.query<
+    getAdminRouteComponentAction: build.query<
       AdminComponentActionResponse,
       { componentId: string; clientId: string }
     >({
@@ -618,6 +630,68 @@ export const api = createApi({
         },
       }),
       invalidatesTags: ["RouteComponentAction"],
+    }),
+    getRouteComponentAnalystNote: build.query<
+      AnalystComponentNoteResponse,
+      string
+    >({
+      query: (componentId) => ({
+        url: `/api/client/componentAnalystNote?componentId=${componentId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentNote"],
+    }),
+    createRouteComponentAnalystNote: build.mutation({
+      query: (data) => ({
+        url: `/api/client/componentAnalystNote`,
+        method: "POSt",
+        body: data,
+        headers: {
+          "Content-type": "application/json",
+        },
+      }),
+      invalidatesTags: ["RouteComponentNote"],
+    }),
+    getAdminRouteComponentAnalystNote: build.query<
+      AdminComponentAnalystNoteResponse,
+      { componentId: string; clientId: string }
+    >({
+      query: ({ componentId, clientId }) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/analystNote?componentId=${componentId}&clientId=${clientId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentNote"],
+    }),
+    getRouteComponentDetails: build.query<
+      ClientComponentDetailsResponse,
+      string
+    >({
+      query: (componentId) => ({
+        url: `/api/client/componentDetails?componentId=${componentId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentDetails"],
+    }),
+    getAdminRouteComponentDetails: build.query<
+      AdminRouteComponentDetailsResponse,
+      { componentId: string; clientId: string }
+    >({
+      query: ({ componentId, clientId }) => ({
+        url: `/api/createRoute/routeMachineList/routeComponents/details?componentId=${componentId}&clientId=${clientId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentDetails"],
+    }),
+    createClientComponentDetails: build.mutation({
+      query: (data) => ({
+        url: `/api/client/componentDetails`,
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-type": "application/json",
+        },
+      }),
+      invalidatesTags: ["RouteComponentDetails"],
     }),
   }),
 });
@@ -661,11 +735,16 @@ export const {
   useGetRouteComponentTemperatureQuery,
   useCreateOilAnalysisMutation,
   useGetRouteComponenetOilAnalysisQuery,
-  useGetRouteComponentDetailsQuery,
   useSearchClientRouteEquipmentListQuery,
   useGetClienttRouteComponentCommentQuery,
   useGetClienttRouteComponentRecommendationQuery,
   useGetRouteComponentActionQuery,
   useCreateRouteComponentActionMutation,
-  useGetRouteComponentActionAdminQuery,
+  useGetAdminRouteComponentActionQuery,
+  useGetAdminRouteComponentAnalystNoteQuery,
+  useGetRouteComponentAnalystNoteQuery,
+  useCreateRouteComponentAnalystNoteMutation,
+  useCreateClientComponentDetailsMutation,
+  useGetRouteComponentDetailsQuery,
+  useGetAdminRouteComponentDetailsQuery,
 } = api;

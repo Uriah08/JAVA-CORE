@@ -15,12 +15,14 @@ interface SelectedComponent {
 }
 
 interface ClientActionProps {
+  routeComponentsLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openClientAction: boolean;
   setOpenClientAction: Dispatch<SetStateAction<boolean>>;
 }
 
 const ClientActionSection: React.FC<ClientActionProps> = ({
+  routeComponentsLoading,
   selectedComponent,
   openClientAction,
   setOpenClientAction,
@@ -46,6 +48,7 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
   const latestDate = latestAction
     ? new Date(latestAction.createdAt).toLocaleDateString()
     : "No date available";
+
   const handleOpen = () => {
     if (!selectedComponent) {
       toast({
@@ -64,7 +67,7 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
       </h1>
       <div className=" p-3 flex flex-col h-full">
         <h1 className="font-semibold">WO Number</h1>
-        {routeComponentActionIsLoading ? (
+        {routeComponentsLoading || routeComponentActionIsLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
@@ -74,16 +77,16 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
             readOnly
             placeholder={"WoNumber"}
             className="mt-2 text-sm"
-            value={latestAction?.woNumber || "No WoNumber Available"}
+            value={latestAction?.woNumber || "WO Number"}
           />
         )}
         <div className="flex justify-between items-center mt-5">
           <h1 className="font-semibold">Previous Action</h1>
           <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
-            {latestDate}
+            {latestDate || "No Selected Component"}
           </h1>
         </div>
-        {routeComponentActionIsLoading ? (
+        {routeComponentsLoading || routeComponentActionIsLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}

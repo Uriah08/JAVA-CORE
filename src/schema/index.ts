@@ -194,4 +194,15 @@ export const RouteComponentActionSchema = z.object({
   woNumber: z.string().min(1, "WO Number is required"),
 });
 
+export const RouteComponentNoteSchema = z.object({
+  componentId: z.string().min(1, "Component ID is required"),
+  note: z.string().min(1, "Note is required"),
+  analyst: z.string().min(1, "Analyst is required")
+});
+
+export const RouteComponentDetailsSchema = z.object({
+  componentId: z.string().min(1, "Component ID is required"),
+  header: z.string().min(1, "Header is required!"),
+  value: z.string().min(1, "Value is required!"),
+});
 
