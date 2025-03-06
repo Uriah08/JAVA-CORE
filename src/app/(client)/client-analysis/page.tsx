@@ -117,9 +117,9 @@ const ClientAnalysis = () => {
   });
 
   return (
-    <div className="w-full h-full p-5 flex xl:flex-row flex-col gap-5">
+    <div className="w-full h-full p-3 sm:p-5 flex xl:flex-row flex-col gap-3 sm:gap-5">
       <div className="w-full xl:w-1/3 p-5 bg-white rounded-xl shadow-lg">
-        <h1 className="text-2xl font-bold">Equipment List</h1>
+        <h1 className="text-xl sm:text-2xl font-bold">Equipment List</h1>
         <Form {...form}>
           <FormField
             name="equipment"
@@ -235,7 +235,7 @@ const ClientAnalysis = () => {
       </div>
       <div className="w-full xl:w-2/3 p-5 bg-white rounded-xl shadow-lg">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Severity History</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">Severity History</h1>
           <Button
             onClick={() => setOpen(!open)}
             className="bg-main hover:bg-follow text-white"
