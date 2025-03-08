@@ -726,12 +726,14 @@ export const api = createApi({
         url: "/api/machineList/dashboard",
         method: "GET",
       }),
+      providesTags: ["Area", "EquipmentGroup", "EquipmentName", "Component"],
     }),
     getRecentRoutes: build.query<RouteResponse, void>({
       query: () => ({
         url: "/api/createRoute/dashboard",
         method: "GET",
       }),
+      providesTags: ["RouteList"],
     }),
   }),
 });
