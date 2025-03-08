@@ -2,13 +2,22 @@
 import { Button } from "@/components/ui/button";
 import { Document, Page, Text, StyleSheet, PDFDownloadLink, Image, View } from "@react-pdf/renderer";
 
-// const data = [
-//   { symbol: "N", condition: "Normal", description: "Testing results on equipment are within acceptable limits. No indications of a defect are detected in data and no abnormalities are observed in the operation.", action: "No action is required", risk: "Low" },
-//   { symbol: "M", condition: "Moderate", description: "Testing results on equipment are slightly higher than acceptable limits. Minor defects are detected in data and/or minor abnormalities are observed in operation.", action: "Continue routine monitoring", risk: "Low" },
-//   { symbol: "S", condition: "Severe", description: "Testing results on equipment are significantly higher than acceptable limits. Alarming level of defect indications are detected in data and/or pronounced abnormalities are observed in operation.", action: "-Preventive action (e.g., greasing, tightening of bolts, etc.)\n-Corrective action (e.g., planned replacement).\n-Close monitoring interval while waiting for replacement.", risk: "High" },
-//   { symbol: "C", condition: "Critical", description: "Testing results on equipment exceeded the maximum allowable limits. High probability of failure is likely to occur if left uncorrected.", action: "Immediate corrective action is required", risk: "Very High" },
-//   { symbol: "X", condition: "Missed Points", description: "Data are not collected; equipment conditions are unknown.", action: "-Redesign guarding to allow access.\n-Install permanent accelerometer\n-Collect data if machine was not running on previous survey.", risk: "Unknown" }
-// ];
+const recommendations = [
+  {
+    equipmentName: "Services Pumps SPU303 – CHPP Dirty Water Dam Pump No. 3",
+    component: "SPU303 Compressor",
+    priority: "P4",
+    action: "Planned replacement on convenient opportunity is stillrecommended.",
+    date: "08 August 2024"
+  },
+  {
+    equipmentName: "Services Pumps SPU303 – CHPP Dirty Water Dam Pump No. 3",
+    component: "SPU303 Compressor",
+    priority: "P6",
+    action: "Java CM will monitor the pump condition on 2-weekly interval.",
+    date: "02 September 2024"
+  }
+]
 
 const styles = StyleSheet.create({
   page: {
@@ -23,6 +32,10 @@ const styles = StyleSheet.create({
   logo: {
     width: 80,
     height: 80,
+  },
+  severity: {
+    width: 20,
+    height: 20,
   },
   companyDetails: {
     flexDirection: "column",
@@ -48,6 +61,77 @@ const styles = StyleSheet.create({
   },
   details: {
     fontSize: 13,
+  },
+  table: {
+    display: "flex",
+    flexDirection: "column",
+    border: "0.3px solid black",
+  },
+  row: {
+    flexDirection: "row",
+  },
+  headerCell: {
+    backgroundColor: "#d3d3d3",
+    borderLeft: "0.5px solid black",
+    borderTop: "0.5px solid black",
+    borderBottom: "0.5px solid black",
+    padding: 5,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  rightBorder: {
+    borderRight: "0.5px solid black"
+  },
+  colSymbol: { flex: 0.5 },
+  colCondition: { flex: 1 },
+  colDescription: { flex: 2 },
+  colAction: { flex: 1.5 },
+  colRisk: { flex: 1 },
+  cell: {
+    borderLeft: "0.5px solid black",
+    borderBottom: "0.5px solid black",
+    padding: 5,
+  },
+  cell2: {
+    flex: 1,
+    borderLeft: "0.5px solid black",
+    borderBottom: "0.5px solid black",
+    padding: 5
+  },
+  headerCell2: {
+    flex: 1,
+    backgroundColor: "#d3d3d3",
+    borderLeft: "0.5px solid black",
+    borderTop: "0.5px solid black",
+    borderBottom: "0.5px solid black",
+    padding: 10,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  pageNumber: {
+    position: "absolute",
+    bottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 300,
+  },
+  colEquipmentList: { flex: 1 },
+  colPriority: { flex: 0.3 },
+  colAction2: { flex: 2 },
+  headerCell3: {
+    backgroundColor: "#d3d3d3",
+    borderLeft: "0.5px solid black",
+    borderTop: "0.5px solid black",
+    borderBottom: "0.5px solid black",
+    paddingHorizontal: 5,
+    fontWeight: "bold",
+    paddingVertical: 2
+  },
+  cell3: {
+    borderLeft: "0.5px solid black",
+    borderBottom: "0.5px solid black",
+    padding: 5
   },
 });
 
@@ -124,42 +208,148 @@ const PdfDocument = () => (
         </View>
     </View>
 
-    <Text style={{fontWeight: "bold", fontSize: 15}}>Introduction</Text>
-      <Text style={[styles.details, {marginTop: 5}]}>
+    <Text style={{fontWeight: "bold", fontSize: 12}}>Introduction</Text>
+      <Text style={[styles.details, {marginTop: 5, fontSize: 10}]}>
       A 4-weekly routine vibration survey was conducted to determine the conditions Pumps, to monitor any defect that was
       previously detected, and to recommend maintenance action based on the severity of machinery’s condition. Oil
       analysis results and bearing temperatures were also considered in the assessment of machinery’s overall health
       conditions.
       </Text>
-      <Text style={{fontWeight: "bold", fontSize: 15, marginTop: 15}}>Methodology</Text>
+      <Text style={{fontWeight: "bold", fontSize: 12, marginTop: 15}}>Methodology</Text>
       <View style={{ marginLeft: 10, marginTop: 5 }}>
-        <Text style={{ fontSize: 12 }}>
+        <Text style={{ fontSize: 10 }}>
           -  Vibration Analysis
         </Text>
-        <Text style={{ fontSize: 12 }}>
+        <Text style={{ fontSize: 10 }}>
           -  Oil Analysis
         </Text>
-        <Text style={{ fontSize: 12 }}>
+        <Text style={{ fontSize: 10 }}>
           -  Temperature Monitoring
         </Text>
       </View>
-      <Text style={{fontWeight: "bold", fontSize: 15, marginTop: 15}}>Testing Equipment</Text>
+      <Text style={{fontWeight: "bold", fontSize: 12, marginTop: 15}}>Testing Equipment</Text>
       <View style={{ marginLeft: 10, marginTop: 5 }}>
-        <Text style={{ fontSize: 12 }}>
+        <Text style={{ fontSize: 10 }}>
           -  CSI 2140 Machinery Health Analyser (S/N B2140XXXXX) with AMS Suite Version 6.33 software
         </Text>
-        <Text style={{ fontSize: 12 }}>
+        <Text style={{ fontSize: 10 }}>
           -  100mV/g accelerometer
         </Text>
-        <Text style={{ fontSize: 12 }}>
+        <Text style={{ fontSize: 10 }}>
           -  accelerometer
         </Text>
-        <Text style={{ fontSize: 12 }}>
+        <Text style={{ fontSize: 10 }}>
           -  Milwaukee 2268-40 Laser Temp Gun
         </Text>
       </View>
-      <Text style={{fontWeight: "bold", fontSize: 15, marginTop: 15}}>Condition Description</Text>
+      <Text style={{fontWeight: "bold", fontSize: 12, marginTop: 15, marginBottom: 15}}>Condition Description</Text>
+      <View style={styles.table}>
+        <View style={styles.row}>
+          <Text style={[styles.headerCell, styles.colSymbol, { fontSize: 12, fontWeight: "normal"}]}>Symbol</Text>
+          <Text style={[styles.headerCell, styles.colCondition, { fontSize: 12, fontWeight: "normal"}]}>Condition</Text>
+          <Text style={[styles.headerCell, styles.colDescription, { fontSize: 12, fontWeight: "normal"}]}>Description</Text>
+          <Text style={[styles.headerCell, styles.colAction, { fontSize: 12, fontWeight: "normal"}]}>Action</Text>
+          <Text style={[styles.headerCell, styles.rightBorder, styles.colRisk, { fontSize: 12, fontWeight: "normal"}]}>Risk Category</Text>
+        </View>
+        
+        <View style={styles.row}>
+        <Image style={[styles.cell, styles.colSymbol, { objectFit: "contain" }]} src="/report/N.png" />
+          <Text style={[styles.cell, styles.colCondition, {fontSize: 10}]}>Normal</Text>
+          <Text style={[styles.cell, styles.colDescription, {fontSize: 10}]}>Testing results on equipment are within acceptable limits. No indications of a defect are detected in data and no abnormalities are observed in the operation.</Text>
+          <Text style={[styles.cell, styles.colAction, {fontSize: 10}]}>No action is required.</Text>
+          <Text style={[styles.cell, styles.colRisk, styles.rightBorder, {fontSize: 10}]}>Low</Text>
+        </View>
+        <View style={styles.row}>
+        <Image style={[styles.cell, styles.colSymbol, { objectFit: "contain" }]} src="/report/M.png" />
+          <Text style={[styles.cell, styles.colCondition, {fontSize: 10}]}>Moderate</Text>
+          <Text style={[styles.cell, styles.colDescription, {fontSize: 10}]}>Testing results on equipment are slightly higher than acceptable limits. Minor defects are detected in data and/or minor abnormalities are observed in operation.</Text>
+          <Text style={[styles.cell, styles.colAction, {fontSize: 10}]}>Continue routine monitoring</Text>
+          <Text style={[styles.cell, styles.colRisk, styles.rightBorder, {fontSize: 10}]}>Low</Text>
+        </View>
+        <View style={styles.row}>
+        <Image style={[styles.cell, styles.colSymbol, { objectFit: "contain" }]} src="/report/S.png" />
+          <Text style={[styles.cell, styles.colCondition, {fontSize: 10}]}>Severe</Text>
+          <Text style={[styles.cell, styles.colDescription, {fontSize: 10}]}>Testing results on equipment are significantly higher than acceptable limits. Alarming level of defect indications are detected in data and/or pronounced abnormalities are observed in operation.</Text>
+          <Text style={[styles.cell, styles.colAction, {fontSize: 10}]}>-Preventive action (e.g., greasing, tightening of bolts, etc.) {'\n'}-Corrective action (e.g., planned replacement). {'\n'}-Close monitoring interval while waiting for replacement.</Text>
+          <Text style={[styles.cell, styles.colRisk, styles.rightBorder, {fontSize: 10}]}>High</Text>
+        </View>
+        <View style={styles.row}>
+        <Image style={[styles.cell, styles.colSymbol, { objectFit: "contain" }]} src="/report/C.png" />
+          <Text style={[styles.cell, styles.colCondition, {fontSize: 10}]}>Critical</Text>
+          <Text style={[styles.cell, styles.colDescription, {fontSize: 10}]}>Testing results on equipment exceeded the maximum allowable limits. High probability of failure is likely to occur if left uncorrected.</Text>
+          <Text style={[styles.cell, styles.colAction, {fontSize: 10}]}>Immediate corrective action is required</Text>
+          <Text style={[styles.cell, styles.colRisk, styles.rightBorder, {fontSize: 10}]}>Very High</Text>
+        </View>
+        <View style={styles.row}>
+        <Image style={[styles.cell, styles.colSymbol, { objectFit: "contain" }]} src="/report/X.png" />
+          <Text style={[styles.cell, styles.colCondition, {fontSize: 10}]}>Missed Points</Text>
+          <Text style={[styles.cell, styles.colDescription, {fontSize: 10}]}>Data are not collected; equipment conditions are unknown. </Text>
+          <Text style={[styles.cell, styles.colAction, {fontSize: 10}]}>-Redesign guarding to allow access. {'\n'}-Install permanent accelerometer {'\n'}-Collect data if machine was not running on previous survey. </Text>
+          <Text style={[styles.cell, styles.colRisk, styles.rightBorder, {fontSize: 10}]}>Unknown</Text>
+        </View>
+      </View>
 
+      <View style={styles.pageNumber}>
+        <Text style={{ fontSize: 10 }}>Pumps VA Report</Text>
+        <Text style={{ fontSize: 10 }} render={({ pageNumber, totalPages }) => <Text>Page <Text style={{fontWeight: "bold"}}>{pageNumber}</Text> of <Text style={{fontWeight: "bold"}}>{totalPages}</Text></Text>}/>
+      </View>
+    </Page>
+
+    <Page style={styles.page}>
+    <View style={[styles.header, {justifyContent: "space-between"}]}>
+        <Image style={styles.logo} src="/logo.png" />
+        <View style={styles.companyDetails}>
+          <Text style={[styles.contact, {fontWeight: "bold"}]}>Vibration Analysis Report </Text>
+          <Text style={styles.contact}>Client: Client 1</Text>
+          <Text style={styles.contact}>Plant Area: All area</Text>
+        </View>
+    </View>
+    <Text style={{fontWeight: "bold", fontSize: 12, marginBottom: 15}}>Maintenance Priority Description</Text>
+
+    <View style={styles.table}>
+    <View style={styles.row}>
+          <Text style={[styles.headerCell2, { fontSize: 12}]}>P1</Text>
+          <Text style={[styles.headerCell2, { fontSize: 12}]}>P2</Text>
+          <Text style={[styles.headerCell2, { fontSize: 12}]}>P3</Text>
+          <Text style={[styles.headerCell2, { fontSize: 12}]}>P4</Text>
+          <Text style={[styles.headerCell2, { fontSize: 12}]}>P5</Text>
+          <Text style={[styles.headerCell2, styles.rightBorder, { fontSize: 12}]}>P6</Text>
+        </View>
+
+        <View style={styles.row}>
+          <Text style={[styles.cell2, {fontSize: 10}]}>Immediate corrective action is required</Text>
+          <Text style={[styles.cell2, {fontSize: 10}]}>Action within a week is recommended</Text>
+          <Text style={[styles.cell2, {fontSize: 10}]}>Action within a fortnight is recommended</Text>
+          <Text style={[styles.cell2, {fontSize: 10}]}>Action within a month is recommended</Text>
+          <Text style={[styles.cell2, {fontSize: 10}]}>Planned maintenance, approximately within 3 months is recommende </Text>
+          <Text style={[styles.cell2, styles.rightBorder, {fontSize: 10}]}>No action is required</Text>
+        </View>
+        </View>
+
+        <Text style={{fontWeight: "bold", fontSize: 12, marginTop: 25, marginBottom: 15}}>Maintenance Recommendations</Text>
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <Text style={[styles.headerCell3, styles.colEquipmentList, { fontSize: 10}]}>Equipment List </Text>
+            <Text style={[styles.headerCell3, styles.colPriority, { fontSize: 10}]}>Priority</Text>
+            <Text style={[styles.headerCell3, styles.colAction2, styles.rightBorder, { fontSize: 10}]}>Action</Text>
+          </View>
+          
+          {recommendations.map((reco, i) => (
+            <View key={i}>
+            <Text style={[styles.headerCell3, styles.rightBorder, { fontSize: 10, borderTop: 0}]}>{reco.equipmentName}</Text>
+          <View style={styles.row}>
+            <Text style={[styles.cell3, styles.colEquipmentList, styles.colEquipmentList, { fontSize: 10}]}>{reco.component}</Text>
+            <Text style={[styles.cell3, styles.colEquipmentList, styles.colPriority, { fontSize: 10, fontWeight: "bold", textAlign: "center"}]}>{reco.priority}</Text>
+            <Text style={[styles.cell3, styles.colEquipmentList, styles.colAction2, styles.rightBorder, { fontSize: 10}]}><Text style={{fontWeight: "bold"}}>{reco.priority}: </Text>{reco.action} {'\n'}{'\n'}Date:  {reco.date}</Text>
+          </View>
+          </View>
+          ))}
+        </View>
+
+    <View style={styles.pageNumber}>
+        <Text style={{ fontSize: 10 }}>Pumps VA Report</Text>
+        <Text style={{ fontSize: 10 }} render={({ pageNumber, totalPages }) => <Text>Page <Text style={{fontWeight: "bold"}}>{pageNumber}</Text> of <Text style={{fontWeight: "bold"}}>{totalPages}</Text></Text>}/>
+      </View>
     </Page>
   </Document>
 );

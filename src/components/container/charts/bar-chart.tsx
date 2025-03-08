@@ -27,27 +27,27 @@ const chartData = [
 
 const chartConfig = {
   visitors: {
-    label: "Visitors",
+    label: "Severities",
   },
   chrome: {
-    label: "Sample",
-    color: "#b70000",
+    label: "Normal",
+    color: "#1CA240",
   },
   safari: {
-    label: "Sample",
-    color: "#b70000",
+    label: "Moderate",
+    color: "#CBD90B",
   },
   firefox: {
-    label: "Sample",
-    color: "#b70000",
+    label: "Severe",
+    color: "#F48845",
   },
   edge: {
-    label: "Sample",
-    color: "#b70000",
+    label: "Crtical",
+    color: "#E90D0D",
   },
   other: {
-    label: "Sample",
-    color: "#b70000",
+    label: "Missed Points",
+    color: "#A8A8A8",
   },
 } satisfies ChartConfig
 
@@ -55,8 +55,8 @@ export function BarCharts() {
   return (
     <Card className="md:w-1/2 w-full shadow-lg">
       <CardHeader>
-        <CardTitle>Bar Chart - Mixed</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Bar Chart - Severity</CardTitle>
+        <CardDescription>All - Time</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -89,10 +89,10 @@ export function BarCharts() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Showing sample data <TrendingUp className="h-4 w-4" />
+          Showing Severity of all Equipments <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          View all the data
+          Severities
         </div>
       </CardFooter>
     </Card>
