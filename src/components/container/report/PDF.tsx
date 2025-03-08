@@ -465,3 +465,114 @@ const PdfDownload = () => (
 export default PdfDownload;
 
 
+// import { useEffect, useRef, useState } from "react";
+// import { Document, Page, StyleSheet, PDFDownloadLink, Image as PdfImage } from "@react-pdf/renderer";
+// import html2canvas from "html2canvas";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+// import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+// import { BarChart, CartesianGrid, XAxis, Bar } from "recharts";
+
+// const chartData = [
+//   { month: "January", previous: 186, current: 80 },
+//   { month: "February", previous: 305, current: 200 },
+//   { month: "March", previous: 237, current: 120 },
+//   { month: "April", previous: 73, current: 190 },
+//   { month: "May", previous: 209, current: 130 },
+//   { month: "June", previous: 214, current: 140 },
+// ];
+
+// const chartConfig = {
+//   previous: {
+//     label: "Previous",
+//     color: "hsl(var(--chart-1))",
+//   },
+//   current: {
+//     label: "Current",
+//     color: "hsl(var(--chart-2))",
+//   },
+// };
+
+// const captureCardAsImage = (cardRef: HTMLDivElement, callback: (imgUrl: string) => void) => {
+//   if (!cardRef) return;
+//   setTimeout(() => {
+//     html2canvas(cardRef, { scale: 3, useCORS: true, backgroundColor: null }).then((canvas) => {
+//       callback(canvas.toDataURL("image/png", 1.0));
+//     });
+//   }, 1200);
+// };
+
+// // Hidden ChartCard Component (Only for Capturing)
+// const HiddenChartCard = ({ onCapture }: { onCapture: (imgUrl: string) => void }) => {
+//   const cardRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     if (cardRef.current) {
+//       captureCardAsImage(cardRef.current, onCapture);
+//     }
+//   }, [onCapture]);
+
+//   return (
+//     <div ref={cardRef} className="absolute -left-full -top-full opacity-0">
+//       <Card className="w-full">
+//         <CardHeader>
+//           <CardTitle>Machinery Condition Summary</CardTitle>
+//         </CardHeader>
+//         <CardContent>
+//           <ChartContainer config={chartConfig}>
+//             <BarChart accessibilityLayer data={chartData} width={800} height={400}>
+//               <CartesianGrid vertical={false} />
+//               <XAxis
+//                 dataKey="month"
+//                 tickLine={false}
+//                 tickMargin={10}
+//                 axisLine={false}
+//                 tickFormatter={(value) => value.slice(0, 3)}
+//               />
+//               <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+//               <Bar dataKey="previous" fill="var(--color-previous)" radius={4} />
+//               <Bar dataKey="current" fill="var(--color-current)" radius={4} />
+//             </BarChart>
+//           </ChartContainer>
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   page: { padding: 20, display: "flex", alignItems: "center", width: "100%" },
+//   image: { width: "100%", height: "auto" },
+// });
+
+// const PdfDocument = ({ chartImage }: { chartImage: string }) => (
+//   <Document>
+//     <Page style={styles.page}>
+//       {chartImage && <PdfImage src={chartImage} style={styles.image} />}
+//     </Page>
+//   </Document>
+// );
+
+// const PdfDownload = () => {
+//   const [chartImage, setChartImage] = useState<string | null>(null);
+
+//   return (
+//     <div className="flex flex-col items-center gap-4">
+//       {/* Hidden Chart (Only for Capturing) */}
+//       <HiddenChartCard onCapture={(img) => setChartImage(img)} />
+
+//       {/* Download Button */}
+//       {chartImage && (
+//         <PDFDownloadLink document={<PdfDocument chartImage={chartImage} />} fileName="report.pdf">
+//           {({ loading }) => (
+//             <Button className="bg-main hover:bg-follow" disabled={loading}>
+//               {loading ? "Generating..." : "Download PDF"}
+//             </Button>
+//           )}
+//         </PDFDownloadLink>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default PdfDownload;
