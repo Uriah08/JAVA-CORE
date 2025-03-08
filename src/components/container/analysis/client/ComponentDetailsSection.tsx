@@ -8,20 +8,21 @@ import { Dialog } from "@/components/ui/dialog";
 import AddDetailsDialog from "../../dialogs/client/AddDeatilsDialog";
 import { toast } from "@/hooks/use-toast";
 import { useGetRouteComponentDetailsQuery } from "@/store/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SelectedComponent {
   id: string;
 }
 
 interface ComponentDetailsProps {
-  //   routeComponentsLoading: boolean;
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openAddDetails: boolean;
   setOpenAddDetails: Dispatch<SetStateAction<boolean>>;
 }
 
 const ComponentDetailsSection: React.FC<ComponentDetailsProps> = ({
-  //   routeComponentsLoading,
+  isLoading,
   selectedComponent,
   openAddDetails,
   setOpenAddDetails,
@@ -32,13 +33,20 @@ const ComponentDetailsSection: React.FC<ComponentDetailsProps> = ({
     shouldRefetch.current = true;
   }, [selectedComponent]);
 
-  const { data, error, isLoading } = useGetRouteComponentDetailsQuery(
-    selectedComponent?.id || "",
-    {
-      skip: !selectedComponent,
-      refetchOnMountOrArgChange: shouldRefetch.current,
-    }
-  );
+  const {
+    data,
+    error,
+    isFetching: queryLoading,
+  } = useGetRouteComponentDetailsQuery(selectedComponent?.id || "", {
+    skip: !selectedComponent,
+    refetchOnMountOrArgChange: shouldRefetch.current,
+  });
+
+  const showLoading = isLoading || queryLoading;
+
+  const componentDetails = selectedComponent
+    ? data?.routeComponentDetails || []
+    : [];
 
   React.useEffect(() => {
     shouldRefetch.current = false;
@@ -79,15 +87,28 @@ const ComponentDetailsSection: React.FC<ComponentDetailsProps> = ({
       </div>
 
       {/* Loading & Error Handling */}
-      {isLoading ? (
-        <p className="p-4">Loading...</p>
+      {showLoading ? (
+        <table className="w-full table-auto">
+          <tbody>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <tr key={index} className="border-b border-main">
+                <th className="p-2 text-left bg-red-300 font-normal w-1/2">
+                  <Skeleton className="w-24 h-5 animate-pulse bg-zinc-200" />
+                </th>
+                <td className="p-2 w-1/2">
+                  <Skeleton className="w-32 h-5 animate-pulse bg-zinc-200" />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : error ? (
         <p className="p-4 text-red-500">Failed to load details.</p>
       ) : (
         <table className="w-full table-auto">
           <tbody>
-            {(data?.routeComponentDetails ?? []).length > 0 ? (
-              data?.routeComponentDetails!.map((detail) => (
+            {componentDetails.length > 0 ? (
+              componentDetails.map((detail) => (
                 <tr key={detail.id} className="border-b border-main">
                   <th className="p-2 text-left bg-red-300 font-normal w-1/2">
                     {detail.header}

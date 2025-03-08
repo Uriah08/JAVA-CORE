@@ -4,35 +4,48 @@ import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetClienttRouteComponentRecommendationQuery } from "@/store/api";
 
-interface SeverityHistoryProps {
-  routeComponentIds: string[];
+interface RecommendationProps {
+  isLoading: boolean;
+  selectedComponent: {
+    routeComponent?: {
+      id: string;
+    }[];
+  } | null;
 }
 
-const Recommendation: React.FC<SeverityHistoryProps> = ({
-  routeComponentIds,
+const Recommendation: React.FC<RecommendationProps> = ({
+  isLoading,
+  selectedComponent,
 }) => {
+  const routeComponentIds = React.useMemo(
+    () => selectedComponent?.routeComponent?.map((rc) => rc.id) ?? [],
+    [selectedComponent]
+  );
+
   const shouldRefetch = React.useRef(true);
 
   React.useEffect(() => {
     shouldRefetch.current = true;
   }, [routeComponentIds]);
 
-  const {
-    data: routeComponentRecommendation,
-    isFetching: routeComponentsLoading,
-  } = useGetClienttRouteComponentRecommendationQuery(routeComponentIds, {
-    skip: !routeComponentIds || routeComponentIds.length === 0,
-    refetchOnMountOrArgChange: shouldRefetch.current,
-  });
+  const { data: routeComponentRecommendation, isFetching: queryLoading } =
+    useGetClienttRouteComponentRecommendationQuery(routeComponentIds, {
+      skip: !routeComponentIds || routeComponentIds.length === 0,
+      refetchOnMountOrArgChange: shouldRefetch.current,
+    }) ?? { routeComponentComments: [] };
+
+  const showLoading = isLoading || queryLoading;
 
   React.useEffect(() => {
     shouldRefetch.current = false;
   }, [routeComponentRecommendation]);
 
   const recommendations =
-    routeComponentRecommendation?.routeComponentRecommendation.flatMap(
-      (rcr) => rcr.recommendations
-    ) || [];
+    routeComponentIds.length === 0
+      ? [] // Reset if no routeComponentIds
+      : routeComponentRecommendation?.routeComponentRecommendation.flatMap(
+          (rcr) => rcr.recommendations
+        ) || [];
 
   const sortedRecommendation = [...recommendations].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -52,7 +65,7 @@ const Recommendation: React.FC<SeverityHistoryProps> = ({
           <div className="flex-1 flex flex-col gap-2">
             <h1 className="font-medium">Current Recommendation</h1>
             <div className="p-3 border rounded-lg">
-              {routeComponentsLoading ? (
+              {showLoading ? (
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
               ) : latestRecommendation ? (
                 <>
@@ -82,7 +95,7 @@ const Recommendation: React.FC<SeverityHistoryProps> = ({
           <div className="flex-1 flex flex-col gap-2">
             <h1 className="font-medium">Previous Recommendation</h1>
             <div className="p-3 border rounded-lg">
-              {routeComponentsLoading ? (
+              {showLoading ? (
                 <Skeleton className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md" />
               ) : previousRecommendation ? (
                 <>

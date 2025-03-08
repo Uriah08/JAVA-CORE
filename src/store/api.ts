@@ -133,16 +133,16 @@ type SearchClientRouteEquipmentResponse = {
 };
 
 export type ExtendedSelectedComponent = Component & {
-  routeComponent?: {
+  routeComponent: {
     id: string;
-  };
+  }[];
 };
 
 type SelectedComponentResponse = {
   selectedComponentData: ExtendedSelectedComponent[];
   message: string;
   success: boolean;
-}
+};
 
 export type ExtendedClientRouteComponent = RouteComponent & {
   comments: {
@@ -211,7 +211,7 @@ type MachinesCountResponse = {
   equipmentGroup: number;
   equipmentName: number;
   components: number;
-}
+};
 
 export const api = createApi({
   reducerPath: "api",
@@ -598,7 +598,9 @@ export const api = createApi({
     }),
     getSelectedComponent: build.query<SelectedComponentResponse, string[]>({
       query: (componentIds) => ({
-        url: `/api/client/selectedComponent?componentIds=${componentIds.map(id => `componentId=${id}`).join("&")}`,
+        url: `/api/client/selectedComponent?${componentIds
+          .map((id) => `componentIds=${id}`)
+          .join("&")}`,
         method: "GET",
       }),
       providesTags: ["Component"],
@@ -723,14 +725,14 @@ export const api = createApi({
       query: () => ({
         url: "/api/machineList/dashboard",
         method: "GET",
-      })
+      }),
     }),
     getRecentRoutes: build.query<RouteResponse, void>({
       query: () => ({
         url: "/api/createRoute/dashboard",
         method: "GET",
-      })
-    })
+      }),
+    }),
   }),
 });
 

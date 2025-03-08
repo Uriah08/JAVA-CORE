@@ -31,7 +31,10 @@ import { FigureUpload } from "@/components/container/analysis/FigureUpload";
 import { EquipmentUpload } from "@/components/container/analysis/EquipmentUpload";
 import { EquipmentView } from "@/components/container/analysis/EquipmentView";
 
-import { useSearchClientRouteEquipmentListQuery } from "@/store/api";
+import {
+  useGetSelectedComponentQuery,
+  useSearchClientRouteEquipmentListQuery,
+} from "@/store/api";
 import { debounce } from "lodash";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useForm } from "react-hook-form";
@@ -41,14 +44,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import SeverityHistory from "@/components/container/analysis/client/SeverityHistory";
 import Recommendation from "@/components/container/analysis/client/Recommendation";
-import { useSession } from "next-auth/react";
 import ClientActionSection from "@/components/container/analysis/client/ClientAction";
 import AnalystNoteSection from "@/components/container/analysis/client/AnalystNote";
 import ComponentDetailsSection from "@/components/container/analysis/client/ComponentDetailsSection";
 
 const ClientAnalysis = () => {
-  const { data: session } = useSession();
-
   const [openAnalystNote, setOpenAnalystNote] = React.useState(false);
   const [openClientAction, setOpenClientAction] = React.useState(false);
   const [openAddDetails, setOpenAddDetails] = useState(false);
@@ -81,14 +81,23 @@ const ClientAnalysis = () => {
     name: string;
     components: {
       id: string;
-      name: string;
-      routeComponent?: {
-        id: string;
-      }[];
     }[];
   } | null>(null);
 
   console.log("fetched data: ", selectedEquipment?.components);
+
+  const selectedComponentIds =
+    selectedEquipment?.components?.map((comp) => comp.id) || [];
+
+  const { data: selectedComponentData, isFetching: isLoading } =
+    useGetSelectedComponentQuery(selectedComponentIds, {
+      skip: selectedComponentIds.length === 0,
+    });
+
+  const routeComponentIds =
+    selectedComponentData?.selectedComponentData?.flatMap((component) =>
+      component.routeComponent.map((rc) => rc.id)
+    ) ?? [];
 
   const [selectedComponent, setSelectedComponent] = React.useState<{
     id: string;
@@ -100,12 +109,7 @@ const ClientAnalysis = () => {
 
   const lastSelectedEquipment = React.useRef<string | null>(null);
 
-  console.log("USER: ", session?.user?.id);
-
   console.log("captured data: ", selectedComponent);
-
-  const routeComponentIds =
-    selectedComponent?.routeComponent?.map((rc) => rc.id) ?? [];
 
   console.log("old data: ", routeComponentIds);
 
@@ -143,6 +147,7 @@ const ClientAnalysis = () => {
                           : null
                       );
                       lastSelectedEquipment.current = value;
+                      setSelectedComponent(null);
                     }
 
                     field.onChange(value);
@@ -201,36 +206,53 @@ const ClientAnalysis = () => {
           />
         </Form>
 
-        {selectedEquipment && selectedEquipment.components && (
+        {isLoading ? (
           <div className="mt-5">
             <h2 className="text-lg font-semibold">Components</h2>
             <ul className="pl-5 pt-5 space-y-2">
-              {Array.isArray(selectedEquipment.components) &&
-              selectedEquipment.components.length > 0 ? (
-                selectedEquipment.components.map((component) => (
-                  <li
-                    key={component.id}
-                    className={`p-2 border rounded cursor-pointer ${
-                      selectedComponent?.id === component.id
-                        ? "bg-red-400 text-white"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      setSelectedComponent({
-                        id: component.id,
-                        name: component.name,
-                        routeComponent: component.routeComponent || [],
-                      })
-                    }
-                  >
-                    {component.name}
-                  </li>
-                ))
-              ) : (
-                <p className="text-gray-500">No components found.</p>
-              )}
+              {[...Array(5)].map((_, index) => (
+                <Skeleton
+                  key={index}
+                  className="h-[30px] w-[80%] rounded-md bg-gray-300 dark:bg-gray-700 animate-pulse"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                />
+              ))}
             </ul>
           </div>
+        ) : (
+          selectedComponentData &&
+          selectedComponentData.selectedComponentData && (
+            <div className="mt-5">
+              <h2 className="text-lg font-semibold">Components</h2>
+              <ul className="pl-5 pt-5 space-y-2">
+                {selectedComponentData.selectedComponentData.length > 0 ? (
+                  selectedComponentData.selectedComponentData.map(
+                    (component) => (
+                      <li
+                        key={component.id}
+                        className={`p-2 border rounded cursor-pointer ${
+                          selectedComponent?.id === component.id
+                            ? "bg-red-400 text-white"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          setSelectedComponent({
+                            id: component.id,
+                            name: component.name,
+                            routeComponent: component.routeComponent || [],
+                          })
+                        }
+                      >
+                        {component.name}
+                      </li>
+                    )
+                  )
+                ) : (
+                  <p className="text-gray-500">No components found.</p>
+                )}
+              </ul>
+            </div>
+          )
         )}
       </div>
       <div className="w-full xl:w-2/3 p-5 bg-white rounded-xl shadow-lg">
@@ -248,16 +270,22 @@ const ClientAnalysis = () => {
         </div>
 
         <div className="w-full mt-3">
-          <SeverityHistory routeComponentIds={routeComponentIds} />
+          <SeverityHistory
+            isLoading={isLoading}
+            selectedComponent={selectedComponent}
+          />
         </div>
 
         <div className="flex flex-col gap-3 w-full mt-5">
-          <Recommendation routeComponentIds={routeComponentIds} />
+          <Recommendation
+            isLoading={isLoading}
+            selectedComponent={selectedComponent}
+          />
         </div>
         <div className="flex w-full gap-5 xl:flex-row flex-col">
           <div className="flex flex-col gap-3 w-full mt-5">
             <ClientActionSection
-              routeComponentsLoading={equipmentsLoading}
+              isLoading={isLoading}
               selectedComponent={selectedComponent}
               openClientAction={openClientAction}
               setOpenClientAction={setOpenClientAction}
@@ -265,7 +293,7 @@ const ClientAnalysis = () => {
           </div>
           <div className="flex flex-col gap-3 w-full mt-5">
             <AnalystNoteSection
-              routeComponentsLoading={equipmentsLoading}
+              isLoading={isLoading}
               selectedComponent={selectedComponent}
               openAnalystNote={openAnalystNote}
               setOpenAnalystNote={setOpenAnalystNote}
@@ -388,7 +416,7 @@ const ClientAnalysis = () => {
             {detailsActive === "add" ? <AddDetails /> : <ViewDetails />}
           </div> */}
           <ComponentDetailsSection
-            // routeComponentsLoading={equipmentsLoading}
+            isLoading={isLoading}
             selectedComponent={selectedComponent}
             openAddDetails={openAddDetails}
             setOpenAddDetails={setOpenAddDetails}

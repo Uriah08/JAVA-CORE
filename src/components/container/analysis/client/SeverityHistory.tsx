@@ -6,12 +6,23 @@ import { useGetClienttRouteComponentCommentQuery } from "@/store/api";
 // import { useRouter } from "next/router";
 
 interface SeverityHistoryProps {
-  routeComponentIds: string[];
+  isLoading: boolean;
+  selectedComponent: {
+    routeComponent?: {
+      id: string;
+    }[];
+  } | null;
 }
 
 const SeverityHistory: React.FC<SeverityHistoryProps> = ({
-  routeComponentIds,
+  isLoading,
+  selectedComponent,
 }) => {
+  const routeComponentIds = React.useMemo(
+    () => selectedComponent?.routeComponent?.map((rc) => rc.id) ?? [],
+    [selectedComponent]
+  );
+
   console.log("selected for History: ", routeComponentIds);
   const shouldRefetch = React.useRef(true);
 
@@ -20,11 +31,13 @@ const SeverityHistory: React.FC<SeverityHistoryProps> = ({
   }, [routeComponentIds]);
 
   // const router = useRouter();
-  const { data: routeComponents, isFetching: routeComponentsLoading } =
+  const { data: routeComponents, isFetching: queryLoading } =
     useGetClienttRouteComponentCommentQuery(routeComponentIds, {
       skip: !routeComponentIds || routeComponentIds.length === 0,
       refetchOnMountOrArgChange: shouldRefetch.current,
-    });
+    }) ?? { routeComponentComments: [] };
+
+  const showLoading = isLoading || queryLoading;
 
   React.useEffect(() => {
     shouldRefetch.current = false;
@@ -35,7 +48,10 @@ const SeverityHistory: React.FC<SeverityHistoryProps> = ({
   );
 
   const comments =
-    routeComponents?.routeComponentComments.flatMap((rc) => rc.comments) || [];
+    routeComponentIds.length === 0
+      ? [] // Reset if no routeComponentIds
+      : routeComponents?.routeComponentComments.flatMap((rc) => rc.comments) ||
+        [];
 
   console.log("severityhistory: ", comments);
 
@@ -65,7 +81,7 @@ const SeverityHistory: React.FC<SeverityHistoryProps> = ({
                 {index === 0 ? "Current" : "Previous"}
               </h1>
               <div className="flex justify-center items-center py-1">
-                {routeComponentsLoading ? (
+                {showLoading ? (
                   <Skeleton className="w-5 h-5 animate-pulse bg-zinc-200" />
                 ) : comment ? (
                   <Image

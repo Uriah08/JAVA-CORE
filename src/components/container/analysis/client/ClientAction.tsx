@@ -15,14 +15,14 @@ interface SelectedComponent {
 }
 
 interface ClientActionProps {
-  routeComponentsLoading: boolean;
+  isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openClientAction: boolean;
   setOpenClientAction: Dispatch<SetStateAction<boolean>>;
 }
 
 const ClientActionSection: React.FC<ClientActionProps> = ({
-  routeComponentsLoading,
+  isLoading,
   selectedComponent,
   openClientAction,
   setOpenClientAction,
@@ -33,18 +33,26 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
     shouldRefetch.current = true;
   }, [selectedComponent]);
 
-  const { data, isFetching: routeComponentActionIsLoading } =
-    useGetRouteComponentActionQuery(selectedComponent?.id ?? "", {
+  console.log("components in Action: ", selectedComponent);
+
+  const { data, isFetching: queryLoading } = useGetRouteComponentActionQuery(
+    selectedComponent?.id ?? "",
+    {
       skip: !selectedComponent,
       refetchOnMountOrArgChange: shouldRefetch.current,
-    });
+    }
+  );
+
+  const showLoading = isLoading || queryLoading;
 
   React.useEffect(() => {
     shouldRefetch.current = false;
   }, [data]);
 
-  const latestAction = data?.routeComponentAction?.[0] || null;
-  const woNumber = data?.woNumbers || [];
+  const actionData = selectedComponent ? data?.routeComponentAction || [] : [];
+  const woNumber = selectedComponent ? data?.woNumbers || [] : [];
+
+  const latestAction = actionData.length > 0 ? actionData[0] : null;
   const latestDate = latestAction
     ? new Date(latestAction.createdAt).toLocaleDateString()
     : "No date available";
@@ -67,7 +75,7 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
       </h1>
       <div className=" p-3 flex flex-col h-full">
         <h1 className="font-semibold">WO Number</h1>
-        {routeComponentsLoading || routeComponentActionIsLoading ? (
+        {showLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
@@ -82,11 +90,17 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
         )}
         <div className="flex justify-between items-center mt-5">
           <h1 className="font-semibold">Previous Action</h1>
-          <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
-            {latestDate || "No Selected Component"}
-          </h1>
+          {showLoading ? (
+            <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
+              ...
+            </h1>
+          ) : (
+            <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
+              {latestDate || "No Selected Component"}
+            </h1>
+          )}
         </div>
-        {routeComponentsLoading || routeComponentActionIsLoading ? (
+        {showLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
