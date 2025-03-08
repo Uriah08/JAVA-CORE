@@ -19,6 +19,65 @@ const recommendations = [
   }
 ]
 
+const machinesHealth = [
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+  {
+    equipmentName:"Services Pumps SPU104 – Raw Water Pump",
+    components: "SPU104 Motor",
+    previousCondtion: "N",
+    currentCondtion: "N",
+    analysis: "No defects were detected."
+  },
+]
+
 const styles = StyleSheet.create({
   page: {
     padding: 30,
@@ -133,6 +192,9 @@ const styles = StyleSheet.create({
     borderBottom: "0.5px solid black",
     padding: 5
   },
+  colPreviousCondtion: { flex: 0.4 },
+  colCurrentCondtion: { flex: 0.4 },
+  colAnalysis: { flex: 2 },
 });
 
 const PdfDocument = () => (
@@ -296,7 +358,7 @@ const PdfDocument = () => (
     </Page>
 
     <Page style={styles.page}>
-    <View style={[styles.header, {justifyContent: "space-between"}]}>
+    <View style={[styles.header, {justifyContent: "space-between"}]} fixed>
         <Image style={styles.logo} src="/logo.png" />
         <View style={styles.companyDetails}>
           <Text style={[styles.contact, {fontWeight: "bold"}]}>Vibration Analysis Report </Text>
@@ -347,6 +409,44 @@ const PdfDocument = () => (
         </View>
 
     <View style={styles.pageNumber}>
+        <Text style={{ fontSize: 10 }}>Pumps VA Report</Text>
+        <Text style={{ fontSize: 10 }} render={({ pageNumber, totalPages }) => <Text>Page <Text style={{fontWeight: "bold"}}>{pageNumber}</Text> of <Text style={{fontWeight: "bold"}}>{totalPages}</Text></Text>}/>
+      </View>
+    </Page>
+
+    <Page style={styles.page}>
+    <View style={[styles.header, {justifyContent: "space-between"}]} fixed>
+        <Image style={styles.logo} src="/logo.png" />
+        <View style={styles.companyDetails}>
+          <Text style={[styles.contact, {fontWeight: "bold"}]}>Vibration Analysis Report </Text>
+          <Text style={styles.contact}>Client: Client 1</Text>
+          <Text style={styles.contact}>Plant Area: All area</Text>
+        </View>
+    </View>
+    <Text style={{fontWeight: "bold", fontSize: 12, marginBottom: 15}} fixed>Machinery Health Condition Reports</Text>
+
+    <View style={styles.table}>
+    <View style={styles.row} fixed>
+      <Text style={[styles.headerCell3, styles.colEquipmentList, { fontSize: 10}]}>Equipment List</Text>
+      <Text style={[styles.headerCell3, styles.colPreviousCondtion, { fontSize: 10}]}>Previous{'\n'}Condition</Text>
+      <Text style={[styles.headerCell3, styles.colCurrentCondtion, { fontSize: 10}]}>Current{'\n'}Condition</Text>
+      <Text style={[styles.headerCell3, styles.colAnalysis, styles.rightBorder, { fontSize: 10}]}>Analysis and Recommendation</Text>
+    </View>
+    
+    {machinesHealth.map((machine, i) => (
+      <View key={i} wrap={false}>
+        <Text style={[styles.headerCell3, styles.rightBorder, { fontSize: 10, borderTop: 0}]}>{machine.equipmentName}</Text>
+        <View style={styles.row}>
+          <Text style={[styles.cell3, styles.colEquipmentList, styles.colEquipmentList, { fontSize: 10}]}>{machine.components}</Text>
+          <Image style={[styles.cell3, styles.colPreviousCondtion, { objectFit: "contain" }]} src={`/report/${machine.previousCondtion}.png`} />
+          <Image style={[styles.cell3, styles.colCurrentCondtion, { objectFit: "contain" }]} src={`/report/${machine.currentCondtion}.png`} />
+          <Text style={[styles.cell3, styles.colEquipmentList, styles.colAction2, styles.rightBorder, { fontSize: 10}]}>{machine.analysis}</Text>
+        </View>
+      </View>
+    ))}
+    </View>
+
+    <View style={styles.pageNumber} fixed>
         <Text style={{ fontSize: 10 }}>Pumps VA Report</Text>
         <Text style={{ fontSize: 10 }} render={({ pageNumber, totalPages }) => <Text>Page <Text style={{fontWeight: "bold"}}>{pageNumber}</Text> of <Text style={{fontWeight: "bold"}}>{totalPages}</Text></Text>}/>
       </View>
