@@ -7,18 +7,24 @@ import { useColumns } from "@/components/container/tables/job-registry/columns";
 import { DataTable } from "@/components/container/tables/job-registry/data-table";
 import React from "react";
 
-import { useGetJobsQuery } from "@/store/api";
-import { BookmarkCheck, WalletCards } from "lucide-react";
+import { useGetJobsQuery, useGetRecentRoutesQuery, useGetSeveritiesQuery } from "@/store/api";
+import { BookmarkCheck, Route, WalletCards } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
 const JobRegistry = () => {
   const columns = useColumns();
 
-  const { data, isLoading: jobsLoading } = useGetJobsQuery();
-  const jobs = data?.jobs || [];
+  const { data : jobData, isLoading: jobsLoading } = useGetJobsQuery();
+  const jobs = jobData?.jobs || [];
 
-  const recentJobs = [...(data?.jobs || [])]
+  const { data : routesData } = useGetRecentRoutesQuery();
+  const routes = routesData?.routes || []
+
+  const { data : severityData, isLoading: severityLoading } = useGetSeveritiesQuery();
+  const severities = severityData?.data || [];
+
+  const recentJobs = [...(jobData?.jobs || [])]
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -38,13 +44,13 @@ const JobRegistry = () => {
           <h1 className="text-xl sm:text-2xl font-bold">Job Registry</h1>
           <DataTable columns={columns} data={jobs} loading={jobsLoading} />
         </div>
-        {jobsLoading ? (
+        {jobsLoading || severityLoading ? (
           <Skeleton className="w-full h-[320px] shadow-lg" />
         ) : (
           <WaveChart chartDatas={chart1} />
         )}
         <div className="flex md:flex-row flex-col gap-3 sm:gap-5">
-          {jobsLoading ? (
+          {jobsLoading || severityLoading ? (
             <>
               <Skeleton className="md:w-1/2 w-full h-[400px] shadow-lg" />
               <Skeleton className="md:w-1/2 w-full h-[400px] shadow-lg" />
@@ -52,7 +58,7 @@ const JobRegistry = () => {
           ) : (
             <>
               <PieCharts chartDatas={chart2} />
-              <BarCharts />
+              <BarCharts data={severities}/>
             </>
           )}
         </div>
@@ -137,6 +143,17 @@ const JobRegistry = () => {
             ))
           )}
         </div>
+        <div className="bg-white h-2/3 w-full rounded-xl shadow-lg p-5">
+                  <h1 className="text-base sm:text-xl font-semibold text-black mb-3">Recent Routes</h1>
+                  <div className='flex flex-col gap-3 mt-5'>
+                    {routes?.map((route) => (
+                      <div key={route.id} className="flex gap-3 border rounded-md p-2">
+                      <Route size={24} className="text-white bg-main rounded-md p-1"/>
+                      <h1 className="text-lg font-semibold">{route.routeName}</h1>
+                    </div>
+                    ))}
+                  </div>
+                </div>
       </div>
     </div>
   );

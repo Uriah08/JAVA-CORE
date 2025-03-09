@@ -205,8 +205,8 @@ const List = () => {
   const renderList = (items: { id: string; name: string }[], level: number) => {
     return (
       <ul className="">
-        <div className="flex justify-between items-center my-9">
-          <h1 className="text-lg items-center text-center text-gray-800 font-semibold">
+        <div className="flex md:flex-row flex-col justify-between md:items-center my-9">
+          <h1 className="text-lg items-center md:text-center text-gray-800 font-semibold">
             {level === 0
               ? "Select an area"
               : level === 1
@@ -234,7 +234,7 @@ const List = () => {
                   }`
                 )
               }
-              className="bg-main hover:bg-follow"
+              className="bg-main hover:bg-follow md:mt-0 mt-5"
               disabled={loading}
             >
               Add <Plus />
@@ -243,7 +243,7 @@ const List = () => {
               <Button
                 disabled={loading}
                 onClick={() => setIsConfirmDialogOpen(true)}
-                className="bg-main hover:bg-follow"
+                className="bg-main hover:bg-follow md:mt-0 mt-5"
               >
                 Delete Selected
               </Button>
@@ -253,7 +253,7 @@ const List = () => {
                 setIsDeleting((prev) => !prev);
                 setSelectedItems([]);
               }}
-              className="text-main hover:text-main"
+              className="text-main hover:text-main md:mt-0 mt-5"
               variant={"outline"}
               disabled={loading}
             >
@@ -324,7 +324,7 @@ const List = () => {
                         />
                       )}
                       <span
-                        className={`${isDeleting ? "px-2" : ""} py-1 rounded`}
+                        className={`${isDeleting ? "px-2" : ""} py-1 rounded md:text-base text-sm`}
                       >
                         {item.name}
                       </span>
@@ -386,7 +386,7 @@ const List = () => {
       <div className="font-base flex">
         <React.Fragment>
           <span
-            className={`cursor-pointer text-gray-600 hover:underline mr-1 ${
+            className={`cursor-pointer text-gray-600 hover:underline mr-1 md:text-base text-xs ${
               breadcrumb.length > 0 ? "" : "font-semibold text-gray-800"
             }`}
             onClick={() => handleBreadcrumbClick(0)}
@@ -402,7 +402,7 @@ const List = () => {
             {breadcrumb.map((item, index) => (
               <React.Fragment key={index}>
                 <span
-                  className={`cursor-pointer text-gray-600 hover:underline ${
+                  className={`cursor-pointer text-gray-600 hover:underline md:text-base text-xs ${
                     index === breadcrumb.length - 1
                       ? "font-semibold text-gray-800"
                       : ""

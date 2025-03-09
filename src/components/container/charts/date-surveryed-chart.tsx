@@ -50,11 +50,7 @@ export function WaveChart({ chartDatas } : { chartDatas: Date[]}) {
 
     return acc;
   }, [] as { date: string; surveyed: number }[]);
-
-  console.log(chartDatas)
-  console.log(formattedData);
   
-
   const [timeRange, setTimeRange] = React.useState("90d")
 
   const filteredData = formattedData.filter((item) => {
