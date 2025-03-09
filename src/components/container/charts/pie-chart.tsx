@@ -71,7 +71,7 @@ export function PieCharts({chartDatas}: {chartDatas: string[]}) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px] xl:max-h-[400px]"
+          className="mx-auto aspect-square max-h-[250px] xl:max-h-[300px]"
         >
           <PieChart>
             <ChartTooltip
