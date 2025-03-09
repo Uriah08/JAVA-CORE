@@ -213,6 +213,13 @@ type MachinesCountResponse = {
   components: number;
 };
 
+export type SeveritiesResponse = {
+  data: {
+    severity: string;
+    count: number;
+  }[]
+}
+
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
@@ -735,6 +742,12 @@ export const api = createApi({
       }),
       providesTags: ["RouteList"],
     }),
+    getSeverities: build.query<SeveritiesResponse, void>({
+      query: () => ({
+        url: "/api/createRoute/routeMachineList/routeComponents/comments/dashboard",
+        method: "GET",
+      }),
+    })
   }),
 });
 
@@ -792,4 +805,5 @@ export const {
   useGetAdminRouteComponentDetailsQuery,
   useGetMachinesCountQuery,
   useGetRecentRoutesQuery,
+  useGetSeveritiesQuery
 } = api;

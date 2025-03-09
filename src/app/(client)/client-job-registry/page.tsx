@@ -1,6 +1,6 @@
 'use client'
 
-import { useGetClientJobsQuery } from '@/store/api';
+import { useGetClientJobsQuery, useGetSeveritiesQuery } from '@/store/api';
 import React from 'react'
 import { useSession } from 'next-auth/react';
 import { useColumns } from '@/components/container/tables/job-registry/columns'
@@ -15,6 +15,9 @@ const JobRegistry = () => {
   const { data: session } = useSession();
 
   const columns = useColumns()
+
+  const { data : severityData, isLoading: severityLoading } = useGetSeveritiesQuery();
+    const severities = severityData?.data || [];
 
   const { data, isLoading: jobsLoading } = useGetClientJobsQuery(session?.user.id ?? '', {
     skip:!session?.user?.id,
@@ -37,13 +40,13 @@ const JobRegistry = () => {
             </div>
             {jobsLoading ? <Skeleton className='w-full h-[320px] shadow-lg'/> : <WaveChart chartDatas={chart1}/>}
         <div className='flex md:flex-row flex-col gap-3 sm:gap-5'>
-          {jobsLoading ? (<>
+          {jobsLoading || severityLoading ? (<>
             <Skeleton className='md:w-1/2 w-full h-[400px] shadow-lg' />
             <Skeleton className='md:w-1/2 w-full h-[400px] shadow-lg' />
             </>
           ) : (<>
             <PieCharts chartDatas={chart2}/>
-            <BarCharts/>
+            <BarCharts data={severities}/>
           </>)}
         </div>
         </div>

@@ -71,7 +71,7 @@ export function PieCharts({chartDatas}: {chartDatas: string[]}) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[250px] xl:max-h-[400px]"
         >
           <PieChart>
             <ChartTooltip
@@ -82,7 +82,7 @@ export function PieCharts({chartDatas}: {chartDatas: string[]}) {
               data={chartData}
               dataKey="visitors"
               nameKey="browser"
-              innerRadius={60}
+              innerRadius={80}
               strokeWidth={5}
               activeIndex={0}
               activeShape={({
