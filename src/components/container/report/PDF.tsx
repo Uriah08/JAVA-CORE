@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Button } from "@/components/ui/button";
+import { selectedJob } from "@/schema";
 import {
   Document,
   Page,
@@ -413,7 +414,7 @@ const BarChart = () => (
   </View>
 );
 
-const PdfDocument = () => (
+const PdfDocument = ({ data }: { data: selectedJob }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.header}>
@@ -434,10 +435,10 @@ const PdfDocument = () => (
       <Text style={styles.subtitle}>Pumps VA Report</Text>
 
       <Text style={[styles.details, { marginTop: 50 }]}>
-        <Text style={{ fontWeight: "bold" }}>Client :</Text> Client 1
+        <Text style={{ fontWeight: "bold" }}>Client :</Text> {data?.user?.name}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Plant Area :</Text> All area
+        <Text style={{ fontWeight: "bold" }}>Plant Area :</Text> {data?.area}
       </Text>
       <Text style={styles.details}>
         <Text style={{ fontWeight: "bold" }}>Report Number :</Text> : ABC123 –
@@ -448,8 +449,7 @@ const PdfDocument = () => (
         2024
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Date Reported :</Text> 05 January
-        2024
+        <Text style={{ fontWeight: "bold" }}>Date Reported :</Text> {new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
       </Text>
 
       <Text style={[styles.details, { marginTop: 30 }]}>
@@ -1032,8 +1032,8 @@ const PdfDocument = () => (
   </Document>
 );
 
-const PdfDownload = () => (
-  <PDFDownloadLink document={<PdfDocument />} fileName="report.pdf">
+const PdfDownload = ({ data}: { data: selectedJob }) => (
+  <PDFDownloadLink document={<PdfDocument data={data}/>} fileName="report.pdf">
     {({ loading }) => (
       <Button className="bg-main hover:bg-follow" disabled={loading}>
         PDF

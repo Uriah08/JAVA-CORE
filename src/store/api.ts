@@ -747,6 +747,7 @@ export const api = createApi({
         url: "/api/createRoute/routeMachineList/routeComponents/comments/dashboard",
         method: "GET",
       }),
+      providesTags: ["RouteComponentComment"]
     })
   }),
 });

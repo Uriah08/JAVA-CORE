@@ -206,3 +206,18 @@ export const RouteComponentDetailsSchema = z.object({
   value: z.string().min(1, "Value is required!"),
 });
 
+export type  selectedJob = {
+    jobNumber: string;
+    area?: string;
+    user?: {
+      id?: string;
+      name?: string;
+    };
+    yearWeekNumber?: string;
+    reviewer?: string | null;
+    inspectionRoute?: string;
+    routeList?: {
+      routeName?: string;
+    };
+  } | null
+
