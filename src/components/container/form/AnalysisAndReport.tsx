@@ -206,11 +206,12 @@ const AnalysisAndReportForm = () => {
                   onClick={() => setOpenExport(!openExport)}
                   type="button"
                   className="bg-main hover:bg-follow text-white"
+                  disabled={!selectedJob}
                 >
                   Export
                 </Button>
                 <Dialog open={openExport} onOpenChange={setOpenExport}>
-                  <ExportAdmin onClose={() => setOpenExport(false)} />
+                  <ExportAdmin onClose={() => setOpenExport(false)} data={selectedJob} />
                 </Dialog>
               </div>
               <h2 className="text-base sm:text-lg font-semibold mb-3 mt-3 text-zinc-700">
