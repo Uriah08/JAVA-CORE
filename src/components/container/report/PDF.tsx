@@ -418,7 +418,7 @@ const PdfDocument = ({ data }: { data: selectedJob }) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.header}>
-        <Image style={styles.logo} src="/logo.png" />
+        <Image style={styles.logo} src="/java(logo).png" />
         <View style={styles.companyDetails}>
           <Text style={styles.companyName}>
             <Text style={{ color: "red" }}>JAVA</Text> Condition Monitoring Pty
@@ -441,27 +441,29 @@ const PdfDocument = ({ data }: { data: selectedJob }) => (
         <Text style={{ fontWeight: "bold" }}>Plant Area :</Text> {data?.area}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Report Number :</Text> : ABC123 –
-        VA01
+        <Text style={{ fontWeight: "bold" }}>Report Number :</Text> {data?.reportNumber}
       </Text>
       <Text style={styles.details}>
         <Text style={{ fontWeight: "bold" }}>Date Inspected :</Text> 01 January
         2024
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Date Reported :</Text> {new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" })}
+        <Text style={{ fontWeight: "bold" }}>Date Reported :</Text>{" "}
+        {new Date().toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })}
       </Text>
 
       <Text style={[styles.details, { marginTop: 30 }]}>
-        <Text style={{ fontWeight: "bold" }}>Job Number :</Text> ABC123-1
+        <Text style={{ fontWeight: "bold" }}>Job Number :</Text> {data?.jobNumber}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Purchase Order Number :</Text>{" "}
-        12345
+        <Text style={{ fontWeight: "bold" }}>Purchase Order Number :</Text> {data?.poNumber}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Work Order Number :</Text> :
-        1234535
+        <Text style={{ fontWeight: "bold" }}>Work Order Number :</Text> {data?.woNumber}
       </Text>
 
       <BarChart />
@@ -1032,8 +1034,8 @@ const PdfDocument = ({ data }: { data: selectedJob }) => (
   </Document>
 );
 
-const PdfDownload = ({ data}: { data: selectedJob }) => (
-  <PDFDownloadLink document={<PdfDocument data={data}/>} fileName="report.pdf">
+const PdfDownload = ({ data }: { data: selectedJob }) => (
+  <PDFDownloadLink document={<PdfDocument data={data} />} fileName="report.pdf">
     {({ loading }) => (
       <Button className="bg-main hover:bg-follow" disabled={loading}>
         PDF

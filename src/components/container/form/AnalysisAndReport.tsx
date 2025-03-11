@@ -91,6 +91,9 @@ const AnalysisAndReportForm = () => {
     };
     yearWeekNumber?: string;
     reviewer?: string | null;
+    poNumber: string | null;
+    woNumber: string | null;
+    reportNumber: string | null;
     inspectionRoute?: string;
     routeList?: {
       routeName?: string;
@@ -211,7 +214,10 @@ const AnalysisAndReportForm = () => {
                   Export
                 </Button>
                 <Dialog open={openExport} onOpenChange={setOpenExport}>
-                  <ExportAdmin onClose={() => setOpenExport(false)} data={selectedJob} />
+                  <ExportAdmin
+                    onClose={() => setOpenExport(false)}
+                    data={selectedJob}
+                  />
                 </Dialog>
               </div>
               <h2 className="text-base sm:text-lg font-semibold mb-3 mt-3 text-zinc-700">

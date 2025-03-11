@@ -22,6 +22,9 @@ export async function GET(req: Request) {
         jobNumber: true,
         yearWeekNumber: true,
         reviewer: true,
+        poNumber: true,
+        woNumber: true,
+        reportNumber: true,
         user: {
           select: {
             id: true,

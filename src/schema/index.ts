@@ -197,7 +197,7 @@ export const RouteComponentActionSchema = z.object({
 export const RouteComponentNoteSchema = z.object({
   componentId: z.string().min(1, "Component ID is required"),
   note: z.string().min(1, "Note is required"),
-  analyst: z.string().min(1, "Analyst is required")
+  analyst: z.string().min(1, "Analyst is required"),
 });
 
 export const RouteComponentDetailsSchema = z.object({
@@ -206,18 +206,20 @@ export const RouteComponentDetailsSchema = z.object({
   value: z.string().min(1, "Value is required!"),
 });
 
-export type  selectedJob = {
-    jobNumber: string;
-    area?: string;
-    user?: {
-      id?: string;
-      name?: string;
-    };
-    yearWeekNumber?: string;
-    reviewer?: string | null;
-    inspectionRoute?: string;
-    routeList?: {
-      routeName?: string;
-    };
-  } | null
-
+export type selectedJob = {
+  jobNumber: string;
+  area?: string;
+  user?: {
+    id?: string;
+    name?: string;
+  };
+  yearWeekNumber?: string;
+  reviewer?: string | null;
+  poNumber: string | null;
+  woNumber: string | null;
+  reportNumber: string | null;
+  inspectionRoute?: string;
+  routeList?: {
+    routeName?: string;
+  };
+} | null;
