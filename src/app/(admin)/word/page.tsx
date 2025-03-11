@@ -13,6 +13,8 @@ import {
   ImageRun,
   WidthType,
   AlignmentType,
+  UnderlineType,
+  SectionType,
 } from "docx";
 import { renderAsync } from "docx-preview";
 
@@ -266,26 +268,147 @@ const DOCXPreview = () => {
                     })
                   ]
                 }),
+
+                new Paragraph({
+                  spacing: { after: 14, line: 240 },
+                  children: [
+                    new TextRun({
+                      text: "Data Analysis and Report by",
+                      size: 22,
+                    })
+                  ]
+                }),
+                new Paragraph({
+                  spacing: { after: 14, line: 240 },
+                  children: [
+                    new TextRun({
+                      text: "Ryan Java, ",
+                      size: 24,
+                      underline: { type: UnderlineType.SINGLE }
+                    }),
+                    new TextRun({
+                      text: "MIEAust, VA Cat 2",
+                      italics: true,
+                      size: 22,
+                    })
+                  ]
+                }),
+                new Paragraph({
+                  spacing: { after: 14, line: 240 },
+                  children: [
+                    new TextRun({
+                      text: "Condition Monitoring Engineer",
+                      size: 20,
+                    }),
+                  ]
+                }),
+                new Paragraph({
+                  spacing: { after: 14, line: 240 },
+                  children: [
+                    new TextRun({
+                      text: "Disclaimer: ",
+                      size: 18,
+                      bold: true
+                    }),
+                    new TextRun({
+                      text: "All reports issued by Java Condition Monitoring (JCM) are a result of testings using the industry approved instruments with current calibration certiﬁcates, and all data is analysed by technicians who have complied with the required industry experience, holding ISO certiﬁcations on their related ﬁeld of practice. Recommendations are based on, but not limited to, data information, alarm limits, on site observation, and criticality of equipment to the line of operation. JCM ensures that a thorough assessment of machinery health condition has been undertaken prior to report submission. However, the client should acknowledge that the authority of this report is limited only to diagnostics and recommendations; the maintenance actions will only take place upon the approval of the client’s designated authority, and therefore not holding JCM accountable of any indemnity claim or ﬁnancial obligation due to operational losses, machinery damages and other consequences aŌer conducting the maintenance actions.",
+                      size: 18,
+                    }),
+                  ]
+                }),
             ],
           },
-          // {
-          //     properties: {
-          //         type: SectionType.NEXT_PAGE,
-          //         page: {
-          //             margin: {
-          //                 top: 30 * 20,
-          //                 bottom: 30 * 20,
-          //                 left: 30 * 20,
-          //                 right: 30 * 20,
-          //             },
-          //         },
-          //     },
-          //     children: [
-          //         new Paragraph({
-          //             children: [new TextRun("This is Page 2 with 30pt margins.")],
-          //         }),
-          //     ],
-          // },
+          {
+              properties: {
+                  type: SectionType.NEXT_PAGE,
+                  page: {
+                      margin: {
+                          top: 30 * 20,
+                          bottom: 30 * 20,
+                          left: 30 * 20,
+                          right: 30 * 20,
+                      },
+                  },
+              },
+              children: [
+                new Table({
+                  borders: {
+                      top: { style: "none", size: 0 },
+                      bottom: { style: "none", size: 0 },
+                      left: { style: "none", size: 0 },
+                      right: { style: "none", size: 0 },
+                  },
+                    rows: [
+                        new TableRow({
+                            children: [
+
+                                new TableCell({
+                                    width: { size: 20, type: WidthType.PERCENTAGE },
+                                    children: [
+                                        new Paragraph({
+                                            children: [
+                                                new ImageRun({
+                                                    data: imageBuffer,
+                                                    transformation: { width: 100, height: 100 },
+                                                    type: "png",
+                                                }),
+                                            ],
+                                            alignment: AlignmentType.LEFT,
+                                        }),
+                                    ],
+                                    margins: { top: 100, bottom: 100, right: 400 },
+                                }),
+                                
+                                new TableCell({
+                                    width: { size: 80, type: WidthType.PERCENTAGE },
+                                    children: [
+                                        new Paragraph({
+                                          spacing: { after: 10, line: 200 },
+                                          
+                                            children: [
+                                              new TextRun({
+                                                text: "Vibration Analysis Report",
+                                                bold: true,
+                                                size: 18,
+                                            }),
+                                            ],
+                                        }),
+                                        new Paragraph({
+                                          spacing: { after: 10, line: 200 },
+                                            children: [
+                                                new TextRun({
+                                                    text: "Client: Client 1 ",
+                                                    size: 18,
+                                                }),
+                                            ],
+                                        }),
+                                        new Paragraph({
+                                          spacing: { after: 10, line: 200 },
+                                            children: [
+                                                new TextRun({
+                                                  text: "Plant Area: All area",
+                                                  size: 18
+                                                }),
+                                            ],
+                                        }),
+                                    ],
+                                    margins: { left:5000, top: 530 },
+                                }),
+                            ],
+                        }),
+                    ],
+                }),
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: "Introduction",
+                      bold: true,
+                      size: 20
+                    })
+                  ]
+                })
+              ],
+          },
       ],
       });
 

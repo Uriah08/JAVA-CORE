@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Button } from "@/components/ui/button";
 import { selectedJob } from "@/schema";
+import { ExtendedRouteMachineListReport } from "@/store/api";
 import {
   Document,
   Page,
@@ -414,11 +415,17 @@ const BarChart = () => (
   </View>
 );
 
-const PdfDocument = ({ data }: { data: selectedJob }) => (
+const PdfDocument = ({
+  data,
+  report,
+}: {
+  data: selectedJob;
+  report: ExtendedRouteMachineListReport[];
+}) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.header}>
-        <Image style={styles.logo} src="/java(logo).png" />
+        <Image style={styles.logo} src="/report/java(logo).png" />
         <View style={styles.companyDetails}>
           <Text style={styles.companyName}>
             <Text style={{ color: "red" }}>JAVA</Text> Condition Monitoring Pty
@@ -441,7 +448,8 @@ const PdfDocument = ({ data }: { data: selectedJob }) => (
         <Text style={{ fontWeight: "bold" }}>Plant Area :</Text> {data?.area}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Report Number :</Text> {data?.reportNumber}
+        <Text style={{ fontWeight: "bold" }}>Report Number :</Text>{" "}
+        {data?.reportNumber}
       </Text>
       <Text style={styles.details}>
         <Text style={{ fontWeight: "bold" }}>Date Inspected :</Text> 01 January
@@ -457,13 +465,16 @@ const PdfDocument = ({ data }: { data: selectedJob }) => (
       </Text>
 
       <Text style={[styles.details, { marginTop: 30 }]}>
-        <Text style={{ fontWeight: "bold" }}>Job Number :</Text> {data?.jobNumber}
+        <Text style={{ fontWeight: "bold" }}>Job Number :</Text>{" "}
+        {data?.jobNumber}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Purchase Order Number :</Text> {data?.poNumber}
+        <Text style={{ fontWeight: "bold" }}>Purchase Order Number :</Text>{" "}
+        {data?.poNumber}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Work Order Number :</Text> {data?.woNumber}
+        <Text style={{ fontWeight: "bold" }}>Work Order Number :</Text>{" "}
+        {data?.woNumber}
       </Text>
 
       <BarChart />
@@ -1034,10 +1045,24 @@ const PdfDocument = ({ data }: { data: selectedJob }) => (
   </Document>
 );
 
-const PdfDownload = ({ data }: { data: selectedJob }) => (
-  <PDFDownloadLink document={<PdfDocument data={data} />} fileName="report.pdf">
+const PdfDownload = ({
+  data,
+  report,
+  reportLoading,
+}: {
+  data: selectedJob;
+  report: ExtendedRouteMachineListReport[];
+  reportLoading: boolean;
+}) => (
+  <PDFDownloadLink
+    document={<PdfDocument data={data} report={report} />}
+    fileName="report.pdf"
+  >
     {({ loading }) => (
-      <Button className="bg-main hover:bg-follow" disabled={loading}>
+      <Button
+        className="bg-main hover:bg-follow"
+        disabled={loading || reportLoading}
+      >
         PDF
       </Button>
     )}
@@ -1045,115 +1070,3 @@ const PdfDownload = ({ data }: { data: selectedJob }) => (
 );
 
 export default PdfDownload;
-
-// import { useEffect, useRef, useState } from "react";
-// import { Document, Page, StyleSheet, PDFDownloadLink, Image as PdfImage } from "@react-pdf/renderer";
-// import html2canvas from "html2canvas";
-// import { Button } from "@/components/ui/button";
-// import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-// import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-// import { BarChart, CartesianGrid, XAxis, Bar } from "recharts";
-
-// const chartData = [
-//   { month: "January", previous: 186, current: 80 },
-//   { month: "February", previous: 305, current: 200 },
-//   { month: "March", previous: 237, current: 120 },
-//   { month: "April", previous: 73, current: 190 },
-//   { month: "May", previous: 209, current: 130 },
-//   { month: "June", previous: 214, current: 140 },
-// ];
-
-// const chartConfig = {
-//   previous: {
-//     label: "Previous",
-//     color: "hsl(var(--chart-1))",
-//   },
-//   current: {
-//     label: "Current",
-//     color: "hsl(var(--chart-2))",
-//   },
-// };
-
-// const captureCardAsImage = (cardRef: HTMLDivElement, callback: (imgUrl: string) => void) => {
-//   if (!cardRef) return;
-//   setTimeout(() => {
-//     html2canvas(cardRef, { scale: 3, useCORS: true, backgroundColor: null }).then((canvas) => {
-//       callback(canvas.toDataURL("image/png", 1.0));
-//     });
-//   }, 1200);
-// };
-
-// // Hidden ChartCard Component (Only for Capturing)
-// const HiddenChartCard = ({ onCapture }: { onCapture: (imgUrl: string) => void }) => {
-//   const cardRef = useRef<HTMLDivElement>(null);
-
-//   useEffect(() => {
-//     if (cardRef.current) {
-//       captureCardAsImage(cardRef.current, onCapture);
-//     }
-//   }, [onCapture]);
-
-//   return (
-//     <div ref={cardRef} className="absolute -left-full -top-full opacity-0">
-//       <Card className="w-full">
-//         <CardHeader>
-//           <CardTitle>Machinery Condition Summary</CardTitle>
-//         </CardHeader>
-//         <CardContent>
-//           <ChartContainer config={chartConfig}>
-//             <BarChart accessibilityLayer data={chartData} width={800} height={400}>
-//               <CartesianGrid vertical={false} />
-//               <XAxis
-//                 dataKey="month"
-//                 tickLine={false}
-//                 tickMargin={10}
-//                 axisLine={false}
-//                 tickFormatter={(value) => value.slice(0, 3)}
-//               />
-//               <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-//               <Bar dataKey="previous" fill="var(--color-previous)" radius={4} />
-//               <Bar dataKey="current" fill="var(--color-current)" radius={4} />
-//             </BarChart>
-//           </ChartContainer>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   page: { padding: 20, display: "flex", alignItems: "center", width: "100%" },
-//   image: { width: "100%", height: "auto" },
-// });
-
-// const PdfDocument = ({ chartImage }: { chartImage: string }) => (
-//   <Document>
-//     <Page style={styles.page}>
-//       {chartImage && <PdfImage src={chartImage} style={styles.image} />}
-//     </Page>
-//   </Document>
-// );
-
-// const PdfDownload = () => {
-//   const [chartImage, setChartImage] = useState<string | null>(null);
-
-//   return (
-//     <div className="flex flex-col items-center gap-4">
-//       {/* Hidden Chart (Only for Capturing) */}
-//       <HiddenChartCard onCapture={(img) => setChartImage(img)} />
-
-//       {/* Download Button */}
-//       {chartImage && (
-//         <PDFDownloadLink document={<PdfDocument chartImage={chartImage} />} fileName="report.pdf">
-//           {({ loading }) => (
-//             <Button className="bg-main hover:bg-follow" disabled={loading}>
-//               {loading ? "Generating..." : "Download PDF"}
-//             </Button>
-//           )}
-//         </PDFDownloadLink>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default PdfDownload;

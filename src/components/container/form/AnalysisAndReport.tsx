@@ -213,7 +213,7 @@ const AnalysisAndReportForm = () => {
                 >
                   Export
                 </Button>
-                <Dialog open={openExport} onOpenChange={setOpenExport}>
+                <Dialog aria-describedby={undefined} open={openExport} onOpenChange={setOpenExport}>
                   <ExportAdmin
                     onClose={() => setOpenExport(false)}
                     data={selectedJob}

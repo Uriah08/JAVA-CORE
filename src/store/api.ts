@@ -217,8 +217,42 @@ export type SeveritiesResponse = {
   data: {
     severity: string;
     count: number;
-  }[]
-}
+  }[];
+};
+
+export type ExtendedRouteComponentReport = {
+  component: {
+    name: string;
+  };
+  comments: {
+    id: string;
+    severity: string;
+    comment: string;
+  }[];
+  recommendations: {
+    id: string;
+    priority: string;
+    recommendation: string;
+  }[];
+};
+
+export type ExtendedRouteEquipmentNameReport = {
+  id: string;
+  equipmentName: {
+    name: string;
+  };
+  RouteComponent: ExtendedRouteComponentReport[];
+};
+
+export type ExtendedRouteMachineListReport = RouteList & {
+  id: string;
+  routeEquipmentNames: ExtendedRouteEquipmentNameReport[];
+};
+
+export type ReportResponse = {
+  routeMachineList: ExtendedRouteMachineListReport[];
+  success: boolean;
+};
 
 export const api = createApi({
   reducerPath: "api",
@@ -747,8 +781,19 @@ export const api = createApi({
         url: "/api/createRoute/routeMachineList/routeComponents/comments/dashboard",
         method: "GET",
       }),
-      providesTags: ["RouteComponentComment"]
-    })
+      providesTags: ["RouteComponentComment"],
+    }),
+    getPdfReport: build.query<ReportResponse, string>({
+      query: (routeListId) => ({
+        url: `/api/report?routeListId=${routeListId}`,
+        method: "GET",
+      }),
+      providesTags: [
+        "RouteComponent",
+        "RouteComponentComment",
+        "RouteComponentRecommendation",
+      ],
+    }),
   }),
 });
 
@@ -806,5 +851,6 @@ export const {
   useGetAdminRouteComponentDetailsQuery,
   useGetMachinesCountQuery,
   useGetRecentRoutesQuery,
-  useGetSeveritiesQuery
+  useGetSeveritiesQuery,
+  useGetPdfReportQuery,
 } = api;
