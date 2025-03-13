@@ -97,8 +97,13 @@ const AnalysisAndReportForm = () => {
     inspectionRoute?: string;
     routeList?: {
       routeName?: string;
+      machines?: {
+        id?: string;
+      }[];
     };
   } | null>(null);
+
+  console.log("job: ", selectedJob);
 
   const { data: routeData, isFetching: routeLoading } =
     useGetRouteEquipmentListQuery(selectedJob?.inspectionRoute ?? "", {
@@ -111,6 +116,7 @@ const AnalysisAndReportForm = () => {
         id: eq.id,
         routeMachineId: machine?.id,
         name: eq.equipmentName.name,
+        group: eq.equipmentName.group,
         // routeMachineId: eq.routeMachineId,
         // components: eq.equipmentName.components,
       }))
@@ -120,6 +126,10 @@ const AnalysisAndReportForm = () => {
     id: string;
     name: string;
     routeMachineId: string;
+    group: {
+      id: string;
+      name: string;
+    };
     // components: { id: string; name: string }[];
   } | null>(null);
 
@@ -213,7 +223,11 @@ const AnalysisAndReportForm = () => {
                 >
                   Export
                 </Button>
-                <Dialog aria-describedby={undefined} open={openExport} onOpenChange={setOpenExport}>
+                <Dialog
+                  aria-describedby={undefined}
+                  open={openExport}
+                  onOpenChange={setOpenExport}
+                >
                   <ExportAdmin
                     onClose={() => setOpenExport(false)}
                     data={selectedJob}

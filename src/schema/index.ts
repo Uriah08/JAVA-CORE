@@ -221,5 +221,18 @@ export type selectedJob = {
   inspectionRoute?: string;
   routeList?: {
     routeName?: string;
+    machines?: {
+      id?: string;
+    }[];
   };
 } | null;
+
+export type graphData = {
+  label: string;
+  previous?: number; // Make 'previous' optional to support Total Count
+  current: number;
+  prevColor?: string; // Make 'prevColor' optional to avoid issues for 'Total Count'
+  currColor: string;
+}[];
+
+export type yAxisValues = number[];

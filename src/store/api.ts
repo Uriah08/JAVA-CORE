@@ -18,6 +18,7 @@ import {
   RouteComponentDetails,
   RouteComponentAction,
   RouteComponentNote,
+  RouteEquipmentName,
 } from "@prisma/client";
 
 export type ExtendedJob = Job & {
@@ -27,6 +28,9 @@ export type ExtendedJob = Job & {
   };
   routeList: {
     routeName: string;
+    machines: {
+      id: string;
+    }[];
   };
 };
 
@@ -67,6 +71,10 @@ export type ExtendedRouteMachineList = RouteMachineList & {
     id: string;
     equipmentName: {
       name: string;
+      group: {
+        id: string;
+        name: string;
+      };
     };
   }[];
 };
@@ -220,39 +228,32 @@ export type SeveritiesResponse = {
   }[];
 };
 
-export type ExtendedRouteComponentReport = {
+type ReportMachineListResponse = {
+  routeMachineList: RouteMachineList[];
+  success: boolean;
+};
+
+type ReportEquipmentNameResponse = {
+  routeEquipment: RouteEquipmentName[];
+  success: boolean;
+};
+
+export type ExtendedReportComponentResponse = RouteComponent & {
   component: {
-    name: string;
+    name: true,
   };
   comments: {
     id: string;
     severity: string;
     comment: string;
-  }[];
-  recommendations: {
-    id: string;
-    priority: string;
-    recommendation: string;
+    createdAt: Date;
   }[];
 };
 
-export type ExtendedRouteEquipmentNameReport = {
-  id: string;
-  equipmentName: {
-    name: string;
-  };
-  RouteComponent: ExtendedRouteComponentReport[];
-};
-
-export type ExtendedRouteMachineListReport = RouteList & {
-  id: string;
-  routeEquipmentNames: ExtendedRouteEquipmentNameReport[];
-};
-
-export type ReportResponse = {
-  routeMachineList: ExtendedRouteMachineListReport[];
+type ReportComponentResponse = {
+  routeComponent: ExtendedReportComponentResponse[];
   success: boolean;
-};
+}
 
 export const api = createApi({
   reducerPath: "api",
@@ -783,16 +784,26 @@ export const api = createApi({
       }),
       providesTags: ["RouteComponentComment"],
     }),
-    getPdfReport: build.query<ReportResponse, string>({
+    getPdfReport: build.query<ReportMachineListResponse, string>({
       query: (routeListId) => ({
         url: `/api/report?routeListId=${routeListId}`,
         method: "GET",
       }),
-      providesTags: [
-        "RouteComponent",
-        "RouteComponentComment",
-        "RouteComponentRecommendation",
-      ],
+      providesTags: ["RouteMachineList"],
+    }),
+    getRouteEquipmentReport: build.query<ReportEquipmentNameResponse, string>({
+      query: (routeMachineId) => ({
+        url: `/api/report/routeEquipment?routeMachineId=${routeMachineId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteMachineList"],
+    }),
+    getRouteComponentReport: build.query<ReportComponentResponse, string[]>({
+      query: (routeEquipmentIds) => ({
+        url: `/api/report/routeEquipment/routeComponent?${routeEquipmentIds.map((id) => `routeEquipmentId=${id}`).join("&")}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteComponent"],
     }),
   }),
 });
@@ -853,4 +864,6 @@ export const {
   useGetRecentRoutesQuery,
   useGetSeveritiesQuery,
   useGetPdfReportQuery,
+  useGetRouteEquipmentReportQuery,
+  useGetRouteComponentReportQuery,
 } = api;

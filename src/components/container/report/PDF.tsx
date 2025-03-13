@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Button } from "@/components/ui/button";
-import { selectedJob } from "@/schema";
-import { ExtendedRouteMachineListReport } from "@/store/api";
+import { selectedJob, graphData, yAxisValues } from "@/schema";
 import {
   Document,
   Page,
@@ -86,49 +85,6 @@ const machinesHealth = [
     previousCondtion: "N",
     currentCondtion: "N",
     analysis: "No defects were detected.",
-  },
-];
-
-const graphData = [
-  {
-    label: "Normal",
-    previous: 28,
-    current: 21,
-    prevColor: "#90EE90",
-    currColor: "#006400",
-  },
-  {
-    label: "Moderate",
-    previous: 6,
-    current: 9,
-    prevColor: "#FFFF99",
-    currColor: "#FFD700",
-  },
-  {
-    label: "Severe",
-    previous: 1,
-    current: 2,
-    prevColor: "#F4A460",
-    currColor: "#FF8C00",
-  },
-  {
-    label: "Critical",
-    previous: 0,
-    current: 0,
-    prevColor: "#DC143C",
-    currColor: "#8B0000",
-  },
-  {
-    label: "Missed Points",
-    previous: 6,
-    current: 9,
-    prevColor: "#A9A9A9",
-    currColor: "#000000",
-  },
-  {
-    label: "Total Count",
-    current: 41,
-    currColor: "#808080",
   },
 ];
 
@@ -340,87 +296,113 @@ const styles = StyleSheet.create({
   },
 });
 
-const yAxisValues = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45];
+// const yAxisValues = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45];
 
-const BarChart = () => (
-  <View style={styles.chartWrapper}>
-    <Text style={styles.subHeader}>Machinery Condition Summary</Text>
-    <View style={styles.chartContainer}>
-      <View style={styles.yAxisContainer}>
-        {yAxisValues.map((value, index) => (
-          <Text
-            key={index}
-            style={[styles.yAxisLabel, { bottom: index * 20 + 15 }]}
-          >
-            {value}
-          </Text>
-        ))}
-      </View>
+const BarChart = ({
+  graphData,
+  yAxisValues,
+}: {
+  graphData: graphData;
+  yAxisValues: yAxisValues;
+}) => {
+  const maxDataValue = Math.max(...graphData.map((item) => item.current), 10); 
+  const containerHeight = 200;
+  const paddingOffset = 20;
 
-      <View style={styles.graphContainer}>
-        <View style={styles.gridContainer}>
+  const scaleFactor = (containerHeight - paddingOffset) / maxDataValue;
+
+  return (
+    <View style={styles.chartWrapper}>
+      <Text style={styles.subHeader}>Machinery Condition Summary</Text>
+      <View style={styles.chartContainer}>
+        <View style={[styles.yAxisContainer, { height: containerHeight }]}>
           {yAxisValues.map((value, index) => (
-            <View
+            <Text
               key={index}
-              style={[styles.gridLine, { bottom: index * 20 + 15 }]}
-            />
+              style={[
+                styles.yAxisLabel,
+                { bottom: (value / maxDataValue) * containerHeight },
+              ]}
+            >
+              {value}
+            </Text>
           ))}
         </View>
-        {graphData.map((item, index) => (
-          <View key={index} style={styles.barGroup}>
-            <View style={styles.barContainer}>
-              {item.previous !== undefined && (
+
+
+        <View style={[styles.graphContainer, { height: containerHeight }]}>
+          <View style={styles.gridContainer}>
+            {yAxisValues.map((value, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.gridLine,
+                  { bottom: (value / maxDataValue) * containerHeight },
+                ]}
+              />
+            ))}
+          </View>
+
+          {graphData.map((item, index) => (
+            <View key={index} style={styles.barGroup}>
+              <View style={[styles.barContainer, { height: containerHeight }]}>
+                {item.previous !== undefined && (
+                  <View style={styles.barItem}>
+                    <Text style={styles.barValue}>{item.previous}</Text>
+                    <View
+                      style={[
+                        styles.bar,
+                        {
+                          height: item.previous * scaleFactor,
+                          backgroundColor: item.prevColor,
+                        },
+                      ]}
+                    />
+                  </View>
+                )}
+
                 <View style={styles.barItem}>
-                  <Text style={styles.barValue}>{item.previous}</Text>
+                  <Text style={styles.barValue}>{item.current}</Text>
                   <View
                     style={[
                       styles.bar,
                       {
-                        height: item.previous * 4,
-                        backgroundColor: item.prevColor,
+                        height: item.current * scaleFactor,
+                        backgroundColor: item.currColor,
                       },
                     ]}
                   />
                 </View>
-              )}
-
-              <View style={styles.barItem}>
-                <Text style={styles.barValue}>{item.current}</Text>
-                <View
-                  style={[
-                    styles.bar,
-                    {
-                      height: item.current * 4,
-                      backgroundColor: item.currColor,
-                    },
-                  ]}
-                />
               </View>
+              <Text style={styles.barLabel}>{item.label}</Text>
             </View>
-            <Text style={styles.barLabel}>{item.label}</Text>
-          </View>
-        ))}
+          ))}
+        </View>
+      </View>
+
+      {/* Legend */}
+      <View style={styles.legend}>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: "#90EE90" }]} />
+          <Text style={styles.legendText}>Previous</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View style={[styles.legendColor, { backgroundColor: "#006400" }]} />
+          <Text style={styles.legendText}>Current</Text>
+        </View>
       </View>
     </View>
-    <View style={styles.legend}>
-      <View style={styles.legendItem}>
-        <View style={[styles.legendColor, { backgroundColor: "#90EE90" }]} />
-        <Text style={styles.legendText}>Previous</Text>
-      </View>
-      <View style={styles.legendItem}>
-        <View style={[styles.legendColor, { backgroundColor: "#006400" }]} />
-        <Text style={styles.legendText}>Current</Text>
-      </View>
-    </View>
-  </View>
-);
+  );
+};
 
 const PdfDocument = ({
   data,
-  report,
+  graphData,
+  yAxisValues,
 }: {
   data: selectedJob;
-  report: ExtendedRouteMachineListReport[];
+  graphData: graphData;
+  yAxisValues: yAxisValues;
 }) => (
   <Document>
     <Page style={styles.page}>
@@ -477,7 +459,7 @@ const PdfDocument = ({
         {data?.woNumber}
       </Text>
 
-      <BarChart />
+      <BarChart graphData={graphData} yAxisValues={yAxisValues} />
 
       <Text style={[styles.details, { marginTop: 250 }]}>
         Data Analysis and Report by
@@ -1047,22 +1029,25 @@ const PdfDocument = ({
 
 const PdfDownload = ({
   data,
-  report,
-  reportLoading,
+  graphData,
+  yAxisValues,
 }: {
   data: selectedJob;
-  report: ExtendedRouteMachineListReport[];
-  reportLoading: boolean;
+  graphData: graphData;
+  yAxisValues: yAxisValues;
 }) => (
   <PDFDownloadLink
-    document={<PdfDocument data={data} report={report} />}
+    document={
+      <PdfDocument
+        data={data}
+        graphData={graphData}
+        yAxisValues={yAxisValues}
+      />
+    }
     fileName="report.pdf"
   >
     {({ loading }) => (
-      <Button
-        className="bg-main hover:bg-follow"
-        disabled={loading || reportLoading}
-      >
+      <Button className="bg-main hover:bg-follow" disabled={loading}>
         PDF
       </Button>
     )}
