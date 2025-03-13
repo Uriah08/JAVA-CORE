@@ -41,6 +41,16 @@ export async function GET(req: Request) {
             createdAt: true,
           },
         },
+        recommendations: {
+          take: 1,
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            priority: true,
+            recommendation: true,
+            createdAt: true,
+          },
+        },
       },
     });
 

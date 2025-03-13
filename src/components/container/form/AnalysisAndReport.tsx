@@ -168,7 +168,7 @@ const AnalysisAndReportForm = () => {
     }
   }, [routeComponentsData]);
 
-  const isLoading = jobsLoading || routeLoading || routeComponentsLoading;
+  const isLoading = routeComponentsLoading;
 
   console.log("Captured data: ", selectedComponent);
 
@@ -279,7 +279,7 @@ const AnalysisAndReportForm = () => {
                                 className="focus-visible:ring-0 pl-10"
                               />
                             </div>
-                            {isLoading ? (
+                            {jobsLoading ? (
                               <div className="w-full h-full overflow-hidden flex flex-col gap-1 mt-1">
                                 {[...Array(5)].map((_, index) => (
                                   <Skeleton
@@ -443,7 +443,7 @@ const AnalysisAndReportForm = () => {
             </Button>
           )}
 
-          {isLoading ? (
+          {isLoading || routeLoading ? (
             <div className="mt-8 space-y-2">
               {[...Array(5)].map((_, index) => (
                 <Skeleton

@@ -8,6 +8,8 @@ import React, { useMemo } from "react";
 import PdfDownload from "../report/PDF";
 // import DOCXDownload from "../report/Word";
 import { selectedJob } from "@/schema";
+import RecommendationTableData from "../report/functions/RecommendationTableData";
+import AnalysisTableData from "../report/functions/AnalysisTableData";
 
 const ExportAdmin = ({
   onClose,
@@ -25,12 +27,21 @@ const ExportAdmin = ({
     }
   );
 
+  console.log("euqipmentReport: ", routeEquipment);
+
   const routeEquipmentId =
     routeEquipment?.routeEquipment.map((eqId) => eqId.id) || [];
   const { data: routeComponent, isFetching: isComponentLoading } =
     useGetRouteComponentReportQuery(routeEquipmentId ?? [], {
       skip: !routeEquipmentId,
     });
+
+  console.log("RouteComponent: ", routeComponent);
+
+  console.log(
+    "Recommendation: ",
+    routeComponent?.routeComponent.map((reco) => reco.recommendations)
+  );
 
   const { graphData, yAxisValues } = useMemo(() => {
     if (!routeComponent?.routeComponent)
@@ -111,8 +122,24 @@ const ExportAdmin = ({
     return { graphData, yAxisValues };
   }, [routeComponent]);
 
-  console.log("Graph Data", graphData);
-  console.log("yAxisValues", yAxisValues);
+  const transformedRecommendationData = useMemo(() => {
+    return RecommendationTableData(
+      routeEquipment?.routeEquipment ?? [],
+      routeComponent?.routeComponent ?? []
+    );
+  }, [routeEquipment, routeComponent]);
+
+  console.log("Transformed Data", transformedRecommendationData);
+
+  const transformedAnalysisData = useMemo(() => {
+    return AnalysisTableData(
+      routeEquipment?.routeEquipment ?? [],
+      routeComponent?.routeComponent ?? []
+    );
+  }, [routeEquipment, routeComponent]);
+
+  console.log("Transformed Analysis Data", transformedAnalysisData);
+
   console.log(isLoading, isComponentLoading);
 
   return (
@@ -127,6 +154,8 @@ const ExportAdmin = ({
             data={data}
             graphData={graphData}
             yAxisValues={yAxisValues}
+            transformedRecommendationData={transformedRecommendationData}
+            transformedAnalysisData={transformedAnalysisData}
           />
           {/* <DOCXDownload/> */}
         </div>

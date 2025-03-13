@@ -233,14 +233,25 @@ type ReportMachineListResponse = {
   success: boolean;
 };
 
+export type ExtendedReportEquipmentName = RouteEquipmentName & {
+  equipmentName: {
+    name: string;
+    groupId: string;
+    group: {
+      id: string;
+      name: string;
+    };
+  };
+};
+
 type ReportEquipmentNameResponse = {
-  routeEquipment: RouteEquipmentName[];
+  routeEquipment: ExtendedReportEquipmentName[];
   success: boolean;
 };
 
 export type ExtendedReportComponentResponse = RouteComponent & {
   component: {
-    name: true,
+    name: string;
   };
   comments: {
     id: string;
@@ -248,12 +259,18 @@ export type ExtendedReportComponentResponse = RouteComponent & {
     comment: string;
     createdAt: Date;
   }[];
+  recommendations?: {
+    id: string;
+    priority: string;
+    recommendation: string;
+    createdAt: Date;
+  };
 };
 
 type ReportComponentResponse = {
   routeComponent: ExtendedReportComponentResponse[];
   success: boolean;
-}
+};
 
 export const api = createApi({
   reducerPath: "api",
@@ -800,10 +817,16 @@ export const api = createApi({
     }),
     getRouteComponentReport: build.query<ReportComponentResponse, string[]>({
       query: (routeEquipmentIds) => ({
-        url: `/api/report/routeEquipment/routeComponent?${routeEquipmentIds.map((id) => `routeEquipmentId=${id}`).join("&")}`,
+        url: `/api/report/routeEquipment/routeComponent?${routeEquipmentIds
+          .map((id) => `routeEquipmentId=${id}`)
+          .join("&")}`,
         method: "GET",
       }),
-      providesTags: ["RouteComponent"],
+      providesTags: [
+        "RouteComponent",
+        "RouteComponentComment",
+        "RouteComponentRecommendation",
+      ],
     }),
   }),
 });

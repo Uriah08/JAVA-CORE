@@ -229,10 +229,68 @@ export type selectedJob = {
 
 export type graphData = {
   label: string;
-  previous?: number; // Make 'previous' optional to support Total Count
+  previous?: number; 
   current: number;
-  prevColor?: string; // Make 'prevColor' optional to avoid issues for 'Total Count'
+  prevColor?: string; 
   currColor: string;
 }[];
 
 export type yAxisValues = number[];
+
+export type Recommendation  = {
+  id: string;
+  priority: string;
+  recommendation: string;
+  createdAt: Date;
+}
+
+export type Component  = {
+  component: {
+    name: string;
+  };
+  comments: {
+    id: string;
+    severity: string;
+    comment: string;
+    createdAt: Date;
+  }[];
+  recommendations?: {
+    id: string;
+    priority: string;
+    recommendation: string;
+    createdAt: Date;
+  };
+};
+
+export type Equipment = {
+  equipmentName: {
+    name: string;
+    groupId: string;
+    group: {
+      id: string;
+      name: string;
+    };
+  };
+}
+
+export type TransformedRecommendation = {
+  equipmentGroup: string;
+  equipmentAndComponent: string;
+  priority: string;
+  action: string;
+  date: string;
+}
+
+export type TransformedAnalysis = {
+  equipmentGroup: string;
+  equipmentAndComponent: string;
+  previousCondition: string;
+  currentCondition: string;
+  analysis: string;
+  recommendations?: {
+    priority: string;
+    recommendation: string;
+    createdAt: string;
+  }[];
+};
+
