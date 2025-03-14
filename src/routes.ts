@@ -1,5 +1,6 @@
 export const publicRoutes = [
     "/",
+    "/test"
 ]
 
 export const authRoutes = [
