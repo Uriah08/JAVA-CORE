@@ -3,7 +3,7 @@ import { useGetPdfReportQuery } from "@/store/api";
 import React from "react";
 
 import PdfDownload from "../report/PDF";
-// import DOCXDownload from "../report/Word";
+import DOCXDownload from "../report/Word";
 import { selectedJob } from "@/schema";
 
 const ExportAdmin = ({
@@ -37,7 +37,7 @@ const ExportAdmin = ({
         </h1>
         <div className="flex gap-5 justify-center" onClick={onClose}>
           <PdfDownload data={data} reportLoading={isLoading} report={report} />
-          {/* <DOCXDownload/> */}
+          <DOCXDownload/>
         </div>
       </div>
     </DialogContent>
