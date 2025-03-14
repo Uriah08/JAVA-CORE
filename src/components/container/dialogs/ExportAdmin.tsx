@@ -68,25 +68,36 @@ const ExportAdmin = ({
 
   console.log("Transformed Analysis Data", transformedAnalysisData);
 
-  console.log(isLoading, isComponentLoading);
+  const isDataLoading = isLoading || isComponentLoading;
 
   return (
-    <DialogContent>
+    <DialogContent className="min-h-[300px] md:min-h-[350px] flex flex-col justify-between py-6">
       <DialogTitle>Export Report</DialogTitle>
-      <div className="flex flex-col gap-3 justify-center my-10">
-        <h1 className="text-center text-sm">
+
+      <div className="flex flex-col flex-grow justify-center items-center text-center px-4">
+        <h1 className="text-sm">
           Please select your preferred file format to download the report.
         </h1>
-        <div className="flex gap-5 justify-center" onClick={onClose}>
-          <PdfDownload
-            data={data}
-            graphData={graphData}
-            yAxisValues={yAxisValues}
-            transformedRecommendationData={transformedRecommendationData}
-            transformedAnalysisData={transformedAnalysisData}
-          />
-          <DOCXDownload data={data}/>
-        </div>
+        {isDataLoading && (
+          <p className="text-main mt-4">Preparing your file...</p>
+        )}
+      </div>
+
+      <div className="flex gap-5 justify-center pb-4" onClick={onClose}>
+        <PdfDownload
+          data={data}
+          graphData={graphData}
+          yAxisValues={yAxisValues}
+          transformedRecommendationData={transformedRecommendationData}
+          transformedAnalysisData={transformedAnalysisData}
+          loading={isDataLoading}
+        />
+        <DOCXDownload
+          data={data}
+          transformedRecommendationData={transformedRecommendationData}
+          transformedAnalysisData={transformedAnalysisData}
+          loading={isDataLoading}
+        />
       </div>
     </DialogContent>
   );

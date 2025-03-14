@@ -715,12 +715,14 @@ const PdfDownload = ({
   yAxisValues,
   transformedRecommendationData,
   transformedAnalysisData,
+  loading,
 }: {
   data: selectedJob;
   graphData: graphData;
   yAxisValues: yAxisValues;
   transformedRecommendationData: TransformedRecommendation[];
   transformedAnalysisData: TransformedAnalysis[];
+  loading: boolean;
 }) => (
   <PDFDownloadLink
     document={
@@ -734,16 +736,16 @@ const PdfDownload = ({
     }
     fileName="report.pdf"
   >
-    {({ loading }) => (
-      <>
+    {({ loading: pdfLoading }) => {
+      const isDisabled = loading || pdfLoading;
+      return (
         <div className="flex flex-col items-center gap-2">
-          {loading && <p className="text-main">Preparing your file...</p>}
-          <Button className="bg-main hover:bg-follow" disabled={loading}>
+          <Button className="bg-main hover:bg-follow" disabled={isDisabled}>
             PDF
           </Button>
         </div>
-      </>
-    )}
+      );
+    }}
   </PDFDownloadLink>
 );
 
