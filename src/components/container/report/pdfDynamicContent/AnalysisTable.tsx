@@ -183,11 +183,19 @@ const AnalysisTable = ({
                 {machine.equipmentAndComponent}
               </Text>
               <Image
-                style={[styles.cell3, styles.colPreviousCondtion]}
+                style={[
+                  styles.cell3,
+                  styles.colPreviousCondtion,
+                  { objectFit: "contain" },
+                ]}
                 src={`/report/${machine.previousCondition}.png`}
               />
               <Image
-                style={[styles.cell3, styles.colCurrentCondtion]}
+                style={[
+                  styles.cell3,
+                  styles.colCurrentCondtion,
+                  { objectFit: "contain" },
+                ]}
                 src={`/report/${machine.currentCondition}.png`}
               />
               <View
