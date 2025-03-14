@@ -37,7 +37,7 @@ const ExportAdmin = ({
         </h1>
         <div className="flex gap-5 justify-center" onClick={onClose}>
           <PdfDownload data={data} reportLoading={isLoading} report={report} />
-          <DOCXDownload/>
+          <DOCXDownload data={data} reportLoading={isLoading} report={report}/>
         </div>
       </div>
     </DialogContent>

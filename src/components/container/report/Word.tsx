@@ -18,6 +18,8 @@ import {
   Header,
 } from "docx";
 import { Button } from "@/components/ui/button";
+import { selectedJob } from "@/schema";
+import { ExtendedRouteMachineListReport } from "@/store/api";
 
 const symbols = ["N", "M", "S", "C", "X"];
 
@@ -130,7 +132,15 @@ const fetchImages = async () => {
   }
 };
 
-const DOCXDownload = () => {
+const DOCXDownload = ({
+  data,
+  report,
+  reportLoading,
+}: {
+  data: selectedJob;
+  report: ExtendedRouteMachineListReport[];
+  reportLoading: boolean;
+}) => {
   const generateDocx = async () => {
 
     try {
@@ -286,7 +296,7 @@ const DOCXDownload = () => {
                           size: 22,
                         }),
                         new TextRun({
-                          font: "Poppins", text: " Client 1",
+                          font: "Poppins", text: ` ${data?.user?.name}`,
                           size: 22,
                         })
                       ]
@@ -300,7 +310,7 @@ const DOCXDownload = () => {
                           size: 22,
                         }),
                         new TextRun({
-                          font: "Poppins", text: " All Area",
+                          font: "Poppins", text: ` ${data?.area}`,
                           size: 22,
                         })
                       ]
@@ -314,7 +324,7 @@ const DOCXDownload = () => {
                           size: 22,
                         }),
                         new TextRun({
-                          font: "Poppins", text: " ABC123 – VA01",
+                          font: "Poppins", text: ` ${data?.reportNumber}`,
                           size: 22,
                         })
                       ]
@@ -328,7 +338,12 @@ const DOCXDownload = () => {
                           size: 22,
                         }),
                         new TextRun({
-                          font: "Poppins", text: " 01 January 2024 ",
+                          font: "Poppins", text: ` ${
+                            new Date().toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          })}`,
                           size: 22,
                         })
                       ]
