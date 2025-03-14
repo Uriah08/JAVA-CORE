@@ -97,8 +97,13 @@ const AnalysisAndReportForm = () => {
     inspectionRoute?: string;
     routeList?: {
       routeName?: string;
+      machines?: {
+        id?: string;
+      }[];
     };
   } | null>(null);
+
+  console.log("job: ", selectedJob);
 
   const { data: routeData, isFetching: routeLoading } =
     useGetRouteEquipmentListQuery(selectedJob?.inspectionRoute ?? "", {
@@ -111,6 +116,7 @@ const AnalysisAndReportForm = () => {
         id: eq.id,
         routeMachineId: machine?.id,
         name: eq.equipmentName.name,
+        group: eq.equipmentName.group,
         // routeMachineId: eq.routeMachineId,
         // components: eq.equipmentName.components,
       }))
@@ -120,6 +126,10 @@ const AnalysisAndReportForm = () => {
     id: string;
     name: string;
     routeMachineId: string;
+    group: {
+      id: string;
+      name: string;
+    };
     // components: { id: string; name: string }[];
   } | null>(null);
 
@@ -158,7 +168,7 @@ const AnalysisAndReportForm = () => {
     }
   }, [routeComponentsData]);
 
-  const isLoading = jobsLoading || routeLoading || routeComponentsLoading;
+  const isLoading = routeComponentsLoading;
 
   console.log("Captured data: ", selectedComponent);
 
@@ -213,7 +223,11 @@ const AnalysisAndReportForm = () => {
                 >
                   Export
                 </Button>
-                <Dialog aria-describedby={undefined} open={openExport} onOpenChange={setOpenExport}>
+                <Dialog
+                  aria-describedby={undefined}
+                  open={openExport}
+                  onOpenChange={setOpenExport}
+                >
                   <ExportAdmin
                     onClose={() => setOpenExport(false)}
                     data={selectedJob}
@@ -265,7 +279,7 @@ const AnalysisAndReportForm = () => {
                                 className="focus-visible:ring-0 pl-10"
                               />
                             </div>
-                            {isLoading ? (
+                            {jobsLoading ? (
                               <div className="w-full h-full overflow-hidden flex flex-col gap-1 mt-1">
                                 {[...Array(5)].map((_, index) => (
                                   <Skeleton
@@ -429,7 +443,7 @@ const AnalysisAndReportForm = () => {
             </Button>
           )}
 
-          {isLoading ? (
+          {isLoading || routeLoading ? (
             <div className="mt-8 space-y-2">
               {[...Array(5)].map((_, index) => (
                 <Skeleton

@@ -26,61 +26,14 @@ export async function GET(req: Request) {
       select: {
         id: true,
         areaId: true,
-        equipmentGroupId: true,
-        routeEquipmentNames: {
-          select: {
-            id: true,
-            equipmentName: {
-              select: {
-                name: true,
-              },
-            },
-            RouteComponent: {
-              select: {
-                component: {
-                  select: {
-                    name: true,
-                  },
-                },
-                comments: {
-                  take: 2,
-                  orderBy: { createdAt: "desc" },
-                  select: {
-                    id: true,
-                    severity: true,
-                    comment: true,
-                  },
-                },
-                recommendations: {
-                  take: 2,
-                  orderBy: { createdAt: "desc" },
-                  select: {
-                    id: true,
-                    priority: true,
-                    recommendation: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
+      }
     });
 
-    // const routeMachineIds = routeMachineList.map((machine) => machine.id);
-
-    // const routeEquipmentName = await prisma.routeEquipmentName.findMany({
-    //     where: {
-    //         routeMachineId: {in: routeMachineIds}
-    //     },
-    //     select: {
-
-    //     }
-    // })
+    console.log("Api data: ", routeMachineList);
 
     return NextResponse.json({ routeMachineList, success: true });
   } catch (error) {
-    console.error("Error fetching route components", error);
+    console.error("Error fetching route machine list", error);
     return NextResponse.json(
       { message: "Internal Server Error", success: false },
       { status: 500 }

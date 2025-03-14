@@ -149,15 +149,14 @@ const DOCXPreview = () => {
       const doc = new Document({
         sections: [
           {
-              properties: {
-                  page: {
-                      margin: {
-                          top: 30 * 20,
-                          bottom: 30 * 20,
-                          left: 30 * 20,
-                          right: 30 * 20,
-                      },
-                  },
+            properties: {
+              page: {
+                margin: {
+                  top: 30 * 20,
+                  bottom: 30 * 20,
+                  left: 30 * 20,
+                  right: 30 * 20,
+                },
               },
               headers: {
                 default: new Header({
@@ -444,16 +443,15 @@ const DOCXPreview = () => {
             ],
           },
           {
-              properties: {
-                  type: SectionType.NEXT_PAGE,
-                  page: {
-                      margin: {
-                          top: 30 * 20,
-                          bottom: 30 * 20,
-                          left: 30 * 20,
-                          right: 30 * 20,
-                      },
-                  },
+            properties: {
+              type: SectionType.NEXT_PAGE,
+              page: {
+                margin: {
+                  top: 30 * 20,
+                  bottom: 30 * 20,
+                  left: 30 * 20,
+                  right: 30 * 20,
+                },
               },
               headers: {
                 default: new Header({
@@ -1060,15 +1058,15 @@ const DOCXPreview = () => {
           },
           {
             properties: {
-                type: SectionType.NEXT_PAGE,
-                page: {
-                    margin: {
-                        top: 30 * 20,
-                        bottom: 30 * 20,
-                        left: 30 * 20,
-                        right: 30 * 20,
-                    },
+              type: SectionType.NEXT_PAGE,
+              page: {
+                margin: {
+                  top: 30 * 20,
+                  bottom: 30 * 20,
+                  left: 30 * 20,
+                  right: 30 * 20,
                 },
+              },
             },
             headers: {
               default: new Header({
@@ -1150,14 +1148,14 @@ const DOCXPreview = () => {
                 pageBreakBefore: true,
               }),
               new Paragraph({
-                spacing: { before: 200, after:100 },
+                spacing: { before: 200, after: 100 },
                 children: [
                   new TextRun({
                     font: "Poppins", text: "Introduction",
                     bold: true,
-                    size: 24
-                  })
-                ]
+                    size: 24,
+                  }),
+                ],
               }),
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1279,14 +1277,14 @@ const DOCXPreview = () => {
                 ]
               }),
               new Paragraph({
-                spacing: { before: 500, after:100 },
+                spacing: { before: 500, after: 100 },
                 children: [
                   new TextRun({
                     font: "Poppins", text: "Maintenance Recommendations",
                     bold: true,
-                    size: 24
-                  })
-                ]
+                    size: 24,
+                  }),
+                ],
               }),
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1351,9 +1349,14 @@ const DOCXPreview = () => {
                           }),
                           new TableCell({
                             width: { size: 50, type: WidthType.PERCENTAGE },
-                            margins: { left: 50, right: 20, top:10, bottom: 10 },
+                            margins: {
+                              left: 50,
+                              right: 20,
+                              top: 10,
+                              bottom: 10,
+                            },
                             children: [
-                              new Paragraph({ 
+                              new Paragraph({
                                 spacing: { after: 10, line: 220 },
                                 children: [
                                 new TextRun({ 
@@ -1532,14 +1535,14 @@ const DOCXPreview = () => {
                 pageBreakBefore: true,
               }),
               new Paragraph({
-                spacing: { before: 200, after:100 },
+                spacing: { before: 200, after: 100 },
                 children: [
                   new TextRun({
                     font: "Poppins", text: "Machinery Health Condition Reports",
                     bold: true,
-                    size: 24
-                  })
-                ]
+                    size: 24,
+                  }),
+                ],
               }),
               new Table({
                 width: { size: 100, type: WidthType.PERCENTAGE },
@@ -1570,9 +1573,9 @@ const DOCXPreview = () => {
                         margins: { left: 50, right: 20, top:10, bottom: 10 },
                         children: [new Paragraph({ children: [new TextRun({ font: "Poppins", text: "Analysis and Recommendation", size: 20, bold: true })] })],
                       }),
-                    ]
-                  })
-                ]
+                    ],
+                  }),
+                ],
               }),
               ...machinesHealth.map(({ equipmentName, components, previousCondition, currentCondition, analysis }) => [
                 new Table({
@@ -1623,16 +1626,30 @@ const DOCXPreview = () => {
                           width: { size: 12, type: WidthType.PERCENTAGE },
                           margins: { left: 50, right: 20, top:200, bottom: 100 },
                           children: [
-                            new Paragraph({ 
-                              alignment: AlignmentType.CENTER,
-                                children: [
-                                new ImageRun({
-                                  data: currentCondition === 'N' ? images[0].buffer : currentCondition === 'M' ? images[1].buffer : currentCondition === 'S' ? images[2].buffer : currentCondition === 'C' ? images[3].buffer : images[4].buffer,
-                                  transformation: { width: 20, height: 20 },
-                                  type:"png"
+                            new TableCell({
+                              width: { size: 100, type: WidthType.PERCENTAGE },
+                              shading: {
+                                fill: "D9D9D9",
+                                type: ShadingType.CLEAR,
+                              },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 10,
+                                bottom: 10,
+                              },
+                              children: [
+                                new Paragraph({
+                                  children: [
+                                    new TextRun({
+                                      text: equipmentName,
+                                      size: 20,
+                                      bold: true,
+                                    }),
+                                  ],
                                 }),
-                              ], 
-                            })
+                              ],
+                            }),
                           ],
                         }),
                         new TableCell({
@@ -1653,32 +1670,179 @@ const DOCXPreview = () => {
                           width: { size: 12, type: WidthType.PERCENTAGE },
                           margins: { left: 50, right: 20, top:200, bottom: 100 },
                           children: [
-                            new Paragraph({ 
-                              alignment: AlignmentType.CENTER,
-                                children: [
-                                new ImageRun({
-                                  data: images[0].buffer,
-                                  transformation: { width: 20, height: 20 },
-                                  type:"png"
+                            new TableCell({
+                              width: { size: 28, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 10,
+                                bottom: 10,
+                              },
+                              children: [
+                                new Paragraph({
+                                  children: [
+                                    new TextRun({ text: components, size: 20 }),
+                                  ],
                                 }),
-                              ], 
-                            })
+                              ],
+                            }),
+                            new TableCell({
+                              width: { size: 12, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 200,
+                                bottom: 100,
+                              },
+                              children: [
+                                new Paragraph({
+                                  alignment: AlignmentType.CENTER,
+                                  children: [
+                                    new ImageRun({
+                                      data:
+                                        previousCondition === "N"
+                                          ? images[0].buffer
+                                          : previousCondition === "M"
+                                          ? images[1].buffer
+                                          : previousCondition === "S"
+                                          ? images[2].buffer
+                                          : previousCondition === "C"
+                                          ? images[3].buffer
+                                          : images[4].buffer,
+                                      transformation: { width: 20, height: 20 },
+                                      type: "png",
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new TableCell({
+                              width: { size: 12, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 200,
+                                bottom: 100,
+                              },
+                              children: [
+                                new Paragraph({
+                                  alignment: AlignmentType.CENTER,
+                                  children: [
+                                    new ImageRun({
+                                      data:
+                                        currentCondition === "N"
+                                          ? images[0].buffer
+                                          : currentCondition === "M"
+                                          ? images[1].buffer
+                                          : currentCondition === "S"
+                                          ? images[2].buffer
+                                          : currentCondition === "C"
+                                          ? images[3].buffer
+                                          : images[4].buffer,
+                                      transformation: { width: 20, height: 20 },
+                                      type: "png",
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new TableCell({
+                              width: { size: 48, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 10,
+                                bottom: 10,
+                              },
+                              children: [
+                                new Paragraph({
+                                  children: [
+                                    new TextRun({ text: analysis, size: 20 }),
+                                  ],
+                                }),
+                              ],
+                            }),
                           ],
                         }),
-                        new TableCell({
-                          width: { size: 12, type: WidthType.PERCENTAGE },
-                          margins: { left: 50, right: 20, top:200, bottom: 100 },
+                        new TableRow({
                           children: [
-                            new Paragraph({ 
-                              alignment: AlignmentType.CENTER,
-                                children: [
-                                new ImageRun({
-                                  data: images[0].buffer,
-                                  transformation: { width: 20, height: 20 },
-                                  type:"png"
+                            new TableCell({
+                              width: { size: 28, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 10,
+                                bottom: 10,
+                              },
+                              children: [
+                                new Paragraph({
+                                  children: [
+                                    new TextRun({ text: components, size: 20 }),
+                                  ],
                                 }),
-                              ], 
-                            })
+                              ],
+                            }),
+                            new TableCell({
+                              width: { size: 12, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 200,
+                                bottom: 100,
+                              },
+                              children: [
+                                new Paragraph({
+                                  alignment: AlignmentType.CENTER,
+                                  children: [
+                                    new ImageRun({
+                                      data: images[0].buffer,
+                                      transformation: { width: 20, height: 20 },
+                                      type: "png",
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new TableCell({
+                              width: { size: 12, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 200,
+                                bottom: 100,
+                              },
+                              children: [
+                                new Paragraph({
+                                  alignment: AlignmentType.CENTER,
+                                  children: [
+                                    new ImageRun({
+                                      data: images[0].buffer,
+                                      transformation: { width: 20, height: 20 },
+                                      type: "png",
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            new TableCell({
+                              width: { size: 48, type: WidthType.PERCENTAGE },
+                              margins: {
+                                left: 50,
+                                right: 20,
+                                top: 10,
+                                bottom: 10,
+                              },
+                              children: [
+                                new Paragraph({
+                                  children: [
+                                    new TextRun({
+                                      text: "Same indication as the pump at a lower level.",
+                                      size: 20,
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
                           ],
                         }),
                         new TableCell({

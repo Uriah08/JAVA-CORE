@@ -1,7 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { Button } from "@/components/ui/button";
-import { selectedJob } from "@/schema";
-import { ExtendedRouteMachineListReport } from "@/store/api";
+import {
+  selectedJob,
+  graphData,
+  yAxisValues,
+  TransformedRecommendation,
+  TransformedAnalysis,
+} from "@/schema";
 import {
   Document,
   Page,
@@ -11,126 +16,9 @@ import {
   Image,
   View,
 } from "@react-pdf/renderer";
-
-const recommendations = [
-  {
-    equipmentName: "Services Pumps SPU303 – CHPP Dirty Water Dam Pump No. 3",
-    component: "SPU303 Compressor",
-    priority: "P4",
-    action:
-      "Planned replacement on convenient opportunity is stillrecommended.",
-    date: "08 August 2024",
-  },
-  {
-    equipmentName: "Services Pumps SPU303 – CHPP Dirty Water Dam Pump No. 3",
-    component: "SPU303 Compressor",
-    priority: "P6",
-    action: "Java CM will monitor the pump condition on 2-weekly interval.",
-    date: "02 September 2024",
-  },
-];
-
-const machinesHealth = [
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-  {
-    equipmentName: "Services Pumps SPU104 – Raw Water Pump",
-    components: "SPU104 Motor",
-    previousCondtion: "N",
-    currentCondtion: "N",
-    analysis: "No defects were detected.",
-  },
-];
-
-const graphData = [
-  {
-    label: "Normal",
-    previous: 28,
-    current: 21,
-    prevColor: "#90EE90",
-    currColor: "#006400",
-  },
-  {
-    label: "Moderate",
-    previous: 6,
-    current: 9,
-    prevColor: "#FFFF99",
-    currColor: "#FFD700",
-  },
-  {
-    label: "Severe",
-    previous: 1,
-    current: 2,
-    prevColor: "#F4A460",
-    currColor: "#FF8C00",
-  },
-  {
-    label: "Critical",
-    previous: 0,
-    current: 0,
-    prevColor: "#DC143C",
-    currColor: "#8B0000",
-  },
-  {
-    label: "Missed Points",
-    previous: 6,
-    current: 9,
-    prevColor: "#A9A9A9",
-    currColor: "#000000",
-  },
-  {
-    label: "Total Count",
-    current: 41,
-    currColor: "#808080",
-  },
-];
+import RecommendationTable from "./pdfDynamicContent/RecommendationTable";
+import BarChart from "./pdfDynamicContent/BarChart";
+import AnalysisTable from "./pdfDynamicContent/AnalysisTable";
 
 const styles = StyleSheet.create({
   page: {
@@ -152,28 +40,29 @@ const styles = StyleSheet.create({
   },
   companyDetails: {
     flexDirection: "column",
-    fontSize: 10,
+    fontSize: 8,
   },
   companyName: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "bold",
   },
   contact: {
-    fontSize: 10,
+    fontSize: 8,
   },
   title: {
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 20,
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: 10,
+    fontWeight: "bold",
     textAlign: "center",
-    marginTop: 5,
+    marginTop: 8,
   },
   details: {
-    fontSize: 13,
+    fontSize: 10,
   },
   table: {
     display: "flex",
@@ -340,87 +229,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const yAxisValues = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45];
-
-const BarChart = () => (
-  <View style={styles.chartWrapper}>
-    <Text style={styles.subHeader}>Machinery Condition Summary</Text>
-    <View style={styles.chartContainer}>
-      <View style={styles.yAxisContainer}>
-        {yAxisValues.map((value, index) => (
-          <Text
-            key={index}
-            style={[styles.yAxisLabel, { bottom: index * 20 + 15 }]}
-          >
-            {value}
-          </Text>
-        ))}
-      </View>
-
-      <View style={styles.graphContainer}>
-        <View style={styles.gridContainer}>
-          {yAxisValues.map((value, index) => (
-            <View
-              key={index}
-              style={[styles.gridLine, { bottom: index * 20 + 15 }]}
-            />
-          ))}
-        </View>
-        {graphData.map((item, index) => (
-          <View key={index} style={styles.barGroup}>
-            <View style={styles.barContainer}>
-              {item.previous !== undefined && (
-                <View style={styles.barItem}>
-                  <Text style={styles.barValue}>{item.previous}</Text>
-                  <View
-                    style={[
-                      styles.bar,
-                      {
-                        height: item.previous * 4,
-                        backgroundColor: item.prevColor,
-                      },
-                    ]}
-                  />
-                </View>
-              )}
-
-              <View style={styles.barItem}>
-                <Text style={styles.barValue}>{item.current}</Text>
-                <View
-                  style={[
-                    styles.bar,
-                    {
-                      height: item.current * 4,
-                      backgroundColor: item.currColor,
-                    },
-                  ]}
-                />
-              </View>
-            </View>
-            <Text style={styles.barLabel}>{item.label}</Text>
-          </View>
-        ))}
-      </View>
-    </View>
-    <View style={styles.legend}>
-      <View style={styles.legendItem}>
-        <View style={[styles.legendColor, { backgroundColor: "#90EE90" }]} />
-        <Text style={styles.legendText}>Previous</Text>
-      </View>
-      <View style={styles.legendItem}>
-        <View style={[styles.legendColor, { backgroundColor: "#006400" }]} />
-        <Text style={styles.legendText}>Current</Text>
-      </View>
-    </View>
-  </View>
-);
-
 const PdfDocument = ({
   data,
-  report,
+  graphData,
+  yAxisValues,
+  transformedRecommendationData,
+  transformedAnalysisData,
 }: {
   data: selectedJob;
-  report: ExtendedRouteMachineListReport[];
+  graphData: graphData;
+  yAxisValues: yAxisValues;
+  transformedRecommendationData: TransformedRecommendation[];
+  transformedAnalysisData: TransformedAnalysis[];
 }) => (
   <Document>
     <Page style={styles.page}>
@@ -464,7 +284,7 @@ const PdfDocument = ({
         })}
       </Text>
 
-      <Text style={[styles.details, { marginTop: 30 }]}>
+      <Text style={[styles.details, { marginTop: 15 }]}>
         <Text style={{ fontWeight: "bold" }}>Job Number :</Text>{" "}
         {data?.jobNumber}
       </Text>
@@ -473,25 +293,33 @@ const PdfDocument = ({
         {data?.poNumber}
       </Text>
       <Text style={styles.details}>
-        <Text style={{ fontWeight: "bold" }}>Work Order Number :</Text>{" "}
+        <Text style={{ fontWeight: "bold", paddingBottom: 10 }}>
+          Work Order Number :
+        </Text>{" "}
         {data?.woNumber}
       </Text>
 
-      <BarChart />
+      <BarChart graphData={graphData} yAxisValues={yAxisValues} />
 
-      <Text style={[styles.details, { marginTop: 250 }]}>
+      <Text style={[styles.details, { marginTop: 30 }]}>
         Data Analysis and Report by
       </Text>
       <Text
-        style={[styles.details, { marginTop: 10, textDecoration: "underline" }]}
+        style={[
+          styles.details,
+          { marginTop: 30, textDecoration: "underline", fontWeight: "bold" },
+        ]}
       >
         Ryan Java,
         <Text style={{ fontStyle: "italic" }}>MIEAust, VA Cat 2</Text>
       </Text>
+      <Text style={[styles.details, { marginTop: 1 }]}>
+        Condition Monitoring Engineer
+      </Text>
 
-      <Text style={{ marginTop: 40, fontWeight: "bold", fontSize: 10 }}>
+      <Text style={{ marginTop: 30, fontWeight: "bold", fontSize: 8 }}>
         Disclaimer:
-        <Text style={{ fontWeight: "normal" }}>
+        <Text style={{ fontWeight: "normal", textAlign: "justify" }}>
           All reports issued by Java Condition Monitoring (JCM) are a result of
           testings using the industry approved instruments with current
           calibration certificates, and all data is analysed by technicians who
@@ -824,82 +652,11 @@ const PdfDocument = ({
       >
         Maintenance Recommendations
       </Text>
-      <View style={styles.table}>
-        <View style={styles.row}>
-          <Text
-            style={[
-              styles.headerCell3,
-              styles.colEquipmentList,
-              { fontSize: 10 },
-            ]}
-          >
-            Equipment List{" "}
-          </Text>
-          <Text
-            style={[styles.headerCell3, styles.colPriority, { fontSize: 10 }]}
-          >
-            Priority
-          </Text>
-          <Text
-            style={[
-              styles.headerCell3,
-              styles.colAction2,
-              styles.rightBorder,
-              { fontSize: 10 },
-            ]}
-          >
-            Action
-          </Text>
-        </View>
 
-        {recommendations.map((reco, i) => (
-          <View key={i}>
-            <Text
-              style={[
-                styles.headerCell3,
-                styles.rightBorder,
-                { fontSize: 10, borderTop: 0 },
-              ]}
-            >
-              {reco.equipmentName}
-            </Text>
-            <View style={styles.row}>
-              <Text
-                style={[
-                  styles.cell3,
-                  styles.colEquipmentList,
-                  styles.colEquipmentList,
-                  { fontSize: 10 },
-                ]}
-              >
-                {reco.component}
-              </Text>
-              <Text
-                style={[
-                  styles.cell3,
-                  styles.colEquipmentList,
-                  styles.colPriority,
-                  { fontSize: 10, fontWeight: "bold", textAlign: "center" },
-                ]}
-              >
-                {reco.priority}
-              </Text>
-              <Text
-                style={[
-                  styles.cell3,
-                  styles.colEquipmentList,
-                  styles.colAction2,
-                  styles.rightBorder,
-                  { fontSize: 10 },
-                ]}
-              >
-                <Text style={{ fontWeight: "bold" }}>{reco.priority}: </Text>
-                {reco.action} {"\n"}
-                {"\n"}Date: {reco.date}
-              </Text>
-            </View>
-          </View>
-        ))}
+      <View>
+        <RecommendationTable
+          transformedRecommendationData={transformedRecommendationData}
+        />
       </View>
 
       <View style={styles.pageNumber}>
@@ -934,100 +691,7 @@ const PdfDocument = ({
         Machinery Health Condition Reports
       </Text>
 
-      <View style={styles.table}>
-        <View style={styles.row} fixed>
-          <Text
-            style={[
-              styles.headerCell3,
-              styles.colEquipmentList,
-              { fontSize: 10 },
-            ]}
-          >
-            Equipment List
-          </Text>
-          <Text
-            style={[
-              styles.headerCell3,
-              styles.colPreviousCondtion,
-              { fontSize: 10 },
-            ]}
-          >
-            Previous{"\n"}Condition
-          </Text>
-          <Text
-            style={[
-              styles.headerCell3,
-              styles.colCurrentCondtion,
-              { fontSize: 10 },
-            ]}
-          >
-            Current{"\n"}Condition
-          </Text>
-          <Text
-            style={[
-              styles.headerCell3,
-              styles.colAnalysis,
-              styles.rightBorder,
-              { fontSize: 10 },
-            ]}
-          >
-            Analysis and Recommendation
-          </Text>
-        </View>
-
-        {machinesHealth.map((machine, i) => (
-          <View key={i} wrap={false}>
-            <Text
-              style={[
-                styles.headerCell3,
-                styles.rightBorder,
-                { fontSize: 10, borderTop: 0 },
-              ]}
-            >
-              {machine.equipmentName}
-            </Text>
-            <View style={styles.row}>
-              <Text
-                style={[
-                  styles.cell3,
-                  styles.colEquipmentList,
-                  styles.colEquipmentList,
-                  { fontSize: 10 },
-                ]}
-              >
-                {machine.components}
-              </Text>
-              <Image
-                style={[
-                  styles.cell3,
-                  styles.colPreviousCondtion,
-                  { objectFit: "contain" },
-                ]}
-                src={`/report/${machine.previousCondtion}.png`}
-              />
-              <Image
-                style={[
-                  styles.cell3,
-                  styles.colCurrentCondtion,
-                  { objectFit: "contain" },
-                ]}
-                src={`/report/${machine.currentCondtion}.png`}
-              />
-              <Text
-                style={[
-                  styles.cell3,
-                  styles.colEquipmentList,
-                  styles.colAction2,
-                  styles.rightBorder,
-                  { fontSize: 10 },
-                ]}
-              >
-                {machine.analysis}
-              </Text>
-            </View>
-          </View>
-        ))}
-      </View>
+      <AnalysisTable transformedAnalysisData={transformedAnalysisData} />
 
       <View style={styles.pageNumber} fixed>
         <Text style={{ fontSize: 10 }}>Pumps VA Report</Text>
@@ -1047,24 +711,38 @@ const PdfDocument = ({
 
 const PdfDownload = ({
   data,
-  report,
-  reportLoading,
+  graphData,
+  yAxisValues,
+  transformedRecommendationData,
+  transformedAnalysisData,
 }: {
   data: selectedJob;
-  report: ExtendedRouteMachineListReport[];
-  reportLoading: boolean;
+  graphData: graphData;
+  yAxisValues: yAxisValues;
+  transformedRecommendationData: TransformedRecommendation[];
+  transformedAnalysisData: TransformedAnalysis[];
 }) => (
   <PDFDownloadLink
-    document={<PdfDocument data={data} report={report} />}
+    document={
+      <PdfDocument
+        data={data}
+        graphData={graphData}
+        yAxisValues={yAxisValues}
+        transformedRecommendationData={transformedRecommendationData}
+        transformedAnalysisData={transformedAnalysisData}
+      />
+    }
     fileName="report.pdf"
   >
     {({ loading }) => (
-      <Button
-        className="bg-main hover:bg-follow"
-        disabled={loading || reportLoading}
-      >
-        PDF
-      </Button>
+      <>
+        <div className="flex flex-col items-center gap-2">
+          {loading && <p className="text-main">Preparing your file...</p>}
+          <Button className="bg-main hover:bg-follow" disabled={loading}>
+            PDF
+          </Button>
+        </div>
+      </>
     )}
   </PDFDownloadLink>
 );
