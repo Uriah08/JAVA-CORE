@@ -1,3 +1,4 @@
+"use client"
 
 import {
   Document,
@@ -19,7 +20,11 @@ import {
 } from "docx";
 import { Button } from "@/components/ui/button";
 import { selectedJob } from "@/schema";
-import { ExtendedRouteMachineListReport } from "@/store/api";
+
+import html2canvas from "html2canvas";
+
+import CustomBarChart from "@/components/container/charts/ReportChart";
+import { useRef } from "react";
 
 const symbols = ["N", "M", "S", "C", "X"];
 
@@ -137,11 +142,18 @@ const DOCXDownload = ({
 }: {
   data: selectedJob;
 }) => {
+  const chartRef = useRef(null);
   const generateDocx = async () => {
-
-    try {
-          console.log("Generating DOCX...");
     
+    try {
+
+          let imageDataBuffer = null;
+          if (chartRef.current) {
+            const canvas = await html2canvas(chartRef.current);
+            const imageDataUrl = canvas.toDataURL("image/png");
+            imageDataBuffer = await fetch(imageDataUrl).then((res) => res.arrayBuffer());
+          }
+
           const logo = await fetch("/logo.png");
           const imageArrayBuffer = await logo.arrayBuffer();
           const logoBuffer = new Uint8Array(imageArrayBuffer);
@@ -400,9 +412,24 @@ const DOCXDownload = ({
                         })
                       ]
                     }),
+
+                    ...(imageDataBuffer
+                      ? [
+                          new Paragraph({
+                            spacing: {  before: 300 },
+                            children: [
+                              new ImageRun({
+                                data: imageDataBuffer,
+                                transformation: { width: 690, height: 300 },
+                                type: "png",
+                              }),
+                            ],
+                          }),
+                        ]
+                      : []),
     
                     new Paragraph({
-                      spacing: { after: 14, line: 240 },
+                      spacing: { before: 300, after: 14, line: 240 },
                       children: [
                         new TextRun({
                           font: "Poppins", text: "Data Analysis and Report by",
@@ -411,7 +438,7 @@ const DOCXDownload = ({
                       ]
                     }),
                     new Paragraph({
-                      spacing: { after: 14, line: 240 },
+                      spacing: { before: 300, after: 14, line: 240 },
                       children: [
                         new TextRun({
                           font: "Poppins", text: "Ryan Java, ",
@@ -435,7 +462,7 @@ const DOCXDownload = ({
                       ]
                     }),
                     new Paragraph({
-                      spacing: { after: 14, line: 240 },
+                      spacing: { before: 300, after: 14, line: 240 },
                       children: [
                         new TextRun({
                           font: "Poppins", text: "Disclaimer: ",
@@ -1539,7 +1566,7 @@ const DOCXDownload = ({
                     pageBreakBefore: true,
                   }),
                   new Paragraph({
-                    spacing: { before: 200, after:100 },
+                    spacing: { before: 200, after:300 },
                     children: [
                       new TextRun({
                         font: "Poppins", text: "Machinery Health Condition Reports",
@@ -1782,9 +1809,14 @@ const DOCXDownload = ({
   };
 
   return (
-      <Button onClick={generateDocx} className="bg-blue-700 hover:bg-blue-800">
+  <>
+  <Button onClick={generateDocx} className="bg-blue-700 hover:bg-blue-800">
         DOCX
       </Button>
+      <div ref={chartRef} className="absolute -left-[99999px]">
+        <CustomBarChart />
+      </div>
+  </>
   );
 };
 

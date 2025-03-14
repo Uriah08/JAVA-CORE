@@ -76,7 +76,7 @@ const DocxPreview = () => {
       >
         Download DOCX
       </button>
-      <div ref={chartRef} style={{ position: "absolute", left: "-9999px" }}>
+      <div ref={chartRef} className="absolute -left-[]/">
         <CustomBarChart />
       </div>
       <div id="docx-preview" className="mt-4 border p-2 bg-gray-100"></div>
