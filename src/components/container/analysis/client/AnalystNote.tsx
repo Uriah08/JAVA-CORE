@@ -15,13 +15,13 @@ interface SelectedComponent {
 }
 
 interface AnalystNoteProps {
-  isLoading: boolean;
+  // isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openAnalystNote: boolean;
   setOpenAnalystNote: Dispatch<SetStateAction<boolean>>;
 }
 const AnalystNoteSection: React.FC<AnalystNoteProps> = ({
-  isLoading,
+  // isLoading,
   selectedComponent,
   openAnalystNote,
   setOpenAnalystNote,
@@ -38,7 +38,7 @@ const AnalystNoteSection: React.FC<AnalystNoteProps> = ({
       refetchOnMountOrArgChange: shouldRefetch.current,
     });
 
-  const showLoading = isLoading || queryLoading;
+  const showLoading = queryLoading;
 
   React.useEffect(() => {
     shouldRefetch.current = false;

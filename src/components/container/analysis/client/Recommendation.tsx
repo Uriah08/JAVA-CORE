@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useGetClienttRouteComponentRecommendationQuery } from "@/store/api";
 
 interface RecommendationProps {
-  isLoading: boolean;
+  // isLoading: boolean;
   selectedComponent: {
     routeComponent?: {
       id: string;
@@ -14,7 +14,7 @@ interface RecommendationProps {
 }
 
 const Recommendation: React.FC<RecommendationProps> = ({
-  isLoading,
+  // isLoading,
   selectedComponent,
 }) => {
   const routeComponentIds = React.useMemo(
@@ -34,7 +34,7 @@ const Recommendation: React.FC<RecommendationProps> = ({
       refetchOnMountOrArgChange: shouldRefetch.current,
     }) ?? { routeComponentComments: [] };
 
-  const showLoading = isLoading || queryLoading;
+  const showLoading = queryLoading;
 
   React.useEffect(() => {
     shouldRefetch.current = false;

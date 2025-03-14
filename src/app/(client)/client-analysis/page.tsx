@@ -271,21 +271,21 @@ const ClientAnalysis = () => {
 
         <div className="w-full mt-3">
           <SeverityHistory
-            isLoading={isLoading}
+            // isLoading={isLoading}
             selectedComponent={selectedComponent}
           />
         </div>
 
         <div className="flex flex-col gap-3 w-full mt-5">
           <Recommendation
-            isLoading={isLoading}
+            // isLoading={isLoading}
             selectedComponent={selectedComponent}
           />
         </div>
         <div className="flex w-full gap-5 xl:flex-row flex-col">
           <div className="flex flex-col gap-3 w-full mt-5">
             <ClientActionSection
-              isLoading={isLoading}
+              // isLoading={isLoading}
               selectedComponent={selectedComponent}
               openClientAction={openClientAction}
               setOpenClientAction={setOpenClientAction}
@@ -293,7 +293,7 @@ const ClientAnalysis = () => {
           </div>
           <div className="flex flex-col gap-3 w-full mt-5">
             <AnalystNoteSection
-              isLoading={isLoading}
+              // isLoading={isLoading}
               selectedComponent={selectedComponent}
               openAnalystNote={openAnalystNote}
               setOpenAnalystNote={setOpenAnalystNote}
@@ -416,7 +416,7 @@ const ClientAnalysis = () => {
             {detailsActive === "add" ? <AddDetails /> : <ViewDetails />}
           </div> */}
           <ComponentDetailsSection
-            isLoading={isLoading}
+            // isLoading={isLoading}
             selectedComponent={selectedComponent}
             openAddDetails={openAddDetails}
             setOpenAddDetails={setOpenAddDetails}

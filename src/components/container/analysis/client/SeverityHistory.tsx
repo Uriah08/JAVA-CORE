@@ -6,7 +6,7 @@ import { useGetClienttRouteComponentCommentQuery } from "@/store/api";
 // import { useRouter } from "next/router";
 
 interface SeverityHistoryProps {
-  isLoading: boolean;
+  // isLoading: boolean;
   selectedComponent: {
     routeComponent?: {
       id: string;
@@ -15,7 +15,7 @@ interface SeverityHistoryProps {
 }
 
 const SeverityHistory: React.FC<SeverityHistoryProps> = ({
-  isLoading,
+  // isLoading,
   selectedComponent,
 }) => {
   const routeComponentIds = React.useMemo(
@@ -37,7 +37,7 @@ const SeverityHistory: React.FC<SeverityHistoryProps> = ({
       refetchOnMountOrArgChange: shouldRefetch.current,
     }) ?? { routeComponentComments: [] };
 
-  const showLoading = isLoading || queryLoading;
+  const showLoading = queryLoading;
 
   React.useEffect(() => {
     shouldRefetch.current = false;

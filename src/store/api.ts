@@ -267,7 +267,7 @@ export type ExtendedReportComponentResponse = RouteComponent & {
   };
 };
 
-type ReportComponentResponse = {
+export type ReportComponentResponse = {
   routeComponent: ExtendedReportComponentResponse[];
   success: boolean;
 };
@@ -828,6 +828,33 @@ export const api = createApi({
         "RouteComponentRecommendation",
       ],
     }),
+    getPdfClientReport: build.query<ReportMachineListResponse, string>({
+      query: (routeListId) => ({
+        url: `/api/client/report?routeListId=${routeListId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteMachineList"],
+    }),
+    getRouteEquipmentClientReport: build.query<ReportEquipmentNameResponse, string>({
+      query: (routeMachineId) => ({
+        url: `/api/client/report/routeEquipment?routeMachineId=${routeMachineId}`,
+        method: "GET",
+      }),
+      providesTags: ["RouteMachineList"],
+    }),
+    getRouteComponentClientReport: build.query<ReportComponentResponse, string[]>({
+      query: (routeEquipmentIds) => ({
+        url: `/api/client/report/routeEquipment/routeComponent?${routeEquipmentIds
+          .map((id) => `routeEquipmentId=${id}`)
+          .join("&")}`,
+        method: "GET",
+      }),
+      providesTags: [
+        "RouteComponent",
+        "RouteComponentComment",
+        "RouteComponentRecommendation",
+      ],
+    }),
   }),
 });
 
@@ -889,4 +916,7 @@ export const {
   useGetPdfReportQuery,
   useGetRouteEquipmentReportQuery,
   useGetRouteComponentReportQuery,
+  useGetPdfClientReportQuery,
+  useGetRouteEquipmentClientReportQuery,
+  useGetRouteComponentClientReportQuery,
 } = api;

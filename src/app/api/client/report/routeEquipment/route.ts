@@ -10,29 +10,29 @@ export async function GET(req: Request) {
     }
 
     const url = new URL(req.url);
-    const clientId = url.searchParams.get("clientId");
+    const routeMachineId = url.searchParams.get("routeMachineId");
 
-    if (!clientId) {
-      throw new Error("Missing job ID");
+    if (!routeMachineId) {
+      return NextResponse.json(
+        { message: "Missing routeMachineId", success: false },
+        { status: 400 }
+      );
     }
 
-    const jobs = await prisma.job.findMany({
+    const routeEquipment = await prisma.routeEquipmentName.findMany({
       where: {
-        userId: clientId,
+        routeMachineId: routeMachineId,
       },
-      include: {
-        user: {
+      select: {
+        id: true,
+        equipmentName: {
           select: {
-            id: true,
             name: true,
-          },
-        },
-        routeList: {
-          select: {
-            routeName: true,
-            machines: {
+            groupId: true,
+            group: {
               select: {
                 id: true,
+                name: true,
               },
             },
           },
@@ -40,14 +40,11 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log("fetched JOb: ", jobs);
+    console.log("Api data: ", routeEquipment);
 
-    return NextResponse.json(
-      { message: "Job created successfully", success: true, jobs },
-      { status: 201 }
-    );
+    return NextResponse.json({ routeEquipment, success: true });
   } catch (error) {
-    console.error("Error in route handler:", error);
+    console.error("Error fetching route equipment", error);
     return NextResponse.json(
       { message: "Internal Server Error", success: false },
       { status: 500 }

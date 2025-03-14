@@ -15,14 +15,14 @@ interface SelectedComponent {
 }
 
 interface ClientActionProps {
-  isLoading: boolean;
+  // isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openClientAction: boolean;
   setOpenClientAction: Dispatch<SetStateAction<boolean>>;
 }
 
 const ClientActionSection: React.FC<ClientActionProps> = ({
-  isLoading,
+  // isLoading,
   selectedComponent,
   openClientAction,
   setOpenClientAction,
@@ -43,7 +43,7 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
     }
   );
 
-  const showLoading = isLoading || queryLoading;
+  const showLoading = queryLoading;
 
   React.useEffect(() => {
     shouldRefetch.current = false;

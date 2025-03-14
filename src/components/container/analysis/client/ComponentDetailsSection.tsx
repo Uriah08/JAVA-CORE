@@ -15,14 +15,14 @@ interface SelectedComponent {
 }
 
 interface ComponentDetailsProps {
-  isLoading: boolean;
+  // isLoading: boolean;
   selectedComponent: SelectedComponent | null;
   openAddDetails: boolean;
   setOpenAddDetails: Dispatch<SetStateAction<boolean>>;
 }
 
 const ComponentDetailsSection: React.FC<ComponentDetailsProps> = ({
-  isLoading,
+  // isLoading,
   selectedComponent,
   openAddDetails,
   setOpenAddDetails,
@@ -42,7 +42,7 @@ const ComponentDetailsSection: React.FC<ComponentDetailsProps> = ({
     refetchOnMountOrArgChange: shouldRefetch.current,
   });
 
-  const showLoading = isLoading || queryLoading;
+  const showLoading = queryLoading;
 
   const componentDetails = selectedComponent
     ? data?.routeComponentDetails || []

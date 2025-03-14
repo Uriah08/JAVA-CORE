@@ -1,18 +1,17 @@
 import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import {
-  useGetRouteEquipmentReportQuery,
-  useGetRouteComponentReportQuery,
+  useGetRouteEquipmentClientReportQuery,
+  useGetRouteComponentClientReportQuery,
 } from "@/store/api";
 import React, { useMemo } from "react";
 
-import PdfDownload from "../report/PDF";
-import DOCXDownload from "../report/Word";
+import PdfDownload from "../../report/PDF";
 import { selectedJob } from "@/schema";
-import GraphData from "../report/functions/Graphdata";
-import RecommendationTableData from "../report/functions/RecommendationTableData";
-import AnalysisTableData from "../report/functions/AnalysisTableData";
+import GraphData from "../../report/functions/Graphdata";
+import RecommendationTableData from "../../report/functions/RecommendationTableData";
+import AnalysisTableData from "../../report/functions/AnalysisTableData";
 
-const ExportAdmin = ({
+const ExportClient = ({
   onClose,
   data,
 }: {
@@ -21,19 +20,17 @@ const ExportAdmin = ({
 }) => {
   const routeMachineId = data?.routeList?.machines?.[0]?.id;
 
-  const { data: routeEquipment, isLoading } = useGetRouteEquipmentReportQuery(
-    routeMachineId ?? "",
-    {
+  const { data: routeEquipment, isLoading } =
+    useGetRouteEquipmentClientReportQuery(routeMachineId ?? "", {
       skip: !routeMachineId,
-    }
-  );
+    });
 
   console.log("euqipmentReport: ", routeEquipment);
 
   const routeEquipmentId =
     routeEquipment?.routeEquipment.map((eqId) => eqId.id) || [];
   const { data: routeComponent, isFetching: isComponentLoading } =
-    useGetRouteComponentReportQuery(routeEquipmentId ?? [], {
+    useGetRouteComponentClientReportQuery(routeEquipmentId ?? [], {
       skip: !routeEquipmentId,
     });
 
@@ -85,11 +82,10 @@ const ExportAdmin = ({
             transformedRecommendationData={transformedRecommendationData}
             transformedAnalysisData={transformedAnalysisData}
           />
-          <DOCXDownload />
         </div>
       </div>
     </DialogContent>
   );
 };
 
-export default ExportAdmin;
+export default ExportClient;
