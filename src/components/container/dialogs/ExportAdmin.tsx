@@ -6,7 +6,7 @@ import {
 import React, { useMemo } from "react";
 
 import PdfDownload from "../report/PDF";
-// import DOCXDownload from "../report/Word";
+import DOCXDownload from "../report/Word";
 import { selectedJob } from "@/schema";
 import RecommendationTableData from "../report/functions/RecommendationTableData";
 import AnalysisTableData from "../report/functions/AnalysisTableData";
@@ -157,7 +157,7 @@ const ExportAdmin = ({
             transformedRecommendationData={transformedRecommendationData}
             transformedAnalysisData={transformedAnalysisData}
           />
-          {/* <DOCXDownload/> */}
+          <DOCXDownload/>
         </div>
       </div>
     </DialogContent>
