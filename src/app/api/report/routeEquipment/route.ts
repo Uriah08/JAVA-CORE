@@ -9,35 +9,30 @@ export async function GET(req: Request) {
       throw new Error("Not Authenticated");
     }
 
-
     const url = new URL(req.url);
-    const routeListId = url.searchParams.get("routeListId");
+    const routeMachineId = url.searchParams.get("routeMachineId");
 
-    if (!routeListId) {
+    if (!routeMachineId) {
       return NextResponse.json(
-        { message: "Missing route list ID", success: false },
+        { message: "Missing routeMachineId", success: false },
         { status: 400 }
       );
     }
 
-    const routeMachineList = await prisma.routeMachineList.findMany({
+    const routeEquipment = await prisma.routeEquipmentName.findMany({
       where: {
-        routeId: routeListId,
+        routeMachineId: routeMachineId,
       },
       select: {
         id: true,
-        routeEquipmentNames: {
+        equipmentName: {
           select: {
-            id: true,
-            equipmentName: {
+            name: true,
+            groupId: true,
+            group: {
               select: {
+                id: true,
                 name: true,
-                group: {
-                  select: {
-                    id: true,
-                    name: true,
-                  }
-                }
               },
             },
           },
@@ -45,9 +40,11 @@ export async function GET(req: Request) {
       },
     });
 
-    return NextResponse.json({ routeMachineList });
+    console.log("Api data: ", routeEquipment);
+
+    return NextResponse.json({ routeEquipment, success: true });
   } catch (error) {
-    console.error("Error fetching machine list", error);
+    console.error("Error fetching route equipment", error);
     return NextResponse.json(
       { message: "Internal Server Error", success: false },
       { status: 500 }

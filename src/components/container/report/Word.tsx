@@ -134,12 +134,8 @@ const fetchImages = async () => {
 
 const DOCXDownload = ({
   data,
-  report,
-  reportLoading,
 }: {
   data: selectedJob;
-  report: ExtendedRouteMachineListReport[];
-  reportLoading: boolean;
 }) => {
   const generateDocx = async () => {
 

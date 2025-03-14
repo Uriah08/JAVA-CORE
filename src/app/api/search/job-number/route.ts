@@ -35,10 +35,19 @@ export async function GET(req: Request) {
         routeList: {
           select: {
             routeName: true,
+            machines: {
+              select: {
+                id: true,
+              },
+              take: 1, 
+            },
           },
         },
       },
     });
+
+    console.log("Job: ", jobs);
+
     return NextResponse.json(
       { message: "Searched Success", success: true, jobs },
       { status: 200 }
