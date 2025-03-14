@@ -85,7 +85,7 @@ const ExportAdmin = ({
             transformedRecommendationData={transformedRecommendationData}
             transformedAnalysisData={transformedAnalysisData}
           />
-          <DOCXDownload />
+          <DOCXDownload data={data}/>
         </div>
       </div>
     </DialogContent>
