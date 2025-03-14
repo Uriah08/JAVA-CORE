@@ -341,7 +341,7 @@ const PdfDocument = ({
 
     <Page style={styles.page}>
       <View style={[styles.header, { justifyContent: "space-between" }]}>
-        <Image style={styles.logo} src="/logo.png" />
+        <Image style={styles.logo} src="/report/java(logo).png" />
         <View style={styles.companyDetails}>
           <Text style={[styles.contact, { fontWeight: "bold" }]}>
             Vibration Analysis Report{" "}
@@ -593,7 +593,7 @@ const PdfDocument = ({
 
     <Page style={styles.page}>
       <View style={[styles.header, { justifyContent: "space-between" }]} fixed>
-        <Image style={styles.logo} src="/logo.png" />
+        <Image style={styles.logo} src="/report/java(logo).png" />
         <View style={styles.companyDetails}>
           <Text style={[styles.contact, { fontWeight: "bold" }]}>
             Vibration Analysis Report{" "}
@@ -675,7 +675,7 @@ const PdfDocument = ({
 
     <Page style={styles.page}>
       <View style={[styles.header, { justifyContent: "space-between" }]} fixed>
-        <Image style={styles.logo} src="/logo.png" />
+        <Image style={styles.logo} src="/report/java(logo).png" />
         <View style={styles.companyDetails}>
           <Text style={[styles.contact, { fontWeight: "bold" }]}>
             Vibration Analysis Report{" "}
