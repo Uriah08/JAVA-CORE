@@ -39,15 +39,16 @@ const chartConfig = {
 export function WaveChart({ chartDatas } : { chartDatas: Date[]}) {
 
   const formattedData = chartDatas.reduce((acc, dateObj) => {
-    const date = new Date(dateObj).toISOString().split("T")[0];
-
-    const existingEntry = acc.find((entry) => entry.date === date);
+    const date = new Date(dateObj);
+    date.setDate(date.getDate() + 1);
+    const formattedDate = date.toISOString().split("T")[0];
+    const existingEntry = acc.find((entry) => entry.date === formattedDate);
     if (existingEntry) {
       existingEntry.surveyed += 1;
     } else {
-      acc.push({ date, surveyed: 1 });
+      acc.push({ date: formattedDate, surveyed: 1 });
     }
-
+  
     return acc;
   }, [] as { date: string; surveyed: number }[]);
   

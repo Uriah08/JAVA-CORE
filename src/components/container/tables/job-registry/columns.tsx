@@ -28,8 +28,12 @@ import { useSession } from "next-auth/react";
 import ExportClient from "../../dialogs/client/ExportClient";
 import { selectedJob } from "@/schema";
 
+import { useRouter } from "next/navigation";
+
 export const useColumns = () => {
   const { data: session } = useSession();
+
+  const router = useRouter()
 
   const role = session?.user.role;
 
@@ -283,7 +287,7 @@ export const useColumns = () => {
 
         const transformedJob: selectedJob = {
           jobNumber: job.jobNumber,
-          area: job.area ?? "", // Handle optional properties
+          area: job.area ?? "",
           user: job.user ? { id: job.user.id, name: job.user.name } : undefined,
           yearWeekNumber: job.yearWeekNumber,
           reviewer: job.reviewer ?? null,
@@ -301,7 +305,9 @@ export const useColumns = () => {
             : undefined,
         };
 
-        console.log("job: ", job);
+        const viewAnalysis = () => {
+          router.push('/analysis-report')
+        }
 
         return (
           <>
@@ -334,6 +340,7 @@ export const useColumns = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className={`${session?.user.role === "user" && "hidden"}`}
+                  onClick={viewAnalysis}
                 >
                   View Analysis
                 </DropdownMenuItem>

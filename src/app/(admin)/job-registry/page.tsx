@@ -37,6 +37,37 @@ const JobRegistry = () => {
 
   const chart2 = jobs.map((job) => job.status).filter((status) => status);
 
+  const [day, setDay] = React.useState("");
+  const [time, setTime] = React.useState("");
+
+  React.useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+
+      
+      const formattedDay = now.toLocaleDateString("en-US", {
+        weekday: "short", 
+        year: "numeric",
+        month: "long", 
+        day: "2-digit", 
+      });
+
+      const formattedTime = now.toLocaleTimeString("en-US", {
+        hour: "2-digit", 
+        minute: "2-digit", 
+        hour12: true, 
+      });
+
+      setDay(formattedDay);
+      setTime(formattedTime);
+    };
+
+    updateTime(); 
+    const interval = setInterval(updateTime, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="w-full p-3 sm:p-5 flex xl:flex-row flex-col gap-3 sm:gap-5">
       <div className="w-full xl:w-2/3 h-full gap-3 sm:gap-5 flex flex-col">
@@ -64,7 +95,10 @@ const JobRegistry = () => {
         </div>
       </div>
       <div className="w-full xl:w-1/3 xl:sticky xl:top-5 h-full flex flex-col gap-3 sm:gap-5">
-        <div className="bg-main h-[200px] w-full rounded-xl shadow-lg"></div>
+        <div className="bg-main h-[200px] w-full rounded-xl shadow-lg flex items-center justify-center flex-col">
+          <h1 className="text-center text-white text-xl font-semibold">{day}</h1>
+          <h1 className="text-center text-white text-xl font-semibold">{time}</h1>
+        </div>
         <div className="w-full rounded-xl bg-white flex flex-col justify-end p-5 gap-3 shadow-lg">
           <h1 className="text-base sm:text-xl font-semibold text-black">Job Counts</h1>
           <div className="flex  gap-3 sm:gap-5">
