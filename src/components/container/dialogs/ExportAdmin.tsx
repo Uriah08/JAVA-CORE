@@ -94,6 +94,8 @@ const ExportAdmin = ({
         />
         <DOCXDownload
           data={data}
+          graphData={graphData}
+          yAxisValues={yAxisValues}
           transformedRecommendationData={transformedRecommendationData}
           transformedAnalysisData={transformedAnalysisData}
           loading={isDataLoading}

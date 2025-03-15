@@ -23,6 +23,8 @@ import {
   selectedJob,
   TransformedAnalysis,
   TransformedRecommendation,
+  graphData,
+  yAxisValues,
 } from "@/schema";
 
 import html2canvas from "html2canvas";
@@ -52,11 +54,15 @@ const fetchImages = async () => {
 
 const DOCXDownload = ({
   data,
+  graphData,
+  yAxisValues,
   transformedRecommendationData,
   transformedAnalysisData,
   loading,
 }: {
   data: selectedJob;
+  graphData: graphData;
+  yAxisValues: yAxisValues;
   transformedRecommendationData: TransformedRecommendation[];
   transformedAnalysisData: TransformedAnalysis[];
   loading: boolean;
@@ -2171,7 +2177,7 @@ const DOCXDownload = ({
         DOCX
       </Button>
       <div ref={chartRef} className="absolute -left-[99999px]">
-        <CustomBarChart />
+        <CustomBarChart graphData={graphData} yAxisValues={yAxisValues} />
       </div>
     </>
   );
