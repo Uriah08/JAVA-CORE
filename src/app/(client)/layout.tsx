@@ -18,6 +18,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/loading";
 
+import { usePathname } from "next/navigation";
+
 const sidebar = [
   {
     title: "Job Registry",
@@ -41,10 +43,11 @@ interface Props {
 }
 
 const ClientLayout = ({ children }: Props) => {
+  const pathname = usePathname();
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [active, setActive] = React.useState("/client-job-registry");
+  const [active, setActive] = React.useState(pathname || "/client-job-registry");
   
   const [open, setOpen] = React.useState(true);
 

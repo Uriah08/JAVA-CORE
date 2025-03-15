@@ -22,6 +22,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/loading";
 
+import { usePathname } from "next/navigation";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -60,10 +62,11 @@ const sidebar = [
 ];
 
 const ProtectedLayout = ({ children }: Props) => {
+  const pathname = usePathname();
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [active, setActive] = React.useState("/job-registry");
+  const [active, setActive] = React.useState(pathname || "/job-registry");
 
   const [open, setOpen] = React.useState(true);
   const [loading, setLoading] = React.useState(true);
