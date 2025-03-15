@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/carousel"
 import { X } from "lucide-react"
 import Image from "next/image"
+import { PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
 
 export function EquipmentView({ isDelete } : { isDelete: boolean }) {
   return (
@@ -21,7 +23,9 @@ export function EquipmentView({ isDelete } : { isDelete: boolean }) {
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center relative">
                   {isDelete && <X className="absolute top-2 right-2 cursor-pointer text-zinc-500" size={20}/>}
-                  <Image src={'/machine1.jpg'} width={200} height={200} alt='machine' className="object-center object-cover rounded-lg w-[250px] h-[200px] mt-5"/>
+                  <PhotoView src={'/machine1.jpg'}>
+                    <Image src={'/machine1.jpg'} width={200} height={200} alt='machine' className="object-center cursor-pointer object-cover rounded-lg w-[250px] h-[200px] mt-5"/>
+                  </PhotoView>
                   <CardTitle className="absolute bottom-5 left-8">Image 1</CardTitle>
                 </CardContent>
               </Card>

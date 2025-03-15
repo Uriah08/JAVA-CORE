@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -14,8 +14,8 @@ import {
 import { ImageIcon, Plus, Search, Trash, View } from "lucide-react";
 // import Image from "next/image";
 // import { symbols } from "@/schema";
-import { Dialog } from "@/components/ui/dialog";
-import ExportClient from "@/components/container/dialogs/ExportClient";
+// import { Dialog } from "@/components/ui/dialog";
+// import ExportClient from "@/components/container/dialogs/ExportClient";
 import { useState } from "react";
 import {
   Select,
@@ -56,7 +56,7 @@ const ClientAnalysis = () => {
   const [activeDrawing, setActiveDrawing] = useState("view");
   const [activeFigure, setActiveFigure] = useState("add");
 
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = React.useState("");
   const { data: getEquipmentName, isFetching: equipmentsLoading } =
@@ -258,7 +258,7 @@ const ClientAnalysis = () => {
       <div className="w-full xl:w-2/3 p-5 bg-white rounded-xl shadow-lg">
         <div className="flex justify-between items-center">
           <h1 className="text-xl sm:text-2xl font-bold">Severity History</h1>
-          <Button
+          {/* <Button
             onClick={() => setOpen(!open)}
             className="bg-main hover:bg-follow text-white"
           >
@@ -266,7 +266,7 @@ const ClientAnalysis = () => {
           </Button>
           <Dialog open={open} onOpenChange={setOpen}>
             <ExportClient onClose={() => setOpen(false)} />
-          </Dialog>
+          </Dialog> */}
         </div>
 
         <div className="w-full mt-3">
