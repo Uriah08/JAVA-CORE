@@ -1,8 +1,8 @@
 "use client"
 
 import List from '@/components/container/list/machine-list/List'
-import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
+// import { Input } from '@/components/ui/input'
+// import { Search } from 'lucide-react'
 import React from 'react'
 import { useGetMachinesCountQuery } from "@/store/api";
 
@@ -18,13 +18,13 @@ const DatabasePage = () => {
             <List/>
         </div>
         <div className="w-full md:w-1/3 md:sticky md:top-5 h-full flex flex-col gap-3 sm:gap-5">
-        <div className="bg-white min-h-1/3 h-full w-full rounded-xl shadow-lg p-5">
+        {/* <div className="bg-white min-h-1/3 h-full w-full rounded-xl shadow-lg p-5">
         <h1 className="text-xl sm:text-2xl font-bold">Search Components</h1>
         <div className="relative w-full mt-5">
             <Input className="rounded-full pl-10" placeholder="Search equipments..."/>
             <Search className="text-zinc-500 absolute top-2 left-3" size={20}/>
             </div>
-        </div>
+        </div> */}
         <div className="bg-white min-h-2/3 h-full w-full rounded-xl shadow-lg p-5">
         <h1 className="text-xl sm:text-2xl font-bold">Machine list</h1>
         <div className="grid grid-cols-1 gap-3 mt-3">

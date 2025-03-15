@@ -31,6 +31,8 @@ import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 import { SessionProvider } from "next-auth/react";
 
+import { PhotoProvider } from "react-photo-view";
+
 
 /* REDUX PERSISTENCE */
 const createNoopStorage = () => {
@@ -103,8 +105,10 @@ export default function StoreProvider({
     <Provider store={storeRef.current}>
       <PersistGate loading={null} persistor={persistor}>
         <SessionProvider>
-          {children}
-          </SessionProvider>
+          <PhotoProvider>
+            {children}
+          </PhotoProvider>
+        </SessionProvider>
       </PersistGate>
     </Provider>
   );
