@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${fontSans.className} antialiased bg-[#eee8e8] overflow-x-hidden`}
-      >
+      > 
         <StoreProvider>
         {children}
         <Toaster />

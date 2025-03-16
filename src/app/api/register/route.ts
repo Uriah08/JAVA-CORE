@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import bcryptjs from 'bcryptjs';
 
 import { registerSchema } from '@/schema';
+import { generateVerificationToken } from "@/lib/tokens";
 
 export async function POST(req: Request){
     try {
@@ -49,6 +50,8 @@ export async function POST(req: Request){
             password: hashedPassword,
           },
         });
+
+        await generateVerificationToken(email)
     
         return NextResponse.json({ message: 'User created successfully', success: true}, { status: 201 });
     } catch (error) {
