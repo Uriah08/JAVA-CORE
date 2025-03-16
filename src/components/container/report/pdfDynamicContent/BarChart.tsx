@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     width: 20,
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: "#000000",
   },
   barLabel: {

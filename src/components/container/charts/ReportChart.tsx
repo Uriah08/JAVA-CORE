@@ -1,6 +1,15 @@
 "use client";
 
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, ResponsiveContainer, Text } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Text,
+} from "recharts";
 import { graphData, yAxisValues } from "@/schema";
 
 interface CustomLabelProps {
@@ -35,15 +44,20 @@ const CustomBarChart = ({ graphData, yAxisValues }: CustomBarChartProps) => {
 
   return (
     <div className="h-96 flex justify-center items-center py-5 border border-zinc-400 min-w-[900px] max-w-[900px] flex-col">
-      <h1 className="text-xl text-center text-zinc-500">Machinery Condition Summary</h1>
+      <h1 className="text-xl text-center text-zinc-500">
+        Machinery Condition Summary
+      </h1>
       <ResponsiveContainer width="95%" height="100%">
-        <BarChart data={graphData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <BarChart
+          data={graphData}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="label" />
-          <YAxis 
-            domain={[0, maxDataValue]} 
+          <YAxis
+            domain={[0, maxDataValue]}
             ticks={yAxisValues}
-            tick={{ fontSize: 12 }} 
+            tick={{ fontSize: 12 }}
           />
           <Legend
             payload={[

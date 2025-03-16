@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderBottom: "0.5px solid black",
     paddingHorizontal: 5,
     fontWeight: "bold",
-    paddingVertical: 2,
+    paddingVertical: 5,
   },
   cell3: {
     borderLeft: "0.5px solid black",
