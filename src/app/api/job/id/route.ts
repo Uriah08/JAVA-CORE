@@ -40,8 +40,6 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log("fetched JOb: ", jobs);
-
     return NextResponse.json(
       { message: "Job created successfully", success: true, jobs },
       { status: 201 }
