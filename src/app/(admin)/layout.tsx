@@ -72,6 +72,7 @@ const ProtectedLayout = ({ children }: Props) => {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
+    setActive(pathname)
     if (status === "loading") {
       setLoading(true);
     } else if (status === "authenticated") {
@@ -83,7 +84,7 @@ const ProtectedLayout = ({ children }: Props) => {
     } else if (status === "unauthenticated") {
       router.push("/");
     }
-  }, [status, session, router]);
+  }, [status, session, router, pathname]);
 
   return (
     <div>

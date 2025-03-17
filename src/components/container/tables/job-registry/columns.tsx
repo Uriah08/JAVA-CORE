@@ -306,6 +306,7 @@ export const useColumns = () => {
         };
 
         const viewAnalysis = () => {
+          localStorage.setItem("jobNo", job.jobNumber);
           router.push('/analysis-report')
         }
 
