@@ -65,11 +65,11 @@ const AnalysisAndReportForm = () => {
   const { data, isFetching: jobsLoading } = useSearchJobNumberQuery(
     searchTerm,
     {
-      skip: searchTerm.length < 3,
+      skip: searchTerm.length < 1,
     }
   );
 
-  const jobs = data?.jobs || [];
+  const jobs = React.useMemo(() => data?.jobs || [], [data]);
 
   const handleSearch = debounce(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,8 +102,6 @@ const AnalysisAndReportForm = () => {
       }[];
     };
   } | null>(null);
-
-  console.log("job: ", selectedJob);
 
   const { data: routeData, isFetching: routeLoading } =
     useGetRouteEquipmentListQuery(selectedJob?.inspectionRoute ?? "", {
@@ -143,9 +141,6 @@ const AnalysisAndReportForm = () => {
       skip: !selectedEquipment,
     });
 
-  console.log("Component: ", routeComponentsData);
-  console.log("Component2: ", routeComponentsData?.routeComponents);
-
   const [routeComponents, setRouteComponents] = React.useState(
     routeComponentsData?.routeComponents || []
   );
@@ -169,8 +164,6 @@ const AnalysisAndReportForm = () => {
   }, [routeComponentsData]);
 
   const isLoading = routeComponentsLoading;
-
-  console.log("Captured data: ", selectedComponent);
 
   const form = useForm<z.infer<typeof analysisAndReportSchema>>({
     resolver: zodResolver(analysisAndReportSchema),
