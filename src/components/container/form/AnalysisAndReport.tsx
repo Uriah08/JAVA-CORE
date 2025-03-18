@@ -73,7 +73,16 @@ const AnalysisAndReportForm = () => {
 
   const handleSearch = debounce(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchTerm(event.target.value);
+      const value = event.target.value;
+    
+      setSearchTerm(value);
+      if(localStorage.getItem("jobNo")) {
+        setSelectedComponent(null);
+        setSelectedEquipment(null);
+        setRouteComponents([])
+
+        localStorage.removeItem("jobNo");
+      }
     },
     500
   );
@@ -103,6 +112,14 @@ const AnalysisAndReportForm = () => {
     };
   } | null>(null);
 
+  React.useEffect(() => {
+    const jobNo = localStorage.getItem("jobNo")
+    if(jobNo){
+      setSearchTerm(jobNo || "")
+      setSelectedJob(jobs[0])
+    }
+  },[jobs, searchTerm])
+
   const { data: routeData, isFetching: routeLoading } =
     useGetRouteEquipmentListQuery(selectedJob?.inspectionRoute ?? "", {
       skip: !selectedJob?.inspectionRoute,
@@ -130,8 +147,6 @@ const AnalysisAndReportForm = () => {
     };
     // components: { id: string; name: string }[];
   } | null>(null);
-
-  console.log("captured data: ", selectedEquipment);
 
   // const componentIds = selectedEquipment?.components.map((c) => c.id) || [];
   // const routeMachineId = selectedEquipment?.routeMachineId ?? "";
@@ -251,12 +266,16 @@ const AnalysisAndReportForm = () => {
                           field.onChange(value);
                         }}
                         defaultValue={field.value}
-                        value={field.value || ""}
+                        value={field.value || localStorage.getItem("jobNo") || ""}
                       >
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder={"Select Job Number"} />
-                          </SelectTrigger>
+                            {jobsLoading && localStorage.getItem("jobNo")?.trim() ? (
+                              <Skeleton className="h-9 w-full"/>
+                            ) : (
+                              <SelectTrigger disabled={jobsLoading}>
+                                <SelectValue placeholder={"Select Job Number"} />
+                              </SelectTrigger>
+                            )}
                         </FormControl>
                         <FormMessage />
                         <SelectContent>
