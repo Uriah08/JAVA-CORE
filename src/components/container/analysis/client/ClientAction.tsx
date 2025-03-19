@@ -33,21 +33,21 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
     shouldRefetch.current = true;
   }, [selectedComponent]);
 
-  console.log("components in Action: ", selectedComponent);
-
-  const { data, isFetching: queryLoading } = useGetRouteComponentActionQuery(
-    selectedComponent?.id ?? "",
-    {
-      skip: !selectedComponent,
-      refetchOnMountOrArgChange: shouldRefetch.current,
-    }
-  );
-
-  const showLoading = queryLoading;
+  const {
+    data,
+    isFetching: queryLoading,
+    refetch,
+  } = useGetRouteComponentActionQuery(selectedComponent?.id ?? "", {
+    skip: !selectedComponent,
+  });
 
   React.useEffect(() => {
-    shouldRefetch.current = false;
-  }, [data]);
+    if (selectedComponent && shouldRefetch.current) {
+      refetch().then(() => {
+        shouldRefetch.current = false;
+      });
+    }
+  }, [selectedComponent, refetch]);
 
   const actionData = selectedComponent ? data?.routeComponentAction || [] : [];
   const woNumber = selectedComponent ? data?.woNumbers || [] : [];
@@ -75,7 +75,7 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
       </h1>
       <div className=" p-3 flex flex-col h-full">
         <h1 className="font-semibold">WO Number</h1>
-        {showLoading ? (
+        {queryLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}
@@ -90,7 +90,7 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
         )}
         <div className="flex justify-between items-center mt-5">
           <h1 className="font-semibold">Previous Action</h1>
-          {showLoading ? (
+          {queryLoading ? (
             <h1 className="text-xs text-white bg-main px-3 py-1 rounded-md cursor-pointer hover:opacity-80 transition">
               ...
             </h1>
@@ -100,7 +100,7 @@ const ClientActionSection: React.FC<ClientActionProps> = ({
             </h1>
           )}
         </div>
-        {showLoading ? (
+        {queryLoading ? (
           <Skeleton
             className="w-full h-[25px] animate-pulse bg-zinc-200 rounded-md"
             style={{ animationDelay: `0.2s` }}

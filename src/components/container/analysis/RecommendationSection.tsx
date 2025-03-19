@@ -35,19 +35,12 @@ const RecommendationSection: React.FC<RecommendationsSectionProps> = ({
 }) => {
   const routeComponentID = selectedComponent?.routeComponentID as string;
 
-  const {
-    data: routeComponentRecommendation,
-    isLoading: queryLoading,
-    error: routeComponentRecommendationError,
-  } = useGetRouteComponentRecommendationQuery(routeComponentID, {
-    skip: !routeComponentID,
-  });
+  const { data: routeComponentRecommendation, isLoading: queryLoading } =
+    useGetRouteComponentRecommendationQuery(routeComponentID, {
+      skip: !routeComponentID,
+    });
 
   const showLoading = isLoading || queryLoading;
-
-  if (routeComponentRecommendationError) {
-    return <div className="text-main">Error loading data.</div>;
-  }
 
   const recommendation = selectedComponent
     ? routeComponentRecommendation?.data || []

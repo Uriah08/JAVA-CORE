@@ -22,27 +22,37 @@ const Recommendation: React.FC<RecommendationProps> = ({
     [selectedComponent]
   );
 
-  const shouldRefetch = React.useRef(true);
-
-  React.useEffect(() => {
-    shouldRefetch.current = true;
-  }, [routeComponentIds]);
-
-  const { data: routeComponentRecommendation, isFetching: queryLoading } =
-    useGetClienttRouteComponentRecommendationQuery(routeComponentIds, {
-      skip: !routeComponentIds || routeComponentIds.length === 0,
-      refetchOnMountOrArgChange: shouldRefetch.current,
-    }) ?? { routeComponentComments: [] };
+  const {
+    data: routeComponentRecommendation,
+    isFetching: queryLoading,
+    refetch,
+  } = useGetClienttRouteComponentRecommendationQuery(routeComponentIds, {
+    skip: !routeComponentIds || routeComponentIds.length === 0,
+  });
 
   const showLoading = queryLoading;
 
+  const hasRefetched = React.useRef(false);
+
   React.useEffect(() => {
-    shouldRefetch.current = false;
-  }, [routeComponentRecommendation]);
+    if (
+      routeComponentIds &&
+      routeComponentIds.length > 0 &&
+      !hasRefetched.current
+    ) {
+      refetch().then(() => {
+        hasRefetched.current = true;
+      });
+    }
+  }, [routeComponentIds, refetch]);
+
+  React.useEffect(() => {
+    hasRefetched.current = false;
+  }, [routeComponentIds]);
 
   const recommendations =
     routeComponentIds.length === 0
-      ? [] // Reset if no routeComponentIds
+      ? []
       : routeComponentRecommendation?.routeComponentRecommendation.flatMap(
           (rcr) => rcr.recommendations
         ) || [];

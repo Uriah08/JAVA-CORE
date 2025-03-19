@@ -28,19 +28,12 @@ const SeverityHistorySection: React.FC<SeverityHistoryProps> = ({
 }) => {
   const routeComponentID = selectedComponent?.routeComponentID as string;
 
-  const {
-    data: routeComponentComment,
-    isLoading: queryLoading,
-    error: routeComponentSeverityError,
-  } = useGetRouteComponentCommentQuery(routeComponentID, {
-    skip: !routeComponentID,
-  });
+  const { data: routeComponentComment, isLoading: queryLoading } =
+    useGetRouteComponentCommentQuery(routeComponentID, {
+      skip: !routeComponentID,
+    });
 
   const showLoading = isLoading || queryLoading;
-
-  if (routeComponentSeverityError) {
-    return <div className="text-main">Error loading data.</div>;
-  }
 
   const severityMap: Record<string, string> = Object.fromEntries(
     symbols.map((s) => [s.label, `${s.image}.png`])

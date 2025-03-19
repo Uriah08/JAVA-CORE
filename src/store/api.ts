@@ -801,6 +801,13 @@ export const api = createApi({
       }),
       providesTags: ["RouteComponentComment"],
     }),
+    getClientSeverities: build.query<SeveritiesResponse, void>({
+      query: () => ({
+        url: "/api/client/selectedComponent/dashboard",
+        method: "GET",
+      }),
+      providesTags: ["RouteComponentComment"],
+    }),
     getPdfReport: build.query<ReportMachineListResponse, string>({
       query: (routeListId) => ({
         url: `/api/report?routeListId=${routeListId}`,
@@ -913,6 +920,7 @@ export const {
   useGetMachinesCountQuery,
   useGetRecentRoutesQuery,
   useGetSeveritiesQuery,
+  useGetClientSeveritiesQuery,
   useGetPdfReportQuery,
   useGetRouteEquipmentReportQuery,
   useGetRouteComponentReportQuery,

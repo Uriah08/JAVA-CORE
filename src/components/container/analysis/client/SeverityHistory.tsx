@@ -23,25 +23,33 @@ const SeverityHistory: React.FC<SeverityHistoryProps> = ({
     [selectedComponent]
   );
 
-  console.log("selected for History: ", routeComponentIds);
-  const shouldRefetch = React.useRef(true);
-
-  React.useEffect(() => {
-    shouldRefetch.current = true;
-  }, [routeComponentIds]);
-
-  // const router = useRouter();
-  const { data: routeComponents, isFetching: queryLoading } =
-    useGetClienttRouteComponentCommentQuery(routeComponentIds, {
-      skip: !routeComponentIds || routeComponentIds.length === 0,
-      refetchOnMountOrArgChange: shouldRefetch.current,
-    }) ?? { routeComponentComments: [] };
+  const {
+    data: routeComponents,
+    isFetching: queryLoading,
+    refetch,
+  } = useGetClienttRouteComponentCommentQuery(routeComponentIds, {
+    skip: !routeComponentIds || routeComponentIds.length === 0,
+  }) ?? { routeComponentComments: [] };
 
   const showLoading = queryLoading;
 
+  const hasRefetched = React.useRef(false);
+
   React.useEffect(() => {
-    shouldRefetch.current = false;
-  }, [routeComponents]);
+    if (
+      routeComponentIds &&
+      routeComponentIds.length > 0 &&
+      !hasRefetched.current
+    ) {
+      refetch().then(() => {
+        hasRefetched.current = true;
+      });
+    }
+  }, [routeComponentIds, refetch]);
+
+  React.useEffect(() => {
+    hasRefetched.current = false;
+  }, [routeComponentIds]);
 
   const severityMap: Record<string, string> = Object.fromEntries(
     symbols.map((s) => [s.label, `${s.image}.png`])
