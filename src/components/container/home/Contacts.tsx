@@ -40,7 +40,12 @@ const Contacts = () => {
               <h3 className="lg:text-xl text-gray-900 font-semibold mb-2 text-base">
                 Phone
               </h3>
-              <p className="text-gray-900 lg:text-base text-xs">+61 466 367 629</p>
+              <a
+                href="tel:0977213213"
+                className="text-gray-900 lg:text-base text-xs hover:underline"
+              >
+                +61 466 367 629
+              </a>
             </div>
           </div>
 
@@ -50,9 +55,12 @@ const Contacts = () => {
               <h3 className="lg:text-xl text-gray-900 font-semibold mb-2 text-base">
                 Email
               </h3>
-              <p className="text-gray-900 lg:text-base text-xs">
+              <a
+                href="mailto:ryan.java@javaconditionmonitoring.com.au"
+                className="text-gray-900 lg:text-base text-xs hover:underline"
+              >
                 ryan.java@javaconditionmonitoring.com.au
-              </p>
+              </a>
             </div>
           </div>
         </div>
