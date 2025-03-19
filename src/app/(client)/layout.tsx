@@ -19,6 +19,8 @@ import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/loading";
 
 import { usePathname } from "next/navigation";
+import { useGetVerifiedClientQuery } from "@/store/api";
+import { Button } from "@/components/ui/button";
 
 const sidebar = [
   {
@@ -43,6 +45,9 @@ interface Props {
 }
 
 const ClientLayout = ({ children }: Props) => {
+
+  const { data: verifiedClient, isLoading } = useGetVerifiedClientQuery();
+
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -54,7 +59,7 @@ const ClientLayout = ({ children }: Props) => {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    if (status === "loading") {
+    if (status === "loading" || isLoading) {
       setLoading(true);
     } else if (status === "authenticated") {
       if (!session) {
@@ -65,7 +70,19 @@ const ClientLayout = ({ children }: Props) => {
     } else if (status === "unauthenticated") {
       router.push("/");
     }
-  }, [status, session, router]);
+  }, [status, session, router, isLoading]);
+
+  if(!verifiedClient?.success) {
+    return (
+      <div className="w-full h-screen bg-zinc-300 flex flex-col items-center justify-center">
+        <div className="bg-white rounded-xl shadow-lg p-5 border-t-[5px] border-main">
+        <h1 className="text-2xl text-zinc-400 font-bold">404: You&apos;re Not Verified</h1>
+        <h1 className="mt-5 text-zinc-600">Email <span className="text-main">sample@gmail.com</span> to verify</h1>
+        <Button onClick={() => signOut()} className='bg-main hover:bg-follow mt-5'>Sign Out</Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>

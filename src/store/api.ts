@@ -334,6 +334,24 @@ export const api = createApi({
       }),
       providesTags: ["Client"],
     }),
+    getVerifiedClient: build.query<ClientsResponse, void>({
+      query: () => ({
+        url: "/api/client/verified",
+        method: "GET",
+      }),
+      providesTags: ["Client"],
+    }),
+    verifyClient: build.mutation({
+      query: (data) => ({
+        url: "/api/client/verified",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["Client"],
+    }),
     createJob: build.mutation({
       query: (data) => ({
         url: "/api/job",
@@ -863,6 +881,8 @@ export const {
   useRegisterClientMutation,
   useChangePasswordMutation,
   useGetClientsQuery,
+  useGetVerifiedClientQuery,
+  useVerifyClientMutation,
   useCreateJobMutation,
   useGetJobsQuery,
   useGetClientJobsQuery,

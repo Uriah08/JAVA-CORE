@@ -12,7 +12,11 @@ import Loading from "@/components/ui/loading";
 
 import { useRouter } from "next/navigation";
 
+import { useGetVerifiedClientQuery } from "@/store/api";
+
 const HomePage = () => {
+  const { data: verifiedClient, isLoading } = useGetVerifiedClientQuery();
+
   const { data: session, status } = useSession();
   const router = useRouter()
   React.useEffect(() => {
@@ -31,6 +35,11 @@ const HomePage = () => {
   }, [router, session?.user.role])
   return (
     <>
+    {!verifiedClient?.success || isLoading && (
+      <div className="fixed bottom-10 left-10 bg-white rounded-lg p-3 z-[99]">
+        <h1 className="text-sm">This account is not verified</h1>
+      </div>
+    )}
     {status === 'loading' ? (
       <div className="w-full h-screen">
         <Loading/>
