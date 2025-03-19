@@ -6,7 +6,6 @@ import {
 } from "@/store/api";
 import { TransformedAnalysis } from "@/schema";
 
-// Mapping of severity labels to symbols
 const severityMap: Record<string, string> = {
   Normal: "N",
   Moderate: "M",
@@ -24,22 +23,19 @@ const AnalysisTableData = (
   return routeComponent
     .map((component) => {
       const { comments, component: comp, recommendations } = component;
-
-      // Find matching equipment
       const equipment = routeEquipment.find(
         (eq) => eq.id === component.routeEquipmentId
       );
 
       if (!equipment) return null;
-
-      // Sort comments by createdAt (newest first) only if there are multiple comments
       const sortedComments =
         comments.length > 1
           ? comments
               .slice()
               .sort(
                 (a, b) =>
-                  new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime()
               )
           : comments;
 
@@ -48,12 +44,12 @@ const AnalysisTableData = (
       let analysis = "No Data";
 
       if (sortedComments.length > 0) {
-        // Transform severity to symbol
         currentCondition = severityMap[sortedComments[0].severity] || "No Data";
         analysis = sortedComments[0].comment;
 
         if (sortedComments.length > 1) {
-          previousCondition = severityMap[sortedComments[1].severity] || "No Data";
+          previousCondition =
+            severityMap[sortedComments[1].severity] || "No Data";
         }
       }
 
@@ -66,7 +62,7 @@ const AnalysisTableData = (
         recommendations:
           Array.isArray(recommendations) && recommendations.length
             ? recommendations
-            : undefined, 
+            : undefined,
       };
     })
     .filter(Boolean) as TransformedAnalysis[];

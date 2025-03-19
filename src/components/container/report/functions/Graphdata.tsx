@@ -62,11 +62,13 @@ const GraphData = (routeComponent?: ReportComponentResponse) => {
 
   const graphData = [...finalGraphData, totalCountData];
 
+  const step = totalCurrent > 30 ? 10 : 5;
   const yAxisValues = [0];
-  let nextValue = 5;
+
+  let nextValue = step;
   while (nextValue <= totalCurrent) {
     yAxisValues.push(nextValue);
-    nextValue += 5;
+    nextValue += step;
   }
   yAxisValues.push(nextValue);
 

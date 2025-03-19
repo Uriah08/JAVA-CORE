@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 3,
     color: "#71797E",
+    marginBottom: 10,
   },
   chartWrapper: {
     borderWidth: 0.5,
@@ -18,15 +19,17 @@ const styles = StyleSheet.create({
     height: "30%",
     alignSelf: "center",
     marginTop: 30,
+    overflow: "hidden",
   },
   chartContainer: {
     flexDirection: "row",
     alignItems: "flex-end",
+    height: "100%",
   },
   gridContainer: {
     position: "absolute",
     width: "100%",
-    height: "100%",
+    height: "80%",
   },
   gridLine: {
     position: "absolute",
@@ -36,8 +39,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   yAxisContainer: {
-    width: 5,
-    height: 200,
+    width: 10,
+    height: "80%",
     justifyContent: "flex-end",
     alignItems: "flex-end",
     marginRight: 10,
@@ -107,10 +110,17 @@ const BarChart = ({
   yAxisValues: yAxisValues;
 }) => {
   const maxDataValue = Math.max(...graphData.map((item) => item.current), 10);
-  const containerHeight = 200;
-  const paddingOffset = 20;
 
-  const scaleFactor = (containerHeight - paddingOffset) / maxDataValue;
+  const containerHeight = 200;
+  const minScale = 10;
+  const paddingOffset = 40;
+  const topPadding = 30;
+  const maxBarHeight = containerHeight - paddingOffset - topPadding;
+
+  const scaleFactor = Math.max(
+    maxBarHeight / maxDataValue,
+    minScale / maxDataValue
+  );
 
   return (
     <View style={styles.chartWrapper}>
@@ -120,10 +130,7 @@ const BarChart = ({
           {yAxisValues.map((value, index) => (
             <Text
               key={index}
-              style={[
-                styles.yAxisLabel,
-                { bottom: (value / maxDataValue) * containerHeight },
-              ]}
+              style={[styles.yAxisLabel, { bottom: value * scaleFactor }]}
             >
               {value}
             </Text>
@@ -135,10 +142,7 @@ const BarChart = ({
             {yAxisValues.map((value, index) => (
               <View
                 key={index}
-                style={[
-                  styles.gridLine,
-                  { bottom: (value / maxDataValue) * containerHeight },
-                ]}
+                style={[styles.gridLine, { bottom: value * scaleFactor }]}
               />
             ))}
           </View>
@@ -153,7 +157,10 @@ const BarChart = ({
                       style={[
                         styles.bar,
                         {
-                          height: item.previous * scaleFactor,
+                          height:
+                            item.previous === 0
+                              ? 0
+                              : Math.max(item.previous * scaleFactor, minScale),
                           backgroundColor: item.prevColor,
                         },
                       ]}
@@ -167,7 +174,10 @@ const BarChart = ({
                     style={[
                       styles.bar,
                       {
-                        height: item.current * scaleFactor,
+                        height:
+                          item.current === 0
+                            ? 0
+                            : Math.max(item.current * scaleFactor, minScale),
                         backgroundColor: item.currColor,
                       },
                     ]}

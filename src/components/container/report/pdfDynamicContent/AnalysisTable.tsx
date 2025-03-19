@@ -160,7 +160,7 @@ const AnalysisTable = ({
       </View>
 
       {Object.keys(groupedData).map((group, i) => (
-        <View key={i} wrap={false}>
+        <View key={i}>
           <Text
             style={[
               styles.headerCell3,
@@ -172,7 +172,8 @@ const AnalysisTable = ({
           </Text>
 
           {groupedData[group].map((machine, j) => (
-            <View style={styles.row} key={j}>
+            <View style={styles.row} key={j} wrap={false}>
+              {" "}
               <Text
                 style={[
                   styles.cell3,
@@ -208,7 +209,6 @@ const AnalysisTable = ({
               >
                 <Text>{machine.analysis}</Text>
 
-                {/* Render recommendations if available */}
                 {machine.recommendations &&
                   machine.recommendations.length > 0 && (
                     <View style={{ marginTop: 5 }}>
