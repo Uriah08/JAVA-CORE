@@ -25,6 +25,16 @@ export async function POST(req: Request){
           );
         }
 
+        const emailValidator = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=${process.env.ABSTRACT_API}&email=${email}`)
+        const validatedEmail = await emailValidator.json();
+
+        if(validatedEmail.deliverability !== 'DELIVERABLE') {
+          return NextResponse.json(
+            { message: 'Email is not deliverable', success: false },
+            { status: 400 }
+          )
+        }
+
         const [existingEmail, existingUsername] = await Promise.all([
           prisma.user.findUnique({
             where: { email: email.toLowerCase() }
