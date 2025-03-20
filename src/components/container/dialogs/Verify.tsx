@@ -20,7 +20,7 @@ const Verify = ({ client, onClose }: Props) => {
 
     const handleVerify = async () => {
         try {
-          const response = await verifyClient({ id : client.id }).unwrap()
+          const response = await verifyClient({ id : client.id, email : client.email, name: client.name }).unwrap()
 
           if(!response.success) {
             throw new Error(response.message)

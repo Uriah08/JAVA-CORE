@@ -45,12 +45,20 @@ interface Props {
 }
 
 const ClientLayout = ({ children }: Props) => {
+  const router = useRouter();
 
-  const { data: verifiedClient, isLoading } = useGetVerifiedClientQuery();
+  const { data: verify, error, isLoading } = useGetVerifiedClientQuery(navigator.userAgent)
+
+  const errorType = error ? ("data" in error ? (error.data as { errorType: string }).errorType : error) : "No error";
+
+  React.useEffect(() => {
+      if(errorType === "device_not_verified") {
+        router.push('/OTP-Verification')
+      }
+    }, [errorType, router])
 
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   const [active, setActive] = React.useState(pathname || "/client-job-registry");
   
@@ -72,7 +80,7 @@ const ClientLayout = ({ children }: Props) => {
     }
   }, [status, session, router, isLoading]);
 
-  if(!verifiedClient?.success) {
+  if(errorType === "email_not_verified") {
     return (
       <div className="w-full h-screen bg-zinc-300 flex flex-col items-center justify-center">
         <div className="bg-white rounded-xl shadow-lg p-5 border-t-[5px] border-main">
@@ -81,6 +89,12 @@ const ClientLayout = ({ children }: Props) => {
         <Button onClick={() => signOut()} className='bg-main hover:bg-follow mt-5'>Sign Out</Button>
         </div>
       </div>
+    )
+  }
+
+  if(!verify?.success) {
+    return (
+      <Loading/>
     )
   }
 

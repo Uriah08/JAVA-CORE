@@ -23,6 +23,7 @@ import { useSession } from "next-auth/react";
 import Loading from "@/components/ui/loading";
 
 import { usePathname } from "next/navigation";
+import { useGetVerifiedClientQuery } from "@/store/api";
 
 interface Props {
   children: React.ReactNode;
@@ -62,9 +63,18 @@ const sidebar = [
 ];
 
 const ProtectedLayout = ({ children }: Props) => {
+  const { data: verify, error, isLoading } = useGetVerifiedClientQuery(navigator.userAgent);
+  const router = useRouter();
+
+  const errorType = error ? ("data" in error ? (error.data as { errorType: string }).errorType : error) : "No error";
+  
+    React.useEffect(() => {
+        if(errorType === "device_not_verified") {
+          router.push('/OTP-Verification')
+        }
+      }, [errorType, router])
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   const [active, setActive] = React.useState(pathname || "/job-registry");
 
@@ -73,7 +83,7 @@ const ProtectedLayout = ({ children }: Props) => {
 
   React.useEffect(() => {
     setActive(pathname)
-    if (status === "loading") {
+    if (status === "loading" || isLoading) {
       setLoading(true);
     } else if (status === "authenticated") {
       if (session?.user?.role !== "admin") {
@@ -84,7 +94,13 @@ const ProtectedLayout = ({ children }: Props) => {
     } else if (status === "unauthenticated") {
       router.push("/");
     }
-  }, [status, session, router, pathname]);
+  }, [status, session, router, pathname, isLoading]);
+
+  if(!verify?.success) {
+      return (
+        <Loading/>
+      )
+    }
 
   return (
     <div>
