@@ -16,9 +16,7 @@ import { useGetVerifiedClientQuery } from "@/store/api";
 
 const HomePage = () => {
 
-  const { data: verify, error, isLoading: verifyLoading } = useGetVerifiedClientQuery(navigator.userAgent, {
-    pollingInterval: 5000,
-  });
+  const { data: verify, error, isLoading: verifyLoading } = useGetVerifiedClientQuery(navigator.userAgent);
 
   const errorType = error ? ("data" in error ? (error.data as { errorType: string }).errorType : error) : "No error";
 
@@ -46,15 +44,6 @@ const HomePage = () => {
       }
     }
   }, [router, session?.user.role, errorType])
-
-  const verifiedSuccess = () => {
-    if(status === 'authenticated') {
-      if(!verify?.success) {
-        return true
-      }
-    }
-    return false
-  }
   
   return (
     <>
@@ -63,7 +52,7 @@ const HomePage = () => {
         <h1 className="text-sm">This account is not verified</h1>
       </div>
     )}
-    {status === 'loading' || verifyLoading || verifiedSuccess() ? (
+    {status === 'loading' || verifyLoading || !verify?.success ? (
       <div className="w-full h-screen">
         <Loading/>
       </div>

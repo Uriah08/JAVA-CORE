@@ -63,11 +63,7 @@ const sidebar = [
 ];
 
 const ProtectedLayout = ({ children }: Props) => {
-
-  const { data: verify, error, isLoading } = useGetVerifiedClientQuery(navigator.userAgent, {
-    pollingInterval: 5000,
-  });
-  
+  const { data: verify, error, isLoading } = useGetVerifiedClientQuery(navigator.userAgent);
   const router = useRouter();
 
   const errorType = error ? ("data" in error ? (error.data as { errorType: string }).errorType : error) : "No error";

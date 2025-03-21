@@ -19,18 +19,12 @@ import Loading from '@/components/ui/loading'
 const VerificationPage = () => {
     const router = useRouter()
 
-    const { data: verify, error, isLoading: verifyLoading } = useGetVerifiedClientQuery(navigator.userAgent, {
-      pollingInterval: 5000,
-    });
-
-    const errorType = error ? ("data" in error ? (error.data as { errorType: string }).errorType : error) : "No error";
+    const { data: verify, isLoading: verifyLoading } = useGetVerifiedClientQuery(navigator.userAgent);
     
     React.useEffect(() => {
-      if(errorType !== "No Error") {
         if(verify?.success) {
-          router.push('/')
-      }
-      }
+            router.push('/')
+        }
     }, [router, verify?.success])
     
 
