@@ -363,6 +363,263 @@ const DOCXDownload = ({
         ]
       );
 
+      const reportHeader = new Table({
+        borders: {
+          top: { style: "none", size: 0 },
+          bottom: { style: "none", size: 0 },
+          left: { style: "none", size: 0 },
+          right: { style: "none", size: 0 },
+          insideHorizontal: { style: "none", size: 0 },
+          insideVertical: { style: "none", size: 0 },
+        },
+        rows: [
+          new TableRow({
+            children: [
+              new TableCell({
+                width: { size: 20, type: WidthType.PERCENTAGE },
+                children: [
+                  new Paragraph({
+                    children: [
+                      new ImageRun({
+                        data: logoBuffer,
+                        transformation: { width: 100, height: 100 },
+                        type: "png",
+                      }),
+                    ],
+                    alignment: AlignmentType.LEFT,
+                  }),
+                ],
+                margins: { top: 50, bottom: 100, right: 400 },
+              }),
+
+              new TableCell({
+                width: { size: 80, type: WidthType.PERCENTAGE },
+                verticalAlign: VerticalAlign.CENTER,
+                children: [
+                  new Paragraph({
+                    spacing: { after: 10, line: 200 },
+                    children: [
+                      new TextRun({
+                        font: "Arial",
+                        text: "Vibration Analysis Report",
+                        bold: true,
+                        size: 17,
+                      }),
+                    ],
+                  }),
+                  new Paragraph({
+                    spacing: { after: 10, line: 200 },
+                    children: [
+                      new TextRun({
+                        font: "Arial",
+                        text: `Client: ${data?.user?.name}`,
+                        size: 17,
+                      }),
+                    ],
+                  }),
+                  new Paragraph({
+                    spacing: { after: 10, line: 200 },
+                    children: [
+                      new TextRun({
+                        font: "Arial",
+                        text: `Plant Area: ${data?.area}`,
+                        size: 17,
+                      }),
+                    ],
+                  }),
+                ],
+                margins: { left: 5000, top: 300 },
+              }),
+            ],
+          }),
+        ],
+      });
+
+      const chunkSize = 10; // Adjust based on how many rows fit per page
+      const chunkedTableRows = [];
+      for (let i = 0; i < analysisTableRows.length; i += chunkSize) {
+        chunkedTableRows.push(analysisTableRows.slice(i, i + chunkSize));
+      }
+
+      // Prepare document children with paginated tables and headers
+      const docChildren = [
+        reportHeader, // First page header
+        new Paragraph({ text: "", spacing: { before: 200, after: 300 } }), // Space after header
+        new Table({
+          width: { size: 90, type: WidthType.PERCENTAGE },
+          alignment: AlignmentType.CENTER,
+          rows: [
+            // Table header row
+            new TableRow({
+              cantSplit: true,
+              tableHeader: true,
+              children: [
+                new TableCell({
+                  width: { size: 28, type: WidthType.PERCENTAGE },
+                  shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                  margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: "Arial",
+                          text: "Equipment List",
+                          size: 20,
+                          bold: true,
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  width: { size: 12, type: WidthType.PERCENTAGE },
+                  shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                  margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: "Arial",
+                          text: "Previous Condition",
+                          size: 20,
+                          bold: true,
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  width: { size: 12, type: WidthType.PERCENTAGE },
+                  shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                  margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: "Arial",
+                          text: "Current Condition",
+                          size: 20,
+                          bold: true,
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                new TableCell({
+                  width: { size: 48, type: WidthType.PERCENTAGE },
+                  shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                  margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                  children: [
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          font: "Arial",
+                          text: "Analysis and Recommendation",
+                          size: 20,
+                          bold: true,
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            ...chunkedTableRows[0], // First batch of table rows
+          ],
+        }),
+      ];
+
+      // Add subsequent pages with headers and tables
+      for (let i = 1; i < chunkedTableRows.length; i++) {
+        docChildren.push(
+          new Paragraph({ text: "", pageBreakBefore: true }), // Page break
+          reportHeader, // Repeat header on new page
+          new Paragraph({ text: "", spacing: { before: 200, after: 300 } }), // Space after header
+          new Table({
+            width: { size: 90, type: WidthType.PERCENTAGE },
+            alignment: AlignmentType.CENTER,
+            rows: [
+              // Table header row (repeat on new page)
+              new TableRow({
+                cantSplit: true,
+                tableHeader: true,
+                children: [
+                  new TableCell({
+                    width: { size: 28, type: WidthType.PERCENTAGE },
+                    shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                    margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            font: "Arial",
+                            text: "Equipment List",
+                            size: 20,
+                            bold: true,
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  new TableCell({
+                    width: { size: 12, type: WidthType.PERCENTAGE },
+                    shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                    margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            font: "Arial",
+                            text: "Previous Condition",
+                            size: 20,
+                            bold: true,
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  new TableCell({
+                    width: { size: 12, type: WidthType.PERCENTAGE },
+                    shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                    margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            font: "Arial",
+                            text: "Current Condition",
+                            size: 20,
+                            bold: true,
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  new TableCell({
+                    width: { size: 48, type: WidthType.PERCENTAGE },
+                    shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
+                    margins: { left: 50, right: 20, top: 80, bottom: 80 },
+                    children: [
+                      new Paragraph({
+                        children: [
+                          new TextRun({
+                            font: "Arial",
+                            text: "Analysis and Recommendation",
+                            size: 20,
+                            bold: true,
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              ...chunkedTableRows[i], // Add the next batch of rows
+            ],
+          })
+        );
+      }
+
       const doc = new Document({
         sections: [
           {
@@ -2015,172 +2272,8 @@ const DOCXDownload = ({
                 },
               },
             },
-            children: [
-              new Table({
-                borders: {
-                  top: { style: "none", size: 0 },
-                  bottom: { style: "none", size: 0 },
-                  left: { style: "none", size: 0 },
-                  right: { style: "none", size: 0 },
-                  insideHorizontal: { style: "none", size: 0 },
-                  insideVertical: { style: "none", size: 0 },
-                },
-                rows: [
-                  new TableRow({
-                    children: [
-                      new TableCell({
-                        width: { size: 20, type: WidthType.PERCENTAGE },
-                        children: [
-                          new Paragraph({
-                            children: [
-                              new ImageRun({
-                                data: logoBuffer,
-                                transformation: { width: 100, height: 100 },
-                                type: "png",
-                              }),
-                            ],
-                            alignment: AlignmentType.LEFT,
-                          }),
-                        ],
-                        margins: { top: 50, bottom: 100, right: 400 },
-                      }),
+            children: docChildren,
 
-                      new TableCell({
-                        width: { size: 80, type: WidthType.PERCENTAGE },
-                        verticalAlign: VerticalAlign.CENTER,
-                        children: [
-                          new Paragraph({
-                            spacing: { after: 10, line: 200 },
-
-                            children: [
-                              new TextRun({
-                                font: "Arial",
-                                text: "Vibration Analysis Report",
-                                bold: true,
-                                size: 17,
-                              }),
-                            ],
-                          }),
-                          new Paragraph({
-                            spacing: { after: 10, line: 200 },
-                            children: [
-                              new TextRun({
-                                font: "Arial",
-                                text: `Client: ${data?.user?.name}`,
-                                size: 17,
-                              }),
-                            ],
-                          }),
-                          new Paragraph({
-                            spacing: { after: 10, line: 200 },
-                            children: [
-                              new TextRun({
-                                font: "Arial",
-                                text: `Plant Area: ${data?.area}`,
-                                size: 17,
-                              }),
-                            ],
-                          }),
-                        ],
-                        margins: { left: 5000, top: 300 },
-                      }),
-                    ],
-                  }),
-                ],
-              }),
-              new Paragraph({
-                spacing: { before: 200, after: 300 },
-                children: [
-                  new TextRun({
-                    font: "Arial",
-                    text: "Machinery Health Condition Reports",
-                    bold: true,
-                    size: 24,
-                  }),
-                ],
-              }),
-              new Table({
-                width: { size: 90, type: WidthType.PERCENTAGE },
-                alignment: AlignmentType.CENTER,
-                rows: [
-                  new TableRow({
-                    children: [
-                      new TableCell({
-                        width: { size: 28, type: WidthType.PERCENTAGE },
-                        shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
-                        margins: { left: 50, right: 20, top: 80, bottom: 80 },
-                        children: [
-                          new Paragraph({
-                            children: [
-                              new TextRun({
-                                font: "Arial",
-                                text: "Equipment List",
-                                size: 20,
-                                bold: true,
-                              }),
-                            ],
-                          }),
-                        ],
-                      }),
-                      new TableCell({
-                        width: { size: 12, type: WidthType.PERCENTAGE },
-                        shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
-                        margins: { left: 50, right: 20, top: 80, bottom: 80 },
-                        children: [
-                          new Paragraph({
-                            spacing: { after: 10, line: 200 },
-                            children: [
-                              new TextRun({
-                                font: "Arial",
-                                text: "Previous Condition",
-                                size: 20,
-                                bold: true,
-                              }),
-                            ],
-                          }),
-                        ],
-                      }),
-                      new TableCell({
-                        width: { size: 12, type: WidthType.PERCENTAGE },
-                        shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
-                        margins: { left: 50, right: 20, top: 80, bottom: 80 },
-                        children: [
-                          new Paragraph({
-                            spacing: { after: 10, line: 200 },
-                            children: [
-                              new TextRun({
-                                font: "Arial",
-                                text: "Current Condition",
-                                size: 20,
-                                bold: true,
-                              }),
-                            ],
-                          }),
-                        ],
-                      }),
-                      new TableCell({
-                        width: { size: 48, type: WidthType.PERCENTAGE },
-                        shading: { fill: "D9D9D9", type: ShadingType.CLEAR },
-                        margins: { left: 50, right: 20, top: 80, bottom: 80 },
-                        children: [
-                          new Paragraph({
-                            children: [
-                              new TextRun({
-                                font: "Arial",
-                                text: "Analysis and Recommendation",
-                                size: 20,
-                                bold: true,
-                              }),
-                            ],
-                          }),
-                        ],
-                      }),
-                    ],
-                  }),
-                  ...analysisTableRows,
-                ],
-              }),
-            ],
             footers: {
               default: new Footer({
                 children: [

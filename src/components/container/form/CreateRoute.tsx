@@ -271,13 +271,13 @@ const CreateRoute = () => {
         </div>
         <hr className="my-0 border-t border-gray-300 w-full" />{" "}
         <div className="flex md:flex-row flex-col gap-5 w-full">
-          <div className="w-full md:w-2/6">
+          <div className="w-full md:w-2/5 flex flex-col h-[calc(100vh-14rem)]">
             <h2 className="text-lg font-semibold mb-3">Machine List</h2>
-            <div className="font-base flex flex-col">
-              <Breadcrumb
-                breadcrumb={breadcrumb}
-                handleBreadcrumbClick={handleBreadcrumbClick}
-              />
+            <Breadcrumb
+              breadcrumb={breadcrumb}
+              handleBreadcrumbClick={handleBreadcrumbClick}
+            />
+            <div className="font-base flex flex-col flex-grow min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-500">
               <ItemList
                 items={
                   currentEquipmentGroup
@@ -306,7 +306,7 @@ const CreateRoute = () => {
           </div>
 
           <hr className="h-auto border-l border-gray-300 mx-4 -mt-3" />
-          <div className="w-full md:w-4/6">
+          <div className="w-full md:w-3/5">
             <div className="flex md:flex-row flex-col gap-5 w-full">
               <div className="w-full md:w-1/2">
                 <FormField
@@ -363,7 +363,11 @@ const CreateRoute = () => {
                         Create Route
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter route name..." {...field} className='text-sm'/>
+                        <Input
+                          placeholder="Enter route name..."
+                          {...field}
+                          className="text-sm"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -371,22 +375,26 @@ const CreateRoute = () => {
                 />
               </div>
             </div>
-            <FormField
-              control={form.control}
-              name="equipmentNames"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <EquipmentSelector
-                      field={field}
-                      selectedEquipment={selectedEquipment}
-                      setSelectedEquipment={setSelectedEquipment}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex-1 overflow-auto mt-4">
+              <FormField
+                control={form.control}
+                name="equipmentNames"
+                render={({ field }) => (
+                  <FormItem className="h-full">
+                    <FormControl>
+                      <div className="h-[calc(100vh-20rem)] overflow-auto">
+                        <EquipmentSelector
+                          field={field}
+                          selectedEquipment={selectedEquipment}
+                          setSelectedEquipment={setSelectedEquipment}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
         </div>
       </form>
