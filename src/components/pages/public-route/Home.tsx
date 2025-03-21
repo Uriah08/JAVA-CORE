@@ -13,6 +13,13 @@ import Loading from "@/components/ui/loading";
 import { useRouter } from "next/navigation";
 
 const HomePage = () => {
+
+  const { data: verify, error, isLoading: verifyLoading } = useGetVerifiedClientQuery(navigator.userAgent, {
+    pollingInterval: 5000,
+  })
+
+  const errorType = error ? ("data" in error ? (error.data as { errorType: string }).errorType : error) : "No error"
+
   const { data: session, status } = useSession();
   const router = useRouter()
   React.useEffect(() => {
