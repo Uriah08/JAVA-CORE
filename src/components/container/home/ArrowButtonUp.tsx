@@ -34,7 +34,7 @@ const ArrowButtonUP = () => {
       {isVisible && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-10 right-10 p-3 bg-red-800 rounded-full text-white shadow-lg hover:bg-red-900 transition"
+          className="fixed bottom-10 right-10 p-3 bg-red-800 rounded-full text-white shadow-lg hover:bg-red-900 transition z-20"
         >
           <ChevronUp className="w-8 h-8" />
         </button>
