@@ -73,6 +73,15 @@ model Job {
 //   @@map("sessions")
 // }
 
+model VerificationToken {
+  id String @id @default(cuid())
+  email String 
+  token String @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?   @unique
@@ -81,13 +90,10 @@ model User {
   role          String    @default("user")
   emailVerified DateTime? @map("email_verified")
   image         String?
-  otp           String?
-  otpExpires    DateTime?
-  otpCooldown   DateTime?
+  tokenExpiresAt DateTime?
 
   // accounts              Account[]
   // sessions              Session[]
-  verifiedDevices       VerifiedDevice[]
   RouteComponentDetails RouteComponentDetails[]
   jobs                  Job[]
   RouteList             RouteList[]
@@ -97,15 +103,6 @@ model User {
   RouteComponentNote    RouteComponentNote[]
 
   @@map("users")
-}
-
-model VerifiedDevice {
-  id         String  @id @default(cuid())
-  userId     String   @map("user_id")
-  userAgent  String
-  addedAt    DateTime @default(now())
-
-  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Area {

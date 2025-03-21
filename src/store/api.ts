@@ -42,8 +42,6 @@ type ClientsResponse = {
   clients: User[];
   message: string;
   success: boolean;
-  errorType: string
-  remainingTime: string
 };
 
 type JobsResponse = {
@@ -298,6 +296,16 @@ export const api = createApi({
     "RouteComponentNote",
   ],
   endpoints: (build) => ({
+    loginUser: build.mutation({
+      query: (userData) => ({
+        url: "/api/login",
+        method: "POST",
+        body: userData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
     registerClient: build.mutation({
       query: (data) => ({
         url: "/api/register",
@@ -308,6 +316,16 @@ export const api = createApi({
         },
       }),
       invalidatesTags: ["Client"],
+    }),
+    changePassword: build.mutation({
+      query: (data) => ({
+        url: "/api/changePassword",
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
     }),
     getClients: build.query<ClientsResponse, void>({
       query: () => ({
@@ -847,86 +865,10 @@ export const api = createApi({
   }),
 });
 
-export const authApi = createApi({
-  reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_URL,
-  }),
-  tagTypes: ["Client"],
-  endpoints: (build) => ({
-    loginUser: build.mutation({
-      query: (userData) => ({
-        url: "/api/login",
-        method: "POST",
-        body: userData,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-    }),
-    changePassword: build.mutation({
-      query: (data) => ({
-        url: "/api/changePassword",
-        method: "POST",
-        body: data,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-    }),
-    getVerifiedClient: build.query<ClientsResponse, string>({
-      query: (userAgent) => ({
-        url: `/api/client/verified?userAgent=${userAgent}`,
-        method: "GET",
-      }),
-      providesTags: ["Client"],
-    }),
-    verifyClient: build.mutation({
-      query: (data) => ({
-        url: "/api/client/verified",
-        method: "POST",
-        body: data,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-      invalidatesTags: ["Client"],
-    }),
-    verifyDevice: build.mutation({
-      query: (data) => ({
-        url: "/api/client/verified/verifyDevice",
-        method: "POST",
-        body: data,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-      invalidatesTags: ["Client"],
-    }),
-    getCode: build.mutation({
-      query: () => ({
-        url: "/api/client/verified/send-code",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }),
-      invalidatesTags: ["Client"],
-    }),
-  })
-});
-
 export const {
   useLoginUserMutation,
-  useChangePasswordMutation,
-  useGetVerifiedClientQuery,
-  useVerifyClientMutation,
-  useVerifyDeviceMutation,
-  useGetCodeMutation,
-} = authApi
-
-export const {
   useRegisterClientMutation,
+  useChangePasswordMutation,
   useGetClientsQuery,
   useCreateJobMutation,
   useGetJobsQuery,

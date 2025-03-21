@@ -97,7 +97,7 @@ const JobRegistry = () => {
         </div>
         <div className="w-full rounded-xl bg-white flex flex-col justify-end p-5 gap-5 shadow-lg max-h-[500px]">
           <h1 className="text-base sm:text-xl font-semibold text-black mb-3">
-            Recent Clients
+            Recently Added
           </h1>
           {jobsLoading ? (
             <>
