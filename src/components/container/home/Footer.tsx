@@ -43,12 +43,16 @@ const Footer = () => {
             </li>
             <li className="flex lg:justify-start justify-center items-center space-x-2">
               <PhoneCall className="w-5 h-5 text-white" />
-              <span className="text-sm">+61 466 367 629</span>
+              <span className="text-sm">
+                <a href="tel:+61466367629">+61 466 367 629</a>
+              </span>
             </li>
             <li className="flex lg:justify-start justify-center items-center space-x-2">
               <Mail className="w-5 h-5 text-white" />
               <span className="text-sm">
-                ryan.java@javaconditionmonitoring.com.au
+                <a href="mailto:ryan.java@javaconditionmonitoring.com.au">
+                  ryan.java@javaconditionmonitoring.com.au
+                </a>
               </span>
             </li>
           </ul>

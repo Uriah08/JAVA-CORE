@@ -41,7 +41,7 @@ const Contacts = () => {
                 Phone
               </h3>
               <a
-                href="tel:0977213213"
+                href="tel:+61466367629"
                 className="text-gray-900 lg:text-base text-xs hover:underline"
               >
                 +61 466 367 629

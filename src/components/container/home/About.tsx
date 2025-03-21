@@ -83,7 +83,10 @@ const About = () => {
       </div>
       <div className="w-screen grid xl:grid-cols-4 lg:grid-cols-2 grid-cols-1">
         <div className="relative group flex flex-col p-5 sm:p-8 md:p-12 h-72 md:h-96 border-r border-gray-300 transition-all duration-300 hover:text-white">
-          <div className="absolute inset-0 bg-[url('/about/monitoring.png')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0"></div>
+          <div
+            className="absolute inset-0 bg-[url('/about/monitoring.svg')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0"
+            style={{ willChange: "opacity, filter" }}
+          ></div>
           <div className="relative z-10">
             <h3 className="text-base md:text-xl font-semibold mb-2">
               Monitoring and Diagnostics
@@ -98,7 +101,10 @@ const About = () => {
           <ClipboardList className="w-12 h-12 text-main absolute bottom-4 left-4 sm:left-auto sm:right-4 transition-transform duration-300 group-hover:scale-150 group-hover:translate-x-[-10px] group-hover:text-white group-hover:translate-y-[-10px] z-10" />
         </div>
         <div className="relative group flex flex-col p-5 sm:p-8 md:p-12 h-72 md:h-96 border-r border-gray-300 transition-all duration-300 hover:text-white">
-          <div className="absolute inset-0 bg-[url('/about/preventiveMaintenance.png')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0"></div>
+          <div
+            className="absolute inset-0 bg-[url('/about/preventiveMaintenance.svg')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0 "
+            style={{ willChange: "opacity, filter" }}
+          ></div>
           <div className="relative z-10">
             <h3 className="text-base md:text-xl font-semibold mb-2">
               Preventive Maintenance Planning
@@ -112,7 +118,10 @@ const About = () => {
           <ShieldPlus className="w-12 h-12 text-main absolute bottom-4 right-4 transition-transform duration-300 group-hover:scale-150 group-hover:text-white group-hover:translate-x-[-10px] group-hover:translate-y-[-10px] z-10" />
         </div>
         <div className="relative group flex flex-col p-5 sm:p-8 md:p-12 h-72 md:h-96 border-r border-gray-300 transition-all duration-300 hover:text-white">
-          <div className="absolute inset-0 bg-[url('/about/analysisAndReporting.png')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0"></div>
+          <div
+            className="absolute inset-0 bg-[url('/about/analysisAndReporting.svg')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0"
+            style={{ willChange: "opacity, filter" }}
+          ></div>
           <div className="relative z-10">
             <h3 className="text-base md:text-xl font-semibold mb-2">
               Data Analysis and Reporting
@@ -127,7 +136,10 @@ const About = () => {
           <ChartSpline className="w-12 h-12 text-main absolute bottom-4 left-4 sm:left-auto sm:right-4 transition-transform duration-300 group-hover:scale-150 group-hover:text-white group-hover:translate-x-[-10px] group-hover:translate-y-[-10px] z-10" />
         </div>
         <div className="relative group flex flex-col p-5 sm:p-8 md:p-12 h-72 md:h-96 transition-all duration-300 hover:text-white">
-          <div className="absolute inset-0 bg-[url('/about/rootCauseAnalysis.png')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0"></div>
+          <div
+            className="absolute inset-0 bg-[url('/about/rootCauseAnalysis.svg')] bg-cover bg-center opacity-0 filter transition-all duration-300 group-hover:opacity-75 group-hover:blur-sm z-0"
+            style={{ willChange: "opacity, filter" }}
+          ></div>
           <div className="relative z-10">
             <h3 className="text-base md:text-xl font-semibold mb-2">
               Root Cause Analysis and Problem Solving

@@ -165,7 +165,7 @@ const ClientAnalysis = () => {
                     <div className="flex flex-col max-h-[200px] overflow-auto">
                       <div className="relative p-2">
                         <Search
-                          className="absolute top-4 left-5 text-zinc-500"
+                          className="absolute top-3 left-3 text-zinc-500"
                           size={20}
                         />
                         <Input

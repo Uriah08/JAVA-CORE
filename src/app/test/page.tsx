@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { Document, Packer, Paragraph, ImageRun } from "docx";
 import { renderAsync } from "docx-preview";
 import html2canvas from "html2canvas";
+import CustomBarChart from "@/components/container/charts/ReportChart";
 
 const DocxPreview = () => {
   const chartRef = useRef(null);
@@ -75,7 +76,8 @@ const DocxPreview = () => {
       >
         Download DOCX
       </button>
-      <div ref={chartRef} className="absolute">
+      <div ref={chartRef} className="absolute -left-[]/">
+        <CustomBarChart />
       </div>
       <div id="docx-preview" className="mt-4 border p-2 bg-gray-100"></div>
     </div>
