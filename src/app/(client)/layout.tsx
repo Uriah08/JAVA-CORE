@@ -47,7 +47,9 @@ interface Props {
 const ClientLayout = ({ children }: Props) => {
   const router = useRouter();
 
-  const { data: verify, error, isLoading } = useGetVerifiedClientQuery(navigator.userAgent)
+  const { data: verify, error, isLoading: verifyLoading } = useGetVerifiedClientQuery(navigator.userAgent, {
+    pollingInterval: 5000,
+  });
 
   const errorType = error ? ("data" in error ? (error.data as { errorType: string }).errorType : error) : "No error";
 
@@ -67,7 +69,7 @@ const ClientLayout = ({ children }: Props) => {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    if (status === "loading" || isLoading) {
+    if (status === "loading" || verifyLoading) {
       setLoading(true);
     } else if (status === "authenticated") {
       if (!session) {
@@ -78,7 +80,7 @@ const ClientLayout = ({ children }: Props) => {
     } else if (status === "unauthenticated") {
       router.push("/");
     }
-  }, [status, session, router, isLoading]);
+  }, [status, session, router, verifyLoading]);
 
   if(errorType === "email_not_verified") {
     return (

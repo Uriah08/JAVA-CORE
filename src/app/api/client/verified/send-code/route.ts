@@ -36,16 +36,18 @@ export async function POST() {
                 otp: code,
                 otpCooldown: new Date(now.getTime() + 60 * 1000),
             }
-        })     
+        })    
+        
+        console.log("Code:", code);
+        
+        // const emailContent = await VerificationTemplate({ code });
 
-        const emailContent = await VerificationTemplate({ code });
-
-        await resend.emails.send({
-            from: 'Acme <onboarding@resend.dev>',
-            to: [`${session.user.email}`],
-            subject: 'Sample',
-            react: emailContent,
-        });
+        // await resend.emails.send({
+        //     from: 'Acme <onboarding@resend.dev>',
+        //     to: [`${session.user.email}`],
+        //     subject: 'Sample',
+        //     react: emailContent,
+        // });
         
         return NextResponse.json({ message: 'Sent Code Successfully', success: true});
     } catch (error) {
